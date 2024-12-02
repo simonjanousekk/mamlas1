@@ -1,0 +1,1 @@
+- sample zrychlujou moduly..? muzes si zajet pro dalsi moduly?
