@@ -26,7 +26,30 @@ class Player {
   void collide(Wall wall) {
     wall.collided = isCircleLineColliding(pos, diameter/2, wall.pos1, wall.pos2);
     if (wall.collided) {
-      println("gameover");
+      resolveCollision(player.pos, player.diameter/2, wall.pos1, wall.pos2);
+      //println("debil naboural");
+    }
+  }
+
+  void resolveCollision(PVector circlePos, float radius, PVector lineStart, PVector lineEnd) {
+    PVector lineDir = PVector.sub(lineEnd, lineStart);
+    PVector toCircle = PVector.sub(circlePos, lineStart);
+
+    float lineLengthSq = lineDir.magSq();
+    float t = PVector.dot(toCircle, lineDir) / lineLengthSq;
+    t = constrain(t, 0, 1); // Clamp to segment
+
+    // Closest point on the line segment
+    PVector closestPoint = PVector.add(lineStart, PVector.mult(lineDir, t));
+
+    // Distance from circle to the closest point
+    float distance = PVector.dist(circlePos, closestPoint);
+
+    if (distance < radius) {
+      // Calculate overlap and resolve
+      PVector collisionNormal = PVector.sub(circlePos, closestPoint).normalize();
+      float overlap = radius - distance;
+      circlePos.add(PVector.mult(collisionNormal, overlap));
     }
   }
 
@@ -35,7 +58,7 @@ class Player {
 
     translate(width/2, height/2);
     fill(255, 100);
-    //circle(0, 0, diameter); 
+    //circle(0, 0, diameter);
     translate(-imgW/2, -imgH/2);
     image(img, 0, 0, imgW, imgH);
 

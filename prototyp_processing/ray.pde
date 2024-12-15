@@ -1,4 +1,4 @@
-class Ray {
+class Ray { //<>//
   PVector pos, dir;
   final int rayLength = 100;
   float originAngle;
@@ -16,18 +16,21 @@ class Ray {
   }
 
   void display() {
-    
+
+    PVector pos1 = dir.copy().mult(player.diameter/2).add(pos.copy());
+
     if (intersection != null) {
-      stroke(100, 100, 255);
-      line(pos.x, pos.y, intersection.x, intersection.y);
+      stroke(255, 0, 255);
+      line(pos1.x, pos1.y, intersection.x, intersection.y);
       noStroke();
       fill(100, 100, 255);
       circle(intersection.x, intersection.y, 5);
     } else {
       stroke(100, 100, 255);
+
       line(
-        pos.x,
-        pos.y,
+        pos1.x,
+        pos1.y,
         pos.x + dir.x * rayLength,
         pos.y + dir.y * rayLength
         );
@@ -48,7 +51,7 @@ class Ray {
   }
 
   void findShortestIntersection(ArrayList<Wall> wls) {
-    ArrayList<PVector> intersections = cast(wls); //<>//
+    ArrayList<PVector> intersections = cast(wls);
 
     intersection = null;
     PVector shortestIntersection = null;

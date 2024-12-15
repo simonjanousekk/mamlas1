@@ -17,3 +17,25 @@ class Wall {
     pop();
   }
 }
+
+
+
+
+void displayFPS() {
+  fill(255);
+  textSize(16);
+  textAlign(RIGHT, BOTTOM);
+  text(int(frameRate), width-5, height-5);
+}
+
+void displayMask(int border) {
+  push();
+  fill(0);
+  noStroke();
+  rect(0, 0, border, height);
+  rect(0, 0, width, border);
+  rect(width, height, -border, -height);
+  rect(width, height, -width, -border);
+  image(mask, border, border, width-border*2, height-border*2);
+  pop();
+}

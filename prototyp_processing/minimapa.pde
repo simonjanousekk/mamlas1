@@ -1,18 +1,22 @@
 class Minimapa {
-  PVector pos;
   int size;
   float minimapaCellSize;
   PGraphics pg;
-  Minimapa(int xl, int yl, int s) {
-    pos = new PVector(xl, yl);
+
+  Minimapa(int s) {
     size = s;
     pg = createGraphics(size, size);
-
     minimapaCellSize = float(size) / mapa.rows;
-    pg.beginDraw();
-    pg.background(0);
+    update();
+  }
 
+  void update() {
+    pg.beginDraw();
+    pg.background(0, 0, 40);
     pg.noStroke();
+    //pg.stroke(0);
+    //pg.strokeWeight(0);
+
     for (int x = 0; x < mapa.cols; x++) {
       for (int y = 0; y < mapa.rows; y++) {
         if (!mapa.grid[x][y].state) {
@@ -26,39 +30,57 @@ class Minimapa {
         }
       }
     }
+
     pg.endDraw();
   }
+}
 
-  void display() {
-    image(pg, pos.x, pos.y, size, size);
+
+
+class MinimapaWindow extends PApplet {
+  PApplet parent;
+  Minimapa minimap;
+
+  MinimapaWindow(PApplet parent, Minimapa minimap) {
+    this.parent = parent;
+    this.minimap = minimap;
+    PApplet.runSketch(new String[]{this.getClass().getName()}, this);
+  }
+
+  public void settings() {
+    size(minimap.size, minimap.size);
+  }
+
+  public void setup() {
+    surface.setTitle("Minimap");
+  }
+
+  public void draw() {
+    background(50);
+    this.image(minimap.pg, 0, 0, this.width, this.height);
+    // Render player position
     PVector minimapPlayerPos = new PVector(
-      map(player.pos.x, 0, mapa.size.x, 0, size),
-      map(player.pos.y, 0, mapa.size.y, 0, size)
+      map(player.pos.x, 0, mapa.size.x, 0, this.width),
+      map(player.pos.y, 0, mapa.size.y, 0, this.height)
       );
-    fill(0);
-    noStroke();
-    circle(
-      pos.x + minimapPlayerPos.x,
-      pos.y + minimapPlayerPos.y,
-      5
-      );
+    this.fill(0);
+    this.noStroke();
+    this.ellipse(minimapPlayerPos.x, minimapPlayerPos.y, 5, 5);
 
+    // Render samples
     for (Sample sample : samples) {
       PVector minimapSamplePos = new PVector(
-        map(sample.pos.x, 0, mapa.size.x, 0, size),
-        map(sample.pos.y, 0, mapa.size.y, 0, size)
+        map(sample.pos.x, 0, mapa.size.x, 0, this.width),
+        map(sample.pos.y, 0, mapa.size.y, 0, this.height)
         );
-      if (sample.selected) {
-        stroke(0, 255, 0);
-      } else {
-        noStroke();
-      }
-      fill(255, 0, 0);
-      circle(
-        pos.x + minimapSamplePos.x,
-        pos.y + minimapSamplePos.y,
-        5
-        );
+      this.fill(255, 0, 0);
+      this.noStroke();
+      this.circle(minimapSamplePos.x, minimapSamplePos.y, 5);
     }
+  }
+
+  public void close() {
+    getSurface().setVisible(false); // Hide the window
+    dispose();
   }
 }

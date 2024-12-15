@@ -4,12 +4,12 @@ class MapaCell {
   final int gridX, gridY, cellSize;
   int numOfNeighbors;
   float terrain;
-  final float treshold = .5;
+  final float treshold = .45;
   int col;
 
   MapaCell(int x, int y, int c, float t) {
     pos = new PVector(x * c, y * c);
-    state = t > .5;
+    state = t > treshold;
     gridX = x;
     gridY = y;
     cellSize = c;
@@ -17,12 +17,28 @@ class MapaCell {
     numOfNeighbors = 0;
   }
 
+  void turnOn() {
+    terrain = random(1, treshold);
+    state = true;
+    push();
+    colorMode(HSB, 255);
+    if (!state) {
+      col = color(map(terrain, .2, treshold, 0, 150), 255, 255);
+    } else {
+      col = 20;
+    }
+    pop();
+  }
+
+
+
+
   void initNeighbors(Mapa mapa) {
 
     push();
     colorMode(HSB, 255);
     if (!state) {
-      col = color(map(terrain, .2, treshold, 0, 150), 255, 255);
+      col = color(map(terrain, .2, treshold, 0, 170), 255, 255);
     } else {
       col = 20;
     }
