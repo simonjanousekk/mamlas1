@@ -17,11 +17,11 @@ let selectedSample;
 let selectedSampleIndex = 0;
 
 function setup() {
-  let canvas = createCanvas(800, 600);
+  let canvas = createCanvas(800, 500);
   canvas.parent("canvas");
 
   // setup
-  mapa = new Mapa(3000, 3000, 15);
+  mapa = new Mapa(1000, 1000, 10);
   minimapa = new MiniMapa(width - 200, height - 200, 200, mapa);
   let playerStart = randomPosOutsideWalls();
   player = new Player(playerStart.x, playerStart.y);
@@ -52,9 +52,6 @@ function draw() {
 
   player.handleInput();
 
-  let offsetX = width / 2 - player.pos.x;
-  let offsetY = height / 2 - player.pos.y;
-
   let wallDistance = rays[0]._rayLength * 2;
   relevantWalls = walls.filter((wall) => {
     return (
@@ -67,8 +64,14 @@ function draw() {
     );
   });
 
+  let offsetX = width / 2 - player.pos.x;
+  let offsetY = height / 2 - player.pos.y;
+
   push();
-  translate(offsetX, offsetY);
+  translate(width / 2, height / 2);
+  rotate(-player.angle - (PI / 4) * 3);
+  translate(-player.pos.x, -player.pos.y);
+  // translate(offsetX, offsetY);
 
   // rect(0, 0, mapa._size.x, mapa._size.y);
   if (info.getHardMode()) {
