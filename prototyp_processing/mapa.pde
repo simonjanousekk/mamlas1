@@ -1,14 +1,15 @@
 class Mapa { //<>// //<>//
   final PVector size;
   final int cellSize, cols, rows;
-  float noiseScale;
+  float noiseScale, wallNoiseScale;
 
   MapaCell[][] grid;
 
-  Mapa(int x, int y, int c, float n) {
+  Mapa(int x, int y, int c, float n, float wn) {
     size = new PVector(x, y);
     cellSize = c;
     noiseScale = n;
+    wallNoiseScale = wn;
     cols = int(size.x / cellSize);
     rows = int(size.y / cellSize);
 
@@ -17,8 +18,9 @@ class Mapa { //<>// //<>//
     // First create all cells without checking neighbors
     for (int xl = 0; xl < cols; xl++) {
       for (int yl = 0; yl < rows; yl++) {
-        float terrain = noise(xl * noiseScale, yl * noiseScale);
-        grid[xl][yl] = new MapaCell(xl, yl, cellSize, terrain);
+        float terrain = map(noise(xl * noiseScale, yl * noiseScale), .2, .8, 0, 1);
+        float isWall = map(noise(xl * wallNoiseScale, yl * wallNoiseScale), .2, .8, 0, 1);
+        grid[xl][yl] = new MapaCell(xl, yl, cellSize, terrain, isWall);
       }
     }
 
@@ -56,7 +58,6 @@ class Mapa { //<>// //<>//
 
 
   void removeSmallCaves() {
-    println("Starting to remove small caves...");
     boolean[][] visited = new boolean[cols][rows];
     ArrayList<ArrayList<PVector>> caves = new ArrayList<>();
 
@@ -67,7 +68,6 @@ class Mapa { //<>// //<>//
           ArrayList<PVector> cave = new ArrayList<>();
           floodFill(x, y, visited, cave);
           caves.add(cave);
-          println("Found cave of size: " + cave.size());
         }
       }
     }
@@ -80,14 +80,11 @@ class Mapa { //<>// //<>//
       }
     }
 
-    println("Largest cave size: " + (largestCave != null ? largestCave.size() : 0));
-
     // Step 3: Remove smaller caves
     for (ArrayList<PVector> cave : caves) {
       if (cave != largestCave) {
         for (PVector cell : cave) {
           grid[(int)cell.x][(int)cell.y].state = true; // Turn on the cells to remove the cave
-          println("Removing cave cell at: (" + (int)cell.x + ", " + (int)cell.y + ")");
         }
       }
     }

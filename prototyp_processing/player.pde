@@ -1,13 +1,18 @@
 class Player {
 
-  final float speed = 2;
-  final float rotationSpeed = 0.02;
+  final float max_speed = 2;
+  final float max_rotationSpeed = 0.03;
+  final float acceleration = .2;
+  final float rotationAcceleration = 0.001;
+  final float friction = .5;
   final int diameter;
   PImage img;
 
   PVector pos;
   float angle = PI/4+PI;
   int samplesCollected = 0;
+  PVector velocity = new PVector(0, 0);
+  float rotationVelocity = 0;
   float imgAspectRatio;
   float imgW, imgH;
 
@@ -76,20 +81,32 @@ class Player {
   }
 
   void handleInput() {
+
+
+
+
     if (moveForward) {
-      pos.x += cos(angle + PI / 4) * speed;
-      pos.y += sin(angle + PI / 4) * speed;
+      velocity.x += cos(angle + PI / 4) * acceleration;
+      velocity.y += sin(angle + PI / 4) * acceleration;
+    } else if (moveBackward) {
+      velocity.x -= cos(angle + PI / 4) * acceleration;
+      velocity.y -= sin(angle + PI / 4) * acceleration;
+    } else {
+      velocity.mult(friction);
     }
-    if (moveBackward) {
-      pos.x -= cos(angle + PI / 4) * speed;
-      pos.y -= sin(angle + PI / 4) * speed;
-    }
+
     if (turnLeft) {
-      angle -= rotationSpeed;
+      rotationVelocity -= rotationAcceleration;
+    } else  if (turnRight) {
+      rotationVelocity += rotationAcceleration;
+    } else {
+      rotationVelocity *= friction;
     }
-    if (turnRight) {
-      angle += rotationSpeed;
-    }
+
+    rotationVelocity = rotationVelocity > max_rotationSpeed ? max_rotationSpeed : rotationVelocity;
+    angle += rotationVelocity;
+
+    pos.add(velocity.limit(max_speed));
 
     if (angle > TWO_PI) {
       angle = 0;

@@ -66,8 +66,29 @@ PVector randomPosOutsideWalls() {
   PVector pos = new PVector(random(mapa.size.x), random(mapa.size.y));
   while (
     mapa.grid[floor(pos.x / mapa.cellSize)][floor(pos.y / mapa.cellSize)].state
+    && (mapa.grid[floor(pos.x / mapa.cellSize)][floor(pos.y / mapa.cellSize)].diagonal == Diagonal.FALSE)
     ) {
     pos = new PVector(random(mapa.size.x), random(mapa.size.y));
   }
   return pos;
+}
+
+void displayFPS() {
+  fill(255);
+  textSize(16);
+  textAlign(RIGHT, BOTTOM);
+  text(fakeFrameRate, width-5, height-20);
+  text(int(frameRate), width-5, height-5);
+}
+
+void displayMask(int border) {
+  push();
+  fill(0);
+  noStroke();
+  rect(0, 0, border, height);
+  rect(0, 0, width, border);
+  rect(width, height, -border, -height);
+  rect(width, height, -width, -border);
+  image(mask, border, border, width-border*2, height-border*2);
+  pop();
 }

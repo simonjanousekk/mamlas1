@@ -12,7 +12,7 @@ class Minimapa {
 
   void update() {
     pg.beginDraw();
-    pg.background(0, 0, 40);
+    pg.background(127);
     pg.noStroke();
     //pg.stroke(0);
     //pg.strokeWeight(0);

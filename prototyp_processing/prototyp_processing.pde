@@ -4,27 +4,35 @@ Mapa mapa;
 Minimapa minimapa;
 MinimapaWindow minimapaWindow;
 
+
 PImage mask;
 
 
 ArrayList<Wall> walls = new ArrayList<Wall>();
 ArrayList<Ray> rays = new ArrayList<Ray>();
 ArrayList<Sample> samples = new ArrayList<Sample>();
+ArrayList<TMarker> tmarkers = new ArrayList<TMarker>();
 
 
 int rayCount = 36;
 int sampleCount = 5;
 
 int minimapaSize = 500;
-int mapaSize = 6000;
-float mapScale = 0.05;
+int mapaSize = 5000;
+float terrainMapScale = 0.08;
+float wallNoiseScale = 0.05;
 int cellSize = 50;
+
+int fakeFrameRate = 12;
+
+int sonarRange = 100;
 
 
 
 void setup() {
   size(600, 600);
 
+  //frameRate(12);
   noSmooth();
 
   mask = loadImage("mask.png");
@@ -36,8 +44,8 @@ void setup() {
   randomSeed(millis());
   noiseSeed(millis());
 
-  mapa = new Mapa(mapaSize, mapaSize, cellSize, mapScale);
-  player = new Player(randomPosOutsideWalls(), 50);
+  mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
+  player = new Player(randomPosOutsideWalls(), 60);
   minimapa = new Minimapa(minimapaSize);
   minimapaWindow = new MinimapaWindow(this, minimapa);
 
@@ -54,7 +62,8 @@ void setup() {
 }
 
 void draw() {
-  background(50);
+
+  fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
 
 
   // get relevant walls
@@ -72,39 +81,51 @@ void draw() {
     }
   }
 
-
-
-  //
-  push();
-  translate(width / 2, height / 2);
-  rotate(-player.angle - (PI / 4) * 3);
-  translate(-player.pos.x, -player.pos.y);
-
-
-
-  mapa.display();
-
   for (Wall wall : relevantWalls) {
     player.collide(wall);
-    wall.display();
   }
-
-  for (Ray ray : rays) {
-    ray.update(player.pos, player.angle);
-    ray.findShortestIntersection(relevantWalls);
-    ray.display();
-  }
-
   for (Sample sample : samples) {
-    sample.display();
     sample.update();
   }
 
-  pop();
+  //
+  if (frameCount % (60/fakeFrameRate) == 0) {
+    background(50);
+
+    push();
+    translate(width / 2, height / 2);
+    rotate(-player.angle - (PI / 4) * 3);
+    translate(-player.pos.x, -player.pos.y);
+
+
+
+    mapa.display();
+
+    for (Wall wall : relevantWalls) {
+      wall.display();
+    }
+    for (TMarker tm : tmarkers) {
+      tm.display();
+    }
+
+    for (Ray ray : rays) {
+      ray.update(player.pos, player.angle);
+      ray.findShortestIntersection(relevantWalls);
+      ray.display();
+    }
+
+    for (Sample sample : samples) {
+      sample.display();
+    }
+
+    pop();
+
+    player.display();
+  }
 
 
   player.handleInput();
-  player.display();
+
 
 
   displayMask(10);
@@ -122,13 +143,15 @@ void keyPressed() {
 
   if (key == 'r') { // restart
     if (minimapaWindow != null) {
-      minimapaWindow.close();
+      //minimapaWindow.close();
     }
     setup();
   }
   if (key == ' ') { // remove caves
-    mapa.removeSmallCaves();
-    minimapa.update();
+    println("check terrain");
+    for (int i = 0; i < 5; i++) {
+      tmarkers.add(new TMarker(random(player.pos.x-sonarRange, player.pos.x+sonarRange), random(player.pos.y-sonarRange, player.pos.y+sonarRange)));
+    }
   }
 }
 

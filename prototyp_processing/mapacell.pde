@@ -1,44 +1,43 @@
+enum Diagonal {
+  FALSE, TOP_LEFT, TOP_RIGHT, BOTT_LEFT, BOTT_RIGHT
+}
+
 class MapaCell {
   final PVector pos;
   boolean state;
   final int gridX, gridY, cellSize;
   int numOfNeighbors;
-  float terrain;
+  float terrainNoise, wallNoise;
   final float treshold = .45;
   int col;
+  Diagonal diagonal = Diagonal.FALSE;
 
-  MapaCell(int x, int y, int c, float t) {
+  MapaCell(int x, int y, int c, float t, float wt) {
     pos = new PVector(x * c, y * c);
-    state = t > treshold;
+    state = wt > treshold;
     gridX = x;
     gridY = y;
     cellSize = c;
-    terrain = t;
+    terrainNoise = t;
+    wallNoise = wt;
+
     numOfNeighbors = 0;
   }
 
   void turnOn() {
-    terrain = random(1, treshold);
+    terrainNoise = random(1, treshold);
     state = true;
     push();
     colorMode(HSB, 255);
-    if (!state) {
-      col = color(map(terrain, .2, treshold, 0, 150), 255, 255);
-    } else {
-      col = 20;
-    }
+    //col = color(map(terrainNoise, .2, treshold, 0, 150), 255, 255);
     pop();
   }
 
-
-
-
   void initNeighbors(Mapa mapa) {
-
     push();
     colorMode(HSB, 255);
     if (!state) {
-      col = color(map(terrain, .2, treshold, 0, 170), 255, 255);
+      col = color(map(terrainNoise, .1, treshold, 0, 150), 255, 255);
     } else {
       col = 20;
     }
@@ -67,12 +66,22 @@ class MapaCell {
         (neighbors[2] && neighbors[3]))
         ) {
         addWall(4);
+        if (neighbors[0] && neighbors[1]) {
+          diagonal = Diagonal.BOTT_LEFT;
+        } else {
+          diagonal = Diagonal.TOP_RIGHT;
+        }
       } else if (
         numOfNeighbors == 2 &&
         ((neighbors[0] && neighbors[3]) ||
         (neighbors[2] && neighbors[1]))
         ) {
         addWall(5);
+        if (neighbors[0] && neighbors[3]) {
+          diagonal = Diagonal.TOP_LEFT;
+        } else {
+          diagonal = Diagonal.BOTT_RIGHT;
+        }
       } else {
         for (int i = 0; i < neighbors.length; i++) {
           if (neighbors[i]) addWall(i);
@@ -103,19 +112,51 @@ class MapaCell {
 
 
   void display() {
-    if (
+    if ((
       pos.x < player.pos.x + width / 2 &&
       pos.x > player.pos.x - width / 2 - cellSize &&
       pos.y < player.pos.y + height / 2 &&
-      pos.y > player.pos.y - height / 2 - cellSize
+      pos.y > player.pos.y - height / 2 - cellSize) && !state
       ) {
       push();
       translate(pos.x, pos.y);
-      strokeWeight(2);
+      //strokeWeight(2);
       stroke(col);
       fill(col);
+      if (diagonal == Diagonal.FALSE) {
 
-      rect(0, 0, cellSize, cellSize);
+        rect(0, 0, cellSize, cellSize);
+      } else if (diagonal == Diagonal.BOTT_LEFT) {
+        beginShape();
+        vertex(0, 0);
+        vertex(0, cellSize);
+        vertex(cellSize, cellSize);
+        endShape(CLOSE);
+      } else if (diagonal == Diagonal.TOP_RIGHT) {
+        beginShape();
+        vertex(0, 0);
+        vertex(cellSize, 0);
+        vertex(cellSize, cellSize);
+        endShape(CLOSE);
+      } else if (diagonal == Diagonal.TOP_LEFT) {
+        beginShape();
+        vertex(0, cellSize);
+        vertex(cellSize, 0);
+        vertex(cellSize, cellSize);
+        endShape(CLOSE);
+      } else if (diagonal == Diagonal.BOTT_RIGHT) {
+        beginShape();
+        vertex(0, cellSize);
+        vertex(cellSize, 0);
+        vertex(0, 0);
+        endShape(CLOSE);
+      }
+
+      fill(0);
+      textAlign(CENTER, CENTER);
+      translate(cellSize / 2, cellSize / 2);
+      text(terrainNoise, 0, 0);
+
       pop();
     }
   }
