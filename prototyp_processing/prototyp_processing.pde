@@ -19,7 +19,7 @@ int sampleCount = 5;
 
 int minimapaSize = 500;
 int mapaSize = 5000;
-float terrainMapScale = 0.08;
+float terrainMapScale = 0.02;
 float wallNoiseScale = 0.05;
 int cellSize = 50;
 
