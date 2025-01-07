@@ -69,7 +69,7 @@ class Player {
     //translate(-imgW/2, -imgH/2);
     //image(img, 0, 0, imgW, imgH);
 
-    fill(0, 255, 255);
+    fill(0);
     beginShape();
     vertex(-diameter/4, diameter/4);
     vertex(diameter/4, diameter/4);
@@ -78,7 +78,7 @@ class Player {
 
     pop();
   }
-  
+
   void handleInput() {
     if (moveForward) {
       pos.add(cos(angle+PI/4)*max_speed, sin(angle+PI/4)*max_speed);
@@ -87,12 +87,13 @@ class Player {
       pos.sub(cos(angle+PI/4)*max_speed, sin(angle+PI/4)*max_speed);
     }
     if (turnLeft) {
-      angle -= rotationAcceleration;
+      angle -= max_rotationSpeed;
     }
     if (turnRight) {
-      angle += rotationAcceleration;
+      angle += max_rotationSpeed;
     }
-      
+
+    angle = (angle + TWO_PI) % TWO_PI;
   }
 
   void acchandleInput() {
@@ -111,18 +112,19 @@ class Player {
     }
     if (velocity.mag() > max_speed) {
       velocity.setMag(max_speed);
-    if (turnLeft) {
-      rotationVelocity -= rotationAcceleration;
+      if (turnLeft) {
+        rotationVelocity -= rotationAcceleration;
+      }
+      if (turnRight) {
+        rotationVelocity += rotationAcceleration;
+      }
+      if (!turnLeft && !turnRight) {
+        rotationVelocity *= friction;
+      }
+      rotationVelocity = constrain(rotationVelocity, -max_rotationSpeed, max_rotationSpeed);
+      angle += rotationVelocity;
+      angle = (angle + TWO_PI) % TWO_PI;
+      pos.add(velocity);
     }
-    if (turnRight) {
-      rotationVelocity += rotationAcceleration;
-    }
-    if (!turnLeft && !turnRight) {
-      rotationVelocity *= friction;
-    }
-    rotationVelocity = constrain(rotationVelocity, -max_rotationSpeed, max_rotationSpeed);
-    angle += rotationVelocity;
-    angle = (angle + TWO_PI) % TWO_PI;
-    pos.add(velocity);
   }
 }

@@ -1,6 +1,6 @@
 class Ray { //<>//
   PVector pos, dir;
-  final int rayLength = 100;
+
   float originAngle;
   PVector intersection = null;
 
@@ -36,6 +36,20 @@ class Ray { //<>//
         );
     }
   }
+
+
+  void findWallAnimation() {
+    //if (!(intersection == null)) {
+      wmarkers.add(new WMarker(
+        pos,
+        new PVector(pos.x + dir.x * rayLength, pos.y + dir.y * rayLength),
+        intersection
+        ));
+    //}
+  }
+
+
+
 
   ArrayList<PVector> cast(ArrayList<Wall> wls) {
     ArrayList<PVector> intersections = new ArrayList<PVector>();

@@ -92,3 +92,14 @@ void displayMask(int border) {
   image(mask, border, border, width-border*2, height-border*2);
   pop();
 }
+
+
+
+boolean isDistanceGreater(float x1, float y1, float x2, float y2, float threshold) {
+  return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) > threshold * threshold;
+}
+
+
+boolean isDistanceLess(float x1, float y1, float x2, float y2, float threshold) {
+  return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) < threshold * threshold;
+}

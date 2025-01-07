@@ -44,10 +44,10 @@ class MapaCell {
         col = color(255, 0, 0);
       } else if (terrainNoise > .33) {
         terrain = Terrain.MID;
-        col = color(255, 127, 0);
+        col = color(255, 255, 0);
       } else {
         terrain = Terrain.SOFT;
-        col = color(255, 255, 0);
+        col = color(0, 255, 0);
       }
     }
 

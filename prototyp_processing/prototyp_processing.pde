@@ -14,20 +14,20 @@ ArrayList<Wall> walls = new ArrayList<Wall>();
 ArrayList<Ray> rays = new ArrayList<Ray>();
 ArrayList<Sample> samples = new ArrayList<Sample>();
 ArrayList<TMarker> tmarkers = new ArrayList<TMarker>();
+ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
 
+int rayCount = 1;
+final int rayLength = 150;
 
-int rayCount = 50;
 int sampleCount = 1;
 
 int minimapaSize = 500;
-int mapaSize = 5000;
-float terrainMapScale = 0.02;
+int mapaSize = 8000;
+float terrainMapScale = 0.03;
 float wallNoiseScale = 0.05;
 int cellSize = 50;
 
-int fakeFrameRate = 12;
-
-int sonarRange = 100;
+int fakeFrameRate = 30;
 
 float battery = 100;
 boolean radarDisplay = false;
@@ -38,7 +38,7 @@ void setup() {
   size(600, 600);
 
   //frameRate(12);
-  //noSmooth();
+  noSmooth();
 
   mask = loadImage("mask.png");
 
@@ -46,6 +46,7 @@ void setup() {
   rays.clear();
   samples.clear();
   tmarkers.clear();
+  wmarkers.clear();
 
   randomSeed(millis());
   noiseSeed(millis());
@@ -74,11 +75,9 @@ void setup() {
 
 void draw() {
 
-  fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
-
-
+  //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
   // get relevant walls
-  int wallDistance = rays.get(0).rayLength * 2;
+  int wallDistance = rayLength * 2;
   ArrayList<Wall> relevantWalls = new ArrayList<Wall>(walls);
   for (int i = relevantWalls.size()-1; i >= 0; i--) {
     Wall wall = relevantWalls.get(i);
@@ -102,11 +101,18 @@ void draw() {
     ray.update(player.pos, player.angle);
     ray.findShortestIntersection(relevantWalls);
   }
+  for (int i = wmarkers.size() - 1; i >= 0; i--) {
+    WMarker wm = wmarkers.get(i);
+    if (wm.destroy) {
+      wmarkers.remove(i);
+    }
+    wm.update();
+  }
 
-  //
+  // realest drawing
   if (frameCount % (60/fakeFrameRate) == 0) {
     if (radarDisplay) {
-      background(50);
+      background(150);
 
       radar.display();
       compass.display();
@@ -122,9 +128,12 @@ void draw() {
 
 
       mapa.display();
+      //for (Wall wall : relevantWalls) {
+      //  wall.display();
+      //}
 
-      for (Wall wall : relevantWalls) {
-        wall.display();
+      for (WMarker wm : wmarkers) {
+        wm.display();
       }
       for (TMarker tm : tmarkers) {
         tm.display();
@@ -137,10 +146,12 @@ void draw() {
       for (Sample sample : samples) {
         sample.display();
       }
+      for (WMarker wm : wmarkers) {
+        wm.display();
+      }
 
       pop();
-       
-      radar.display();
+
       compass.display();
       player.display();
     }
@@ -172,9 +183,12 @@ void keyPressed() {
     setup();
   }
   if (key == ' ') { // remove caves
-    println("check terrain");
-    for (int i = 0; i < 5; i++) {
-      tmarkers.add(new TMarker(random(player.pos.x-sonarRange, player.pos.x+sonarRange), random(player.pos.y-sonarRange, player.pos.y+sonarRange)));
+    //println("check terrain");
+    //for (int i = 0; i < 5; i++) {
+    //  tmarkers.add(new TMarker(random(player.pos.x-sonarRange, player.pos.x+sonarRange), random(player.pos.y-sonarRange, player.pos.y+sonarRange)));
+    //}
+    for (Ray r : rays) {
+      r.findWallAnimation();
     }
   }
   if (key == 'l') { //radar
