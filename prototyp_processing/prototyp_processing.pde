@@ -3,10 +3,12 @@ Player player;
 Mapa mapa;
 Minimapa minimapa;
 MinimapaWindow minimapaWindow;
+Radar radar;
+Compass compass;
 
+Info info;
 
 PImage mask;
-
 
 ArrayList<Wall> walls = new ArrayList<Wall>();
 ArrayList<Ray> rays = new ArrayList<Ray>();
@@ -14,8 +16,8 @@ ArrayList<Sample> samples = new ArrayList<Sample>();
 ArrayList<TMarker> tmarkers = new ArrayList<TMarker>();
 
 
-int rayCount = 36;
-int sampleCount = 5;
+int rayCount = 50;
+int sampleCount = 1;
 
 int minimapaSize = 500;
 int mapaSize = 5000;
@@ -27,35 +29,44 @@ int fakeFrameRate = 12;
 
 int sonarRange = 100;
 
+float battery = 100;
+boolean radarDisplay = false;
+
 
 
 void setup() {
   size(600, 600);
 
   //frameRate(12);
-  noSmooth();
+  //noSmooth();
 
   mask = loadImage("mask.png");
 
   walls.clear();
   rays.clear();
   samples.clear();
+  tmarkers.clear();
 
   randomSeed(millis());
   noiseSeed(millis());
 
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
-  player = new Player(randomPosOutsideWalls(), 60);
+  player = new Player(randomPosOutsideWalls(), 40);
   minimapa = new Minimapa(minimapaSize);
   minimapaWindow = new MinimapaWindow(this, minimapa);
+  info = new Info(new PVector(10, 10));
 
 
   for (int i = 0; i < rayCount; i++) {
-    rays.add(new Ray(player.pos, radians(i*(360/rayCount))));
+    rays.add(new Ray(player.pos, i*(TWO_PI/rayCount)));
   }
   for (int i = 0; i < sampleCount; i++) {
     samples.add(new Sample(randomPosOutsideWalls()));
   }
+
+  radar = new Radar(width/2-50);
+  compass = new Compass(width/2-80);
+
 
   surface.setVisible(false);
   surface.setVisible(true);
@@ -87,40 +98,52 @@ void draw() {
   for (Sample sample : samples) {
     sample.update();
   }
+  for (Ray ray : rays) {
+    ray.update(player.pos, player.angle);
+    ray.findShortestIntersection(relevantWalls);
+  }
 
   //
   if (frameCount % (60/fakeFrameRate) == 0) {
-    background(50);
+    if (radarDisplay) {
+      background(50);
 
-    push();
-    translate(width / 2, height / 2);
-    rotate(-player.angle - (PI / 4) * 3);
-    translate(-player.pos.x, -player.pos.y);
+      radar.display();
+      compass.display();
+      player.display();
+    } else {
+      background(50);
+
+      push();
+      translate(width / 2, height / 2);
+      rotate(-player.angle - (PI / 4) * 3);
+      translate(-player.pos.x, -player.pos.y);
 
 
 
-    mapa.display();
+      mapa.display();
 
-    for (Wall wall : relevantWalls) {
-      wall.display();
+      for (Wall wall : relevantWalls) {
+        wall.display();
+      }
+      for (TMarker tm : tmarkers) {
+        tm.display();
+      }
+
+      for (Ray ray : rays) {
+        ray.display();
+      }
+
+      for (Sample sample : samples) {
+        sample.display();
+      }
+
+      pop();
+       
+      radar.display();
+      compass.display();
+      player.display();
     }
-    for (TMarker tm : tmarkers) {
-      tm.display();
-    }
-
-    for (Ray ray : rays) {
-      ray.update(player.pos, player.angle);
-      ray.findShortestIntersection(relevantWalls);
-      ray.display();
-    }
-
-    for (Sample sample : samples) {
-      sample.display();
-    }
-
-    pop();
-
-    player.display();
   }
 
 
@@ -129,6 +152,7 @@ void draw() {
 
 
   displayMask(10);
+  info.display();
   displayFPS();
 }
 
@@ -143,7 +167,7 @@ void keyPressed() {
 
   if (key == 'r') { // restart
     if (minimapaWindow != null) {
-      //minimapaWindow.close();
+      minimapaWindow.close();
     }
     setup();
   }
@@ -152,6 +176,9 @@ void keyPressed() {
     for (int i = 0; i < 5; i++) {
       tmarkers.add(new TMarker(random(player.pos.x-sonarRange, player.pos.x+sonarRange), random(player.pos.y-sonarRange, player.pos.y+sonarRange)));
     }
+  }
+  if (key == 'l') { //radar
+    radarDisplay = !radarDisplay;
   }
 }
 

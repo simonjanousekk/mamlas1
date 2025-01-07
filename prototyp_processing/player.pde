@@ -1,20 +1,20 @@
 class Player {
 
   final float max_speed = 3;
-  final float max_rotationSpeed = 0.03;
-  final float acceleration = .05;
+  final float max_rotationSpeed = .02;
+  final float acceleration = .1;
   final float rotationAcceleration = 0.001;
-  final float friction = .4;
+  final float friction = .9;
   final int diameter;
   PImage img;
 
   PVector pos;
   float angle = PI/4+PI;
   int samplesCollected = 0;
-  
+
   PVector velocity = new PVector(0, 0);
   float rotationVelocity = 0;
-  
+
   float imgAspectRatio;
   float imgW, imgH;
 
@@ -66,51 +66,63 @@ class Player {
     translate(width/2, height/2);
     fill(255, 100);
     //circle(0, 0, diameter);
-    translate(-imgW/2, -imgH/2);
-    image(img, 0, 0, imgW, imgH);
+    //translate(-imgW/2, -imgH/2);
+    //image(img, 0, 0, imgW, imgH);
 
-    //stroke(50);
-    //strokeWeight(2);
-    //noStroke();
-    //fill(0, 255, 255);
-    //beginShape();
-    //vertex(-diameter, diameter);
-    //vertex(diameter, diameter);
-    //vertex(0, -diameter * 2);
-    //endShape(CLOSE);
+    fill(0, 255, 255);
+    beginShape();
+    vertex(-diameter/4, diameter/4);
+    vertex(diameter/4, diameter/4);
+    vertex(0, -diameter/2);
+    endShape(CLOSE);
 
     pop();
   }
-
+  
   void handleInput() {
     if (moveForward) {
-      velocity.x += cos(angle + PI / 4) * acceleration;
-      velocity.y += sin(angle + PI / 4) * acceleration;
-    } else if (moveBackward) {
-      velocity.x -= cos(angle + PI / 4) * acceleration;
-      velocity.y -= sin(angle + PI / 4) * acceleration;
-    } else {
+      pos.add(cos(angle+PI/4)*max_speed, sin(angle+PI/4)*max_speed);
+    }
+    if (moveBackward) {
+      pos.sub(cos(angle+PI/4)*max_speed, sin(angle+PI/4)*max_speed);
+    }
+    if (turnLeft) {
+      angle -= rotationAcceleration;
+    }
+    if (turnRight) {
+      angle += rotationAcceleration;
+    }
+      
+  }
+
+  void acchandleInput() {
+    PVector accelerationVector = new PVector(0, 0);
+    if (moveForward) {
+      accelerationVector.x += cos(angle + PI / 4) * acceleration;
+      accelerationVector.y += sin(angle + PI / 4) * acceleration;
+    }
+    if (moveBackward) {
+      accelerationVector.x -= cos(angle + PI / 4) * acceleration;
+      accelerationVector.y -= sin(angle + PI / 4) * acceleration;
+    }
+    velocity.add(accelerationVector);
+    if (!moveForward && !moveBackward) {
       velocity.mult(friction);
     }
-
+    if (velocity.mag() > max_speed) {
+      velocity.setMag(max_speed);
     if (turnLeft) {
       rotationVelocity -= rotationAcceleration;
-    } else if (turnRight) {
+    }
+    if (turnRight) {
       rotationVelocity += rotationAcceleration;
-    } else {
+    }
+    if (!turnLeft && !turnRight) {
       rotationVelocity *= friction;
     }
-
     rotationVelocity = constrain(rotationVelocity, -max_rotationSpeed, max_rotationSpeed);
     angle += rotationVelocity;
-    
-    velocity.limit(max_speed);
+    angle = (angle + TWO_PI) % TWO_PI;
     pos.add(velocity);
-
-    if (angle > TWO_PI) {
-      angle = 0;
-    } else if (this.angle < 0) {
-      angle = TWO_PI;
-    }
   }
 }

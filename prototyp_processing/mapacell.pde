@@ -1,6 +1,9 @@
 enum Diagonal {
   FALSE, TOP_LEFT, TOP_RIGHT, BOTT_LEFT, BOTT_RIGHT
 }
+enum Terrain {
+  SOFT, HARD, MID
+}
 
 class MapaCell {
   final PVector pos;
@@ -9,8 +12,9 @@ class MapaCell {
   int numOfNeighbors;
   float terrainNoise, wallNoise;
   final float treshold = .45;
-  int col;
+  color col;
   Diagonal diagonal = Diagonal.FALSE;
+  Terrain terrain;
 
   MapaCell(int x, int y, int c, float t, float wt) {
     pos = new PVector(x * c, y * c);
@@ -34,14 +38,18 @@ class MapaCell {
   }
 
   void initNeighbors(Mapa mapa) {
-    push();
-    colorMode(HSB, 255);
     if (!state) {
-      col = color(map(terrainNoise, .1, treshold, 0, 150), 255, 255);
-    } else {
-      col = 20;
+      if (terrainNoise > .66) {
+        terrain = Terrain.HARD;
+        col = color(255, 0, 0);
+      } else if (terrainNoise > .33) {
+        terrain = Terrain.MID;
+        col = color(255, 127, 0);
+      } else {
+        terrain = Terrain.SOFT;
+        col = color(255, 255, 0);
+      }
     }
-    pop();
 
     if (!state) {
       //get neighbors
@@ -151,11 +159,6 @@ class MapaCell {
         vertex(0, 0);
         endShape(CLOSE);
       }
-
-      fill(0);
-      textAlign(CENTER, CENTER);
-      translate(cellSize / 2, cellSize / 2);
-      text(terrainNoise, 0, 0);
 
       pop();
     }

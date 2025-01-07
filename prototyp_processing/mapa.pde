@@ -18,8 +18,8 @@ class Mapa { //<>// //<>//
     // First create all cells without checking neighbors
     for (int xl = 0; xl < cols; xl++) {
       for (int yl = 0; yl < rows; yl++) {
-        float terrain = map(noise(xl * noiseScale, yl * noiseScale), .2, .8, 0, 1);
-        float isWall = map(noise(xl * wallNoiseScale, yl * wallNoiseScale), .2, .8, 0, 1);
+        float terrain = map(noise(xl * noiseScale, yl * noiseScale), .1, .9, 0, 1);
+        float isWall = map(noise(xl * wallNoiseScale, yl * wallNoiseScale), .1, .9, 0, 1);
         grid[xl][yl] = new MapaCell(xl, yl, cellSize, terrain, isWall);
       }
     }
