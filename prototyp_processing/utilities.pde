@@ -94,12 +94,49 @@ void displayMask(int border) {
 }
 
 
-
-boolean isDistanceGreater(float x1, float y1, float x2, float y2, float threshold) {
+boolean isDistanceMore(PVector p1, PVector p2, float threshold) {
+  return isDistanceMore(p1.x, p1.y, p2.x, p2.y, threshold);
+}
+boolean isDistanceMore(float x1, float y1, float x2, float y2, float threshold) {
   return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) > threshold * threshold;
 }
 
 
+boolean isDistanceLess(PVector p1, PVector p2, float threshold) {
+  return isDistanceLess(p1.x, p1.y, p2.x, p2.y, threshold);
+}
 boolean isDistanceLess(float x1, float y1, float x2, float y2, float threshold) {
   return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) < threshold * threshold;
+}
+
+
+PVector pointAlongLine(float x1, float y1, float x2, float y2, float t, String easing) {
+  // Apply easing to t
+  t = constrain(t, 0, 1);
+  t = applyEasing(t, easing);
+
+  // Calculate the interpolated point
+  float x = x1 + t * (x2 - x1);
+  float y = y1 + t * (y2 - y1);
+
+  return new PVector(x, y);
+}
+
+float applyEasing(float t, String easing) {
+  switch (easing) {
+    case "easeInQuad":
+      return t * t; // Quadratic ease-in
+    case "easeOutQuad":
+      return t * (2 - t); // Quadratic ease-out
+    case "easeInOutQuad":
+      return (t < 0.5) ? 2 * t * t : -1 + (4 - 2 * t) * t; // Quadratic ease-in-out
+    case "easeInCubic":
+      return t * t * t; // Cubic ease-in
+    case "easeOutCubic":
+      return (--t) * t * t + 1; // Cubic ease-out
+    case "easeInOutCubic":
+      return (t < 0.5) ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1; // Cubic ease-in-out
+    default:
+      return t; // Linear
+  }
 }

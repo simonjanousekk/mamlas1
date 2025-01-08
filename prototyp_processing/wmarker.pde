@@ -8,6 +8,10 @@ class WMarker {
   boolean isWall;
   int animationL = 60;
   int animationStart, animationEnd;
+  int fadeAnimationL = 30;
+  int fadeAnimationStart, fadeAnimationEnd;
+
+  color col = color(255, 0, 255, 255);
 
 
 
@@ -28,11 +32,8 @@ class WMarker {
   void update() {
     if (!finished) {
       float amt = map(frameCount, animationStart, animationEnd, 0, 1);
-      println(amt);
-      
-      pos.x = lstart.x + amt * (lend.x - lstart.x);
-      pos.y = lstart.y + amt * (lend.y - lstart.y);
-      
+      pos = pointAlongLine(lstart.x, lstart.y, lend.x, lend.y, amt, "easeOutCubic");
+
       if (isWall) {
         if (isDistanceLess(pos.x, pos.y, fpos.x, fpos.y, 5)) {
           finished = true;
@@ -41,16 +42,21 @@ class WMarker {
       } else {
         if (amt >= 1) {
           finished = true;
+          fadeAnimationStart = frameCount;
+          fadeAnimationEnd = fadeAnimationStart + fadeAnimationL;
         }
       }
     } else if (finished && !isWall && !destroy) {
-      println("destroy");
-      destroy = true;
+      float opacity = map(frameCount, fadeAnimationStart, fadeAnimationEnd, 260, 0);
+      col = color(255, 0, 255, opacity);
+      if (opacity >= 255) {
+        destroy = true;
+      }
     }
   }
 
   void display() {
-    fill(255, 0, 255);
+    fill(col);
     noStroke();
     circle(pos.x, pos.y, 5);
   }

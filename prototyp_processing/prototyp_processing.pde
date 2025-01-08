@@ -13,11 +13,10 @@ PImage mask;
 ArrayList<Wall> walls = new ArrayList<Wall>();
 ArrayList<Ray> rays = new ArrayList<Ray>();
 ArrayList<Sample> samples = new ArrayList<Sample>();
-ArrayList<TMarker> tmarkers = new ArrayList<TMarker>();
 ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
 
-int rayCount = 1;
-final int rayLength = 150;
+int rayCount = 36;
+final int rayLength = 250;
 
 int sampleCount = 1;
 
@@ -45,7 +44,6 @@ void setup() {
   walls.clear();
   rays.clear();
   samples.clear();
-  tmarkers.clear();
   wmarkers.clear();
 
   randomSeed(millis());
@@ -76,20 +74,28 @@ void setup() {
 void draw() {
 
   //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
+  
   // get relevant walls
-  int wallDistance = rayLength * 2;
+  float relevantDistance = rayLength*1.2;
   ArrayList<Wall> relevantWalls = new ArrayList<Wall>(walls);
   for (int i = relevantWalls.size()-1; i >= 0; i--) {
     Wall wall = relevantWalls.get(i);
-    if (!((wall.pos1.x - player.pos.x) * (wall.pos1.x - player.pos.x) +
-      (wall.pos1.y - player.pos.y) * (wall.pos1.y - player.pos.y) <
-      wallDistance * wallDistance ||
-      (wall.pos2.x - player.pos.x) * (wall.pos2.x - player.pos.x) +
-      (wall.pos2.y - player.pos.y) * (wall.pos2.y - player.pos.y) <
-      wallDistance * wallDistance)) {
+    if (isDistanceMore(wall.pos1, player.pos, relevantDistance) || isDistanceMore(wall.pos2, player.pos, relevantDistance)) {
       relevantWalls.remove(i);
     }
   }
+  relevantWallsC = relevantWalls.size();
+  
+  //get relewant wmarkers
+  ArrayList<WMarker> relevantWMarkers = new ArrayList<WMarker>(wmarkers);
+  for (int i = relevantWMarkers.size()-1; i >= 0; i--) {
+    WMarker wm = relevantWMarkers.get(i);
+    if (isDistanceMore(wm.pos, player.pos, relevantDistance)) {
+      relevantWMarkers.remove(i);
+    }
+  }
+  relevantWMarkersC = relevantWMarkers.size();
+  
 
   for (Wall wall : relevantWalls) {
     player.collide(wall);
@@ -132,16 +138,13 @@ void draw() {
       //  wall.display();
       //}
 
-      for (WMarker wm : wmarkers) {
+      for (WMarker wm : relevantWMarkers) {
         wm.display();
       }
-      for (TMarker tm : tmarkers) {
-        tm.display();
-      }
 
-      for (Ray ray : rays) {
-        ray.display();
-      }
+      //for (Ray ray : rays) {
+      //  ray.display();
+      //}
 
       for (Sample sample : samples) {
         sample.display();
@@ -188,6 +191,7 @@ void keyPressed() {
     //  tmarkers.add(new TMarker(random(player.pos.x-sonarRange, player.pos.x+sonarRange), random(player.pos.y-sonarRange, player.pos.y+sonarRange)));
     //}
     for (Ray r : rays) {
+      println(wmarkers.size());
       r.findWallAnimation();
     }
   }
