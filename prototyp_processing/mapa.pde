@@ -50,7 +50,7 @@ class Mapa {  //<>//
   void display() {
     for (int x = 0; x < cols; x++) {
       for (int y = 0; y < rows; y++) {
-        //grid[x][y].display();
+        grid[x][y].displayAlt();
       }
     }
   }

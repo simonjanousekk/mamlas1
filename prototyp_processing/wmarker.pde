@@ -8,10 +8,8 @@ class WMarker {
   boolean isWall;
   int animationL = 60;
   int animationStart, animationEnd;
-  int fadeAnimationL = 30;
-  int fadeAnimationStart, fadeAnimationEnd;
 
-  color col = color(255, 0, 255, 255);
+  color col = color(255, 255);
 
 
 
@@ -32,7 +30,10 @@ class WMarker {
   void update() {
     if (!finished) {
       float amt = map(frameCount, animationStart, animationEnd, 0, 1);
-      pos = pointAlongLine(lstart.x, lstart.y, lend.x, lend.y, amt, "easeOutCubic");
+      pos = pointAlongLine(lstart.x, lstart.y, lend.x, lend.y, amt);
+      if (!isWall) {
+        col = color(255, map(amt, 0, 1, 255, 0));
+      }
 
       if (isWall) {
         if (isDistanceLess(pos.x, pos.y, fpos.x, fpos.y, 5)) {
@@ -42,18 +43,14 @@ class WMarker {
       } else {
         if (amt >= 1) {
           finished = true;
-          fadeAnimationStart = frameCount;
-          fadeAnimationEnd = fadeAnimationStart + fadeAnimationL;
         }
       }
     } else if (finished && !isWall && !destroy) {
-      float opacity = map(frameCount, fadeAnimationStart, fadeAnimationEnd, 260, 0);
-      col = color(255, 0, 255, opacity);
-      if (opacity >= 255) {
-        destroy = true;
-      }
+      destroy = true;
     }
   }
+
+
 
   void display() {
     fill(col);

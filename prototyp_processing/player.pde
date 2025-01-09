@@ -1,6 +1,6 @@
 class Player {
 
-  final float max_speed = 3;
+  final float max_speed = 2;
   final float max_rotationSpeed = .02;
   final float acceleration = .1;
   final float rotationAcceleration = 0.001;
@@ -64,12 +64,11 @@ class Player {
     push();
 
     translate(width/2, height/2);
-    fill(255, 100);
+    fill(255);
+    noStroke();
     //circle(0, 0, diameter);
     //translate(-imgW/2, -imgH/2);
     //image(img, 0, 0, imgW, imgH);
-
-    fill(0);
     beginShape();
     vertex(-diameter/4, diameter/4);
     vertex(diameter/4, diameter/4);

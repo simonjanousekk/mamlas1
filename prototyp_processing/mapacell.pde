@@ -31,10 +31,10 @@ class MapaCell {
   void turnOn() {
     terrainNoise = random(1, treshold);
     state = true;
-    push();
-    colorMode(HSB, 255);
+    //push();
+    //colorMode(HSB, 255);
     //col = color(map(terrainNoise, .2, treshold, 0, 150), 255, 255);
-    pop();
+    //pop();
   }
 
   void initNeighbors(Mapa mapa) {
@@ -118,6 +118,53 @@ class MapaCell {
   }
 
 
+  void displayAlt() {
+    if ((
+      pos.x < player.pos.x + width / 2 &&
+      pos.x > player.pos.x - width / 2 - cellSize &&
+      pos.y < player.pos.y + height / 2 &&
+      pos.y > player.pos.y - height / 2 - cellSize) && !state
+      ) {
+      push();
+
+      stroke(150);
+      translate(pos.x, pos.y);
+
+
+      if (terrain == Terrain.HARD) {
+        line(0, 0, cellSize, cellSize);
+        line(cellSize/2, 0, cellSize, cellSize/2);
+        line(0, cellSize/2, cellSize/2, cellSize);
+      } else if (terrain == Terrain.MID) {
+        line(0, 0, cellSize, cellSize);
+        line(0, cellSize, cellSize, 0);
+      } else if (terrain == Terrain.SOFT) {
+        line(0, 0, cellSize, cellSize);
+      }
+      pop();
+    }
+
+
+
+    fill(0);
+    translate(cellSize/2, cellSize/2);
+    textAlign(CENTER, CENTER);
+    String s = "";
+    if (diagonal == Diagonal.FALSE) {
+      s = "false";
+    } else if (diagonal == Diagonal.BOTT_LEFT) {
+      s = "bott L";
+    } else if (diagonal == Diagonal.TOP_RIGHT) {
+      s = "top R";
+    } else if (diagonal == Diagonal.TOP_LEFT) {
+      s = "top L";
+    } else if (diagonal == Diagonal.BOTT_RIGHT) {
+      s = "bott R";
+    }
+
+    text(s, 0, 0);
+  }
+
 
   void display() {
     if ((
@@ -132,7 +179,6 @@ class MapaCell {
       stroke(col);
       fill(col);
       if (diagonal == Diagonal.FALSE) {
-
         rect(0, 0, cellSize, cellSize);
       } else if (diagonal == Diagonal.BOTT_LEFT) {
         beginShape();
@@ -159,6 +205,24 @@ class MapaCell {
         vertex(0, 0);
         endShape(CLOSE);
       }
+
+      //fill(0);
+      //translate(cellSize/2, cellSize/2);
+      //textAlign(CENTER, CENTER);
+      //String s = "";
+      //if (diagonal == Diagonal.FALSE) {
+      //  s = "false";
+      //} else if (diagonal == Diagonal.BOTT_LEFT) {
+      //  s = "bott L";
+      //} else if (diagonal == Diagonal.TOP_RIGHT) {
+      //  s = "top R";
+      //} else if (diagonal == Diagonal.TOP_LEFT) {
+      //  s = "top L";
+      //} else if (diagonal == Diagonal.BOTT_RIGHT) {
+      //  s = "bott R";
+      //}
+
+      //text(s, 0, 0);
 
       pop();
     }

@@ -3,7 +3,7 @@ class Compass{
   float angleToSample;
   
   
-  int arrowL = 100;
+  int arrowL = 70;
   int arrowHL = 20;
   Compass(int r) {
     radius = r;
@@ -23,7 +23,7 @@ class Compass{
     rotate(-angleToSample);
     
     
-    stroke(0);    
+    stroke(255);    
     strokeWeight(2);
     translate(0, radius);
     line(0, 0, 0, -arrowL);

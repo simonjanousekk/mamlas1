@@ -3,12 +3,10 @@ Player player;
 Mapa mapa;
 Minimapa minimapa;
 MinimapaWindow minimapaWindow;
-Radar radar;
-Compass compass;
-
 Info info;
 
 PImage mask;
+PImage teren;
 
 ArrayList<Wall> walls = new ArrayList<Wall>();
 ArrayList<Ray> rays = new ArrayList<Ray>();
@@ -16,27 +14,26 @@ ArrayList<Sample> samples = new ArrayList<Sample>();
 ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
 
 int rayCount = 36;
-final int rayLength = 250;
+final int rayLength = 400;
 
 int sampleCount = 1;
 
 int minimapaSize = 500;
-int mapaSize = 8000;
+int mapaSize = 5000;
 float terrainMapScale = 0.03;
 float wallNoiseScale = 0.05;
-int cellSize = 50;
+int cellSize = 30;
 
 int fakeFrameRate = 30;
 
 float battery = 100;
-boolean radarDisplay = false;
+boolean kryplmod = false;
 
 
 
 void setup() {
-  size(600, 600);
+  size(1000, 1000);
 
-  //frameRate(12);
   noSmooth();
 
   mask = loadImage("mask.png");
@@ -50,7 +47,7 @@ void setup() {
   noiseSeed(millis());
 
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
-  player = new Player(randomPosOutsideWalls(), 40);
+  player = new Player(randomPosOutsideWalls(), 20);
   minimapa = new Minimapa(minimapaSize);
   minimapaWindow = new MinimapaWindow(this, minimapa);
   info = new Info(new PVector(10, 10));
@@ -63,18 +60,16 @@ void setup() {
     samples.add(new Sample(randomPosOutsideWalls()));
   }
 
-  radar = new Radar(width/2-50);
-  compass = new Compass(width/2-80);
-
-
   surface.setVisible(false);
   surface.setVisible(true);
+
+  teren = loadImage("teren3.jpg");
 }
 
 void draw() {
 
-  //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
-  
+  fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
+
   // get relevant walls
   float relevantDistance = rayLength*1.2;
   ArrayList<Wall> relevantWalls = new ArrayList<Wall>(walls);
@@ -85,7 +80,7 @@ void draw() {
     }
   }
   relevantWallsC = relevantWalls.size();
-  
+
   //get relewant wmarkers
   ArrayList<WMarker> relevantWMarkers = new ArrayList<WMarker>(wmarkers);
   for (int i = relevantWMarkers.size()-1; i >= 0; i--) {
@@ -95,7 +90,7 @@ void draw() {
     }
   }
   relevantWMarkersC = relevantWMarkers.size();
-  
+
 
   for (Wall wall : relevantWalls) {
     player.collide(wall);
@@ -116,48 +111,40 @@ void draw() {
   }
 
   // realest drawing
+
   if (frameCount % (60/fakeFrameRate) == 0) {
-    if (radarDisplay) {
-      background(150);
-
-      radar.display();
-      compass.display();
-      player.display();
-    } else {
-      background(50);
-
-      push();
-      translate(width / 2, height / 2);
-      rotate(-player.angle - (PI / 4) * 3);
-      translate(-player.pos.x, -player.pos.y);
-
-
-
-      mapa.display();
-      //for (Wall wall : relevantWalls) {
-      //  wall.display();
-      //}
-
-      for (WMarker wm : relevantWMarkers) {
-        wm.display();
-      }
-
-      //for (Ray ray : rays) {
-      //  ray.display();
-      //}
+    push();
+    translate(width / 2, height / 2);
+    rotate(-player.angle - (PI / 4) * 3);
+    translate(-player.pos.x, -player.pos.y);
+    if (kryplmod) {
+      background(0);
 
       for (Sample sample : samples) {
         sample.display();
       }
-      for (WMarker wm : wmarkers) {
+      for (WMarker wm : relevantWMarkers) {
         wm.display();
       }
+    } else {
+      background(0);
+      //image(teren, 0, 0, mapa.size.x, mapa.size.y);
 
-      pop();
+      mapa.display();
+      for (Wall wall : relevantWalls) {
+        wall.display();
+      }
 
-      compass.display();
-      player.display();
+
+      //for (Ray ray : rays) {
+      //  ray.display();
+      //}
+      for (Sample sample : samples) {
+        sample.display();
+      }
     }
+    pop();
+    player.display();
   }
 
 
@@ -191,12 +178,14 @@ void keyPressed() {
     //  tmarkers.add(new TMarker(random(player.pos.x-sonarRange, player.pos.x+sonarRange), random(player.pos.y-sonarRange, player.pos.y+sonarRange)));
     //}
     for (Ray r : rays) {
-      println(wmarkers.size());
       r.findWallAnimation();
     }
   }
   if (key == 'l') { //radar
-    radarDisplay = !radarDisplay;
+    kryplmod = !kryplmod;
+    for (Ray r : rays) {
+      r.findWallAnimation();
+    }
   }
 }
 

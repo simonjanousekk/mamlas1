@@ -110,10 +110,9 @@ boolean isDistanceLess(float x1, float y1, float x2, float y2, float threshold) 
 }
 
 
-PVector pointAlongLine(float x1, float y1, float x2, float y2, float t, String easing) {
+PVector pointAlongLine(float x1, float y1, float x2, float y2, float t) {
   // Apply easing to t
   t = constrain(t, 0, 1);
-  t = applyEasing(t, easing);
 
   // Calculate the interpolated point
   float x = x1 + t * (x2 - x1);
