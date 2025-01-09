@@ -1,4 +1,4 @@
-#!/home/ddt/lcd_script/myenv/bin/python3
+#!/home/ddt/Documents/prototyp_demo/lcd_script/myenv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
