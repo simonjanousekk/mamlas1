@@ -86,9 +86,9 @@ class MapaCell {
         ) {
         addWall(5);
         if (neighbors[0] && neighbors[3]) {
-          diagonal = Diagonal.TOP_LEFT;
-        } else {
           diagonal = Diagonal.BOTT_RIGHT;
+        } else {
+          diagonal = Diagonal.TOP_LEFT;
         }
       } else {
         for (int i = 0; i < neighbors.length; i++) {
@@ -131,38 +131,42 @@ class MapaCell {
       translate(pos.x, pos.y);
 
 
+      line(0, 0, cellSize, cellSize);
       if (terrain == Terrain.HARD) {
-        line(0, 0, cellSize, cellSize);
         line(cellSize/2, 0, cellSize, cellSize/2);
         line(0, cellSize/2, cellSize/2, cellSize);
       } else if (terrain == Terrain.MID) {
-        line(0, 0, cellSize, cellSize);
         line(0, cellSize, cellSize, 0);
       } else if (terrain == Terrain.SOFT) {
-        line(0, 0, cellSize, cellSize);
+        
+      }
+
+
+
+
+      if (!(diagonal == Diagonal.FALSE)) {
+        push();
+        fill(255);
+        translate(cellSize/2, cellSize/2);
+        textAlign(CENTER, CENTER);
+        String s = "";
+        if (diagonal == Diagonal.BOTT_LEFT) {
+          s = "bott L";
+        } else if (diagonal == Diagonal.TOP_RIGHT) {
+          s = "top R";
+        } else if (diagonal == Diagonal.TOP_LEFT) {
+          s = "top L";
+        } else if (diagonal == Diagonal.BOTT_RIGHT) {
+          s = "bott R";
+        }
+
+
+        text(s, 0, 0);
+
+        pop();
       }
       pop();
     }
-
-
-
-    fill(0);
-    translate(cellSize/2, cellSize/2);
-    textAlign(CENTER, CENTER);
-    String s = "";
-    if (diagonal == Diagonal.FALSE) {
-      s = "false";
-    } else if (diagonal == Diagonal.BOTT_LEFT) {
-      s = "bott L";
-    } else if (diagonal == Diagonal.TOP_RIGHT) {
-      s = "top R";
-    } else if (diagonal == Diagonal.TOP_LEFT) {
-      s = "top L";
-    } else if (diagonal == Diagonal.BOTT_RIGHT) {
-      s = "bott R";
-    }
-
-    text(s, 0, 0);
   }
 
 
