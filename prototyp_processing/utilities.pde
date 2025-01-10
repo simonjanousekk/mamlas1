@@ -66,7 +66,7 @@ PVector randomPosOutsideWalls() {
   PVector pos = new PVector(random(mapa.size.x), random(mapa.size.y));
   while (
     mapa.grid[floor(pos.x / mapa.cellSize)][floor(pos.y / mapa.cellSize)].state
-    && (mapa.grid[floor(pos.x / mapa.cellSize)][floor(pos.y / mapa.cellSize)].diagonal == Diagonal.FALSE)
+    //&& (mapa.grid[floor(pos.x / mapa.cellSize)][floor(pos.y / mapa.cellSize)].diagonal == Diagonal.FALSE)
     ) {
     pos = new PVector(random(mapa.size.x), random(mapa.size.y));
   }

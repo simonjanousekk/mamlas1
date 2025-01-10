@@ -63,24 +63,24 @@ class MinimapaWindow extends PApplet {
       map(player.pos.x, 0, mapa.size.x, 0, this.width),
       map(player.pos.y, 0, mapa.size.y, 0, this.height)
       );
-    this.fill(0);
+    this.fill(0, 255, 0);
     this.noStroke();
-    this.ellipse(minimapPlayerPos.x, minimapPlayerPos.y, 5, 5);
+    this.circle(minimapPlayerPos.x, minimapPlayerPos.y, 5);
 
     // Render samples
-    for (Sample sample : samples) {
-      PVector minimapSamplePos = new PVector(
-        map(sample.pos.x, 0, mapa.size.x, 0, this.width),
-        map(sample.pos.y, 0, mapa.size.y, 0, this.height)
-        );
-      this.fill(255, 0, 0);
-      this.noStroke();
-      this.circle(minimapSamplePos.x, minimapSamplePos.y, 5);
-    }
-  }
 
-  public void close() {
-    getSurface().setVisible(false); // Hide the window
-    dispose();
+    PVector minimapSamplePos = new PVector(
+      map(sample.pos.x, 0, mapa.size.x, 0, this.width),
+      map(sample.pos.y, 0, mapa.size.y, 0, this.height)
+      );
+    this.fill(255, 0, 0);
+    this.noStroke();
+    this.circle(minimapSamplePos.x, minimapSamplePos.y, 5);
   }
+}
+
+public void close() {
+  getSurface().setVisible(false); // Hide the window
+  dispose();
+}
 }

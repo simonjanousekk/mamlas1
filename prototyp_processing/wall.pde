@@ -12,7 +12,7 @@ class Wall {
   void display() {
     stroke(collided ? color(255, 255, 0) : color(0, 255, 0));
     push();
-    strokeWeight(4);
+    strokeWeight(3);
     line(this.pos1.x, this.pos1.y, this.pos2.x, this.pos2.y);
     pop();
   }

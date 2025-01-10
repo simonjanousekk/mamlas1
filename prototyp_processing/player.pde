@@ -14,7 +14,6 @@ class Player {
 
   PVector velocity = new PVector(0, 0);
   float rotationVelocity = 0;
-
   float imgAspectRatio;
   float imgW, imgH;
 
@@ -64,6 +63,9 @@ class Player {
     push();
 
     translate(width/2, height/2);
+    fill(255, 50);
+    noStroke();
+    circle(0, 0, diameter);
     fill(255);
     noStroke();
     //circle(0, 0, diameter);
@@ -93,37 +95,5 @@ class Player {
     }
 
     angle = (angle + TWO_PI) % TWO_PI;
-  }
-
-  void acchandleInput() {
-    PVector accelerationVector = new PVector(0, 0);
-    if (moveForward) {
-      accelerationVector.x += cos(angle + PI / 4) * acceleration;
-      accelerationVector.y += sin(angle + PI / 4) * acceleration;
-    }
-    if (moveBackward) {
-      accelerationVector.x -= cos(angle + PI / 4) * acceleration;
-      accelerationVector.y -= sin(angle + PI / 4) * acceleration;
-    }
-    velocity.add(accelerationVector);
-    if (!moveForward && !moveBackward) {
-      velocity.mult(friction);
-    }
-    if (velocity.mag() > max_speed) {
-      velocity.setMag(max_speed);
-      if (turnLeft) {
-        rotationVelocity -= rotationAcceleration;
-      }
-      if (turnRight) {
-        rotationVelocity += rotationAcceleration;
-      }
-      if (!turnLeft && !turnRight) {
-        rotationVelocity *= friction;
-      }
-      rotationVelocity = constrain(rotationVelocity, -max_rotationSpeed, max_rotationSpeed);
-      angle += rotationVelocity;
-      angle = (angle + TWO_PI) % TWO_PI;
-      pos.add(velocity);
-    }
   }
 }

@@ -1,4 +1,4 @@
-class Ray { //<>//
+class Ray {
   PVector pos, dir;
 
   float originAngle;
