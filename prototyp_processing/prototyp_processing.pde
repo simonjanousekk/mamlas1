@@ -53,9 +53,9 @@ ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 
 void setup() {
-
-  size(750, 375);
-
+  fullScreen();
+  //size(750, 375);
+  println(width, height);
   noSmooth();
 
   mbInit();
