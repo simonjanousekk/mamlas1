@@ -8,11 +8,12 @@ Compass compass;
 Info info;
 
 PImage mask;
-PImage teren;
+PFont mono;
 
 ArrayList<Wall> walls = new ArrayList<Wall>();
 ArrayList<Ray> rays = new ArrayList<Ray>();
 ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
+ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 int rayCount = 36;
 final int rayLength = 400;
@@ -25,13 +26,16 @@ float terrainMapScale = 0.03;
 float wallNoiseScale = 0.05;
 int cellSize = 30;
 
+int quadrantSize = 30;
+
 final float treshold = .45;
 
 
-int fakeFrameRate = 30;
+int fakeFrameRate = 60;
 
 float battery = 100;
 boolean kryplmod = false;
+boolean godmod = false;
 
 
 
@@ -41,6 +45,8 @@ void setup() {
   noSmooth();
 
   mask = loadImage("mask.png");
+  mono = createFont("AzeretMono-Regular.otf", 16);
+  textFont(mono);
 
   walls.clear();
   rays.clear();
@@ -55,11 +61,21 @@ void setup() {
   minimapa = new Minimapa(minimapaSize);
   minimapaWindow = new MinimapaWindow(this, minimapa);
   info = new Info(new PVector(10, 10));
-  compass = new Compass(width/2-50);
+  compass = new Compass(width/2-50, 50);
+
 
 
   for (int i = 0; i < rayCount; i++) {
     rays.add(new Ray(player.pos, i*(TWO_PI/rayCount)));
+  }
+
+  for (int x = 0; x < mapa.cols; x+=quadrantSize) {
+    for (int y = 0; y < mapa.rows; y+=quadrantSize) {
+      if (!mapa.grid[x][y].state) {
+        String s = getLetterFromAlphabet(x/quadrantSize) + str(y/quadrantSize);
+        dcrosses.add(new DCross(x*cellSize, y*cellSize, cellSize, s));
+      }
+    }
   }
 
   surface.setVisible(false);
@@ -68,7 +84,7 @@ void setup() {
 
 void draw() {
 
-  fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
+  //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
 
   // get relevant walls
   float relevantDistance = rayLength*1.2;
@@ -124,6 +140,10 @@ void draw() {
       }
     } else {
       mapa.display();
+
+      for (DCross dc : dcrosses) {
+        dc.display();
+      }
       for (Wall wall : relevantWalls) {
         wall.display();
       }
@@ -170,6 +190,9 @@ void keyPressed() {
         r.findWallAnimation();
       }
     }
+  }
+  if (key == 'g') {
+    godmod = !godmod;
   }
 
 

@@ -64,10 +64,16 @@ boolean isCircleSquareColliding(PVector circle, float radius, PVector squarePos,
 
 PVector randomPosOutsideWalls() {
   PVector pos = new PVector(random(mapa.size.x), random(mapa.size.y));
-  while (
-    mapa.grid[floor(pos.x / mapa.cellSize)][floor(pos.y / mapa.cellSize)].state
-    //&& (mapa.grid[floor(pos.x / mapa.cellSize)][floor(pos.y / mapa.cellSize)].diagonal == Diagonal.FALSE)
-    ) {
+  while (true) {
+    int gridX = floor(pos.x / mapa.cellSize);
+    int gridY = floor(pos.y / mapa.cellSize);
+
+    if (gridX >= 0 && gridX < mapa.cols && gridY >= 0 && gridY < mapa.rows) {
+      if (!mapa.grid[gridX][gridY].state) {
+        break;
+      }
+    }
+
     pos = new PVector(random(mapa.size.x), random(mapa.size.y));
   }
   return pos;
@@ -138,4 +144,9 @@ float applyEasing(float t, String easing) {
     default:
       return t; // Linear
   }
+}
+
+char getLetterFromAlphabet(int index) {
+    index = (index % 26 + 26) % 26;
+    return char('A' + index);
 }

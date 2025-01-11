@@ -77,10 +77,10 @@ class MinimapaWindow extends PApplet {
     this.noStroke();
     this.circle(minimapSamplePos.x, minimapSamplePos.y, 5);
   }
-}
 
-public void close() {
-  getSurface().setVisible(false); // Hide the window
-  dispose();
-}
+
+  public void close() {
+    getSurface().setVisible(false); // Hide the window
+    dispose();
+  }
 }

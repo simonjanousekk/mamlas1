@@ -1,6 +1,6 @@
 class Player {
 
-  final float max_speed = 2;
+  float max_speed = 2;
   final float max_rotationSpeed = .02;
   final float acceleration = .1;
   final float rotationAcceleration = 0.001;
@@ -66,8 +66,9 @@ class Player {
     fill(255, 50);
     noStroke();
     circle(0, 0, diameter);
-    fill(255);
-    noStroke();
+    fill(0, 255, 0);
+    //stroke(0);
+    //strokeWeight(2);
     //circle(0, 0, diameter);
     //translate(-imgW/2, -imgH/2);
     //image(img, 0, 0, imgW, imgH);
@@ -81,6 +82,12 @@ class Player {
   }
 
   void handleInput() {
+    if (godmod) {
+      max_speed = 5;
+    } else {
+      max_speed = 2;
+    }
+    
     if (moveForward) {
       pos.add(cos(angle+PI/4)*max_speed, sin(angle+PI/4)*max_speed);
     }
