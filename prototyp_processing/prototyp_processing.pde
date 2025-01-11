@@ -9,7 +9,7 @@ Info info;
 SignalDisplay signalDisplay;
 
 Atom atom;
-Weather weather;
+Storm storm;
 
 int rayCount = 36;
 int rayLength;
@@ -107,7 +107,7 @@ void setup() {
 
   atom = new Atom();
 
-  weather = new Weather();
+  storm = new Storm();
 
 
   for (int i = 0; i < rayCount; i++) {
@@ -219,7 +219,7 @@ void draw() {
   player.handleInput();
 
   if (screen2State == s2s.GPS) {
-    weather.display();
+    storm.display();
   }
 
 

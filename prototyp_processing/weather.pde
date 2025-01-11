@@ -103,7 +103,7 @@
 
 
 
-class Weather {
+class Storm {
   int rectSize = 4;
   float noiseScale = 0.05;
   float timeSpeed = 0.0001;
@@ -119,7 +119,7 @@ class Weather {
   boolean storm = false;
   float rise, fall;
 
-  Weather() {
+  Storm() {
   }
 
 
@@ -129,6 +129,7 @@ class Weather {
     rise = r;
     fall = f;
     windDirection = random2DVector();
+    windVelocity = windDirection.copy().mult(windSpeed);
     println(windDirection.x, windDirection.y, windVelocity.x, windVelocity.y);
   }
 

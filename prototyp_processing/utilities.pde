@@ -210,7 +210,7 @@ void keyPressed() {
   }
 
   if (key =='o') {
-    weather.startStorm(60*20, .5, .5);
+    storm.startStorm(60*20, .5, .5);
   }
   
   if (key == 'q') {
