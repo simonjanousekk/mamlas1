@@ -10,6 +10,7 @@ Info info;
 int rayCount = 36;
 final int rayLength = 300;
 
+color primary = color(255, 255, 0);
 
 int minimapaSize = 500;
 int mapaSize = 5000;
@@ -19,7 +20,7 @@ int cellSize = 30;
 int terrainTypeCount = 4;
 int quadrantSize = 25;
 
-final float treshold = .45;
+final float treshold =.45;
 
 
 int fakeFrameRate = 59;
@@ -41,22 +42,22 @@ ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 
 void setup() {
-  size(1000, 1000);
-
+  size(800, 800);
+  
   noSmooth();
-
+  
   mask = loadImage("mask.png");
   mono = createFont("OCR-A.ttf", 64);
   textFont(mono);
-
+  
   walls.clear();
   rays.clear();
   wmarkers.clear();
   dcrosses.clear();
-
+  
   randomSeed(millis());
   noiseSeed(millis());
-
+  
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
   player = new Player(randomPosOutsideWalls(), 20);
   sample = new Sample(randomPosOutsideWalls());
@@ -64,13 +65,13 @@ void setup() {
   minimapaWindow = new MinimapaWindow(this, minimapa);
   info = new Info(new PVector(10, 10));
   compass = new Compass(width / 2 - 75, 75);
-
-
-
+  
+  
+  
   for (int i = 0; i < rayCount; i++) {
     rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
   }
-
+  
   for (int x = 0; x < mapa.cols; x += quadrantSize) {
     for (int y = 0; y < mapa.rows; y += quadrantSize) {
       if (!mapa.grid[x][y].state && mapa.grid[x][y].caseValue == 0) {
@@ -80,17 +81,22 @@ void setup() {
       }
     }
   }
-
+  
   surface.setVisible(false);
   surface.setVisible(true);
 }
 
 void draw() {
-
+  
+  push();
+  colorMode(HSB, 255);
+  primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
+  pop();
+  
   //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
-
+  
   // get relevant walls
-  float relevantDistance = rayLength * 1.1;
+  float relevantDistance = rayLength * 1.3;
   ArrayList<Wall> relevantWalls = new ArrayList<Wall>(walls);
   for (int i = relevantWalls.size() - 1; i >= 0; i--) {
     Wall wall = relevantWalls.get(i);
@@ -99,7 +105,7 @@ void draw() {
     }
   }
   relevantWallsC = relevantWalls.size();
-
+  
   //get relewant wmarkers
   ArrayList<WMarker> relevantWMarkers = new ArrayList<WMarker>(wmarkers);
   for (int i = relevantWMarkers.size() - 1; i >= 0; i--) {
@@ -109,14 +115,14 @@ void draw() {
     }
   }
   relevantWMarkersC = relevantWMarkers.size();
-
-
+  
+  
   for (Wall wall : relevantWalls) {
     if (!godmod) player.collide(wall);
   }
-
+  
   sample.update();
-
+  
   for (Ray ray : rays) {
     ray.update(player.pos, player.angle);
     ray.findShortestIntersection(relevantWalls);
@@ -128,13 +134,13 @@ void draw() {
     }
     wm.update();
   }
-
+  
   // realest drawing
-
+  
   if (frameCount % (60 / fakeFrameRate) == 0) {
     push();
     translate(width / 2, height / 2);
-    rotate(-player.angle);
+    rotate( - player.angle);
     translate( -player.pos.x, -player.pos.y);
     background(0);
     if (kryplmod) {
@@ -143,7 +149,7 @@ void draw() {
       }
     } else {
       mapa.display();
-
+      
       for (DCross dc : dcrosses) {
         dc.display();
       }
@@ -158,15 +164,15 @@ void draw() {
     pop();
     player.display();
   }
-
+  
   player.update();
   player.handleInput();
-
-
+  
+  
   displayMask(75);
-
+  
   compass.display();
-
+  
   info.display();
   displayFPS();
 }
@@ -198,15 +204,15 @@ void keyPressed() {
   if (key == 'g') {
     godmod = !godmod;
   }
-
+  
   if (key == 'i') {
     player.terrainSetting = (player.terrainSetting + 1) % terrainTypeCount;
   }
   if (key == 'k') {
     player.terrainSetting = (player.terrainSetting - 1 + terrainTypeCount) % terrainTypeCount;
   }
-
-
+  
+  
   if (key == 'w' || key == 'W') moveForward = true;
   if (key == 's' || key == 'S') moveBackward = true;
   if (key == 'a' || key == 'A') turnLeft = true;

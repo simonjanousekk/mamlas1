@@ -13,22 +13,22 @@ class DCross {
   DCross(PVector p, int s, String l) {
     this(p.x, p.y, s, l);
   }
-
-
+  
+  
   void display() {
     push();
     translate(pos.x, pos.y);
-    stroke(0, 255, 0);
+    stroke(primary);
     strokeWeight(2);
-    line(0, -size/2, 0, size/2);
-    line(-size/2, 0, size/2, 0);
+    line(0, -size / 2, 0, size / 2);
+    line( -size / 2, 0, size / 2, 0);
     
     
     rotate(player.angle);
-    line(0, 0, size*.75, -size*.75);
-    translate(size*.75, -size*.75);
+    line(0, 0, size *.75, -size *.75);
+    translate(size *.75, -size *.75);
     textAlign(LEFT, BOTTOM);
-    fill(0, 255, 0);
+    fill(primary);
     textSize(24);
     text(label, 0, 0);
     pop();

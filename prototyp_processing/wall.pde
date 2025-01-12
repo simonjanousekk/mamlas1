@@ -8,9 +8,9 @@ class Wall {
   Wall(PVector p1, PVector p2) {
     this(p1.x, p1.y, p2.x, p2.y);
   }
-
+  
   void display() {
-    stroke(collided ? color(255, 255, 0) : color(0, 255, 0));
+    stroke(collided ? color(255, 255, 0) : color(primary));
     push();
     strokeWeight(3);
     line(this.pos1.x, this.pos1.y, this.pos2.x, this.pos2.y);

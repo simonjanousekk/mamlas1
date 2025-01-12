@@ -9,29 +9,29 @@ class Sample {
   Sample(PVector p) {
     this(p.x, p.y);
   }
-
+  
   void update() {
     if (sampleCollected()) {
       collect();
     }
   }
-
+  
   void display() {
     push();
     translate(pos.x, pos.y);
-    rotate(PI/4);
+    rotate(PI / 4);
     noFill();
     strokeWeight(3);
-    stroke(0, 255, 0);
+    stroke(primary);
     rectMode(CENTER);
     rect(0, 0, diameter, diameter);
     pop();
   }
-
+  
   boolean sampleCollected() {
-    return isDistanceLess(player.pos, pos, player.diameter/2+diameter/2);
+    return isDistanceLess(player.pos, pos, player.diameter / 2 + diameter / 2);
   }
-
+  
   void collect() {
     player.samplesCollected++;
     pos = randomPosOutsideWalls();
