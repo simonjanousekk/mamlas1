@@ -1,6 +1,7 @@
 class Player {
 
-  float max_speed = 2;
+  final float max_speed = 3;
+  float currentSpeed;
   final float max_rotationSpeed = .02;
   final float acceleration = .1;
   final float rotationAcceleration = 0.001;
@@ -16,6 +17,9 @@ class Player {
   float rotationVelocity = 0;
   float imgAspectRatio;
   float imgW, imgH;
+  
+  int onTerrain;
+  int terrainSetting = 0;
 
   Player(float x, float y, int d) {
     pos = new PVector(x, y);
@@ -24,6 +28,8 @@ class Player {
     diameter = d;
     imgW = diameter;
     imgH = diameter / imgAspectRatio;
+    this.update();
+    terrainSetting = onTerrain;
   }
   Player(PVector p, int d) {
     this(p.x, p.y, d);
@@ -63,36 +69,52 @@ class Player {
     push();
 
     translate(width/2, height/2);
-    fill(255, 50);
-    noStroke();
-    circle(0, 0, diameter);
-    fill(0, 255, 0);
+    //fill(255, 50);
+    //noStroke();
+    //circle(0, 0, diameter);
     //stroke(0);
     //strokeWeight(2);
     //circle(0, 0, diameter);
     //translate(-imgW/2, -imgH/2);
-    //image(img, 0, 0, imgW, imgH);
+    translate(-diameter/2, -diameter/2);
+    fill(0, 255, 0);
+    
     beginShape();
-    vertex(-diameter/4, diameter/4);
-    vertex(diameter/4, diameter/4);
-    vertex(0, -diameter/2);
+    vertex(diameter*.5, 0);
+    vertex(diameter*.1, diameter*.8);
+    vertex(diameter*.5, diameter*.6);
+    vertex(diameter*.9, diameter*.8);
+    
+    
+    
+    
+    ////vertex(-diameter/4, diameter/4);
+    //vertex(diameter/4, diameter/4);
+    //vertex(0, -diameter/2);
     endShape(CLOSE);
 
     pop();
   }
+  
+  void update() {
+    int xi = int(pos.x/cellSize);
+    int yi = int(pos.y/cellSize);
+    onTerrain = mapa.grid[xi][yi].terrain;
+  }
+  
+  
 
   void handleInput() {
-    if (godmod) {
-      max_speed = 5;
-    } else {
-      max_speed = 2;
-    }
+    
+    float terrainMult = map(abs(onTerrain - terrainSetting), 0, terrainTypeCount, 1, .1);
+    currentSpeed = max_speed * terrainMult;
+    
     
     if (moveForward) {
-      pos.add(cos(angle+PI/4)*max_speed, sin(angle+PI/4)*max_speed);
+      pos.add(cos(angle+PI/4)*currentSpeed, sin(angle+PI/4)*currentSpeed);
     }
     if (moveBackward) {
-      pos.sub(cos(angle+PI/4)*max_speed, sin(angle+PI/4)*max_speed);
+      pos.sub(cos(angle+PI/4)*currentSpeed, sin(angle+PI/4)*currentSpeed);
     }
     if (turnLeft) {
       angle -= max_rotationSpeed;

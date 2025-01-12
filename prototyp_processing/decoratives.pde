@@ -29,6 +29,7 @@ class DCross {
     translate(size*.75, -size*.75);
     textAlign(LEFT, BOTTOM);
     fill(0, 255, 0);
+    textSize(24);
     text(label, 0, 0);
     pop();
     

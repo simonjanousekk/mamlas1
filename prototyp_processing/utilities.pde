@@ -69,7 +69,7 @@ PVector randomPosOutsideWalls() {
     int gridY = floor(pos.y / mapa.cellSize);
 
     if (gridX >= 0 && gridX < mapa.cols && gridY >= 0 && gridY < mapa.rows) {
-      if (!mapa.grid[gridX][gridY].state) {
+      if (!mapa.grid[gridX][gridY].state && mapa.grid[gridX][gridY].caseValue == 0) {
         break;
       }
     }
@@ -85,6 +85,14 @@ void displayFPS() {
   textAlign(RIGHT, BOTTOM);
   text(fakeFrameRate, width-5, height-20);
   text(int(frameRate), width-5, height-5);
+}
+
+PGraphics getMask(int size) {
+  PGraphics p = createGraphics(size, size);
+   
+  
+  
+  return p;
 }
 
 void displayMask(int border) {
