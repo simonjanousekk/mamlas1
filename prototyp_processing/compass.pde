@@ -1,52 +1,150 @@
 class Compass {
   int radius;
-  float arrowRadius;
-  float angleToSample;  
-  int arrowL = 70;
-  int arrowHL = 20;
-  
+  float angleToSample;
+
+  int shortLineL = 10;
+  int longLineL = 20;
+
+  //float arrowRadius;
+  //int arrowL = 70;
+  //int arrowHL = 20;
+
   int arrowSampleSpace;
-  
+
   Compass(int r, int as) {
     radius = r;
+
+
     arrowSampleSpace = as;
   }
-  
+
   void update() {
     angleToSample = atan2(sample.pos.x - player.pos.x, sample.pos.y - player.pos.y);
-    angleToSample += player.angle;
-    
-    boolean sampleInView = isDistanceLess(player.pos, sample.pos, radius + arrowSampleSpace);
-    
-    if (!sampleInView) {
-      arrowRadius = radius;
-    } else {
-      arrowRadius = player.pos.dist(sample.pos) - arrowSampleSpace;
-    }
+    angleToSample += player.angle + PI;
+
+    //boolean sampleInView = isDistanceLess(player.pos, sample.pos, radius + arrowSampleSpace);
+
+    //if (!sampleInView) {
+    //  arrowRadius = radius;
+    //} else {
+    //  arrowRadius = player.pos.dist(sample.pos) - arrowSampleSpace;
+    //}
   }
-  
+
   void display() {
     this.update();
-    
+
+    // push();
+    // translate(width / 2, height / 2);
+    // rotate( -angleToSample);
+    // translate(0, arrowRadius);
+
+
+    // stroke(0);
+    // strokeWeight(15);
+    // line(0, 0, 0, -arrowL);
+    // line(0, 0, -arrowHL, -arrowHL);
+    // line(0, 0, arrowHL, -arrowHL);
+
+
+    // stroke(0, 255, 0);
+    // strokeWeight(3);
+    // line(0, 0, 0, -arrowL);
+    // line(0, 0, -arrowHL, -arrowHL);
+    // line(0, 0, arrowHL, -arrowHL);
+
+    // pop();
+
+    textSize(24);
+    textAlign(CENTER, BOTTOM);
+
     push();
-    translate(width / 2, height / 2);
-    rotate( -angleToSample);
-    translate(0, arrowRadius);
-    
-    
-    stroke(0);
-    strokeWeight(15);
-    line(0, 0, 0, -arrowL);
-    line(0, 0, -arrowHL, -arrowHL);
-    line(0, 0, arrowHL, -arrowHL);
-    
-    
+
+    stroke(255);
+    strokeWeight(2);
+    noFill();
+
+    translate(width/2, height/2);
+    rotate(-player.angle);
+
+    circle(0, 0, radius * 2);
+
+    int linesCount = 72;
+    String[] labels = {"N", "3", "6", "E", "12", "15", "S", "21", "24", "W", "30", "33"};
+    float angleInc = TWO_PI/linesCount;
+
+
+
+    for (int i = 0; i < linesCount; i++) {
+      float l = shortLineL;
+      if (i % 2 == 0) l = longLineL;
+
+      push();
+      rotate(angleInc*i);
+      translate(0, -radius);
+      line(0, 0, 0, -l);
+
+      if (i % (linesCount / labels.length) == 0) {
+        int index = floor(i/(linesCount / labels.length));
+
+        text(labels[index], 0, -l);
+      }
+      pop();
+    }
+    pop();
+
+    push();
+    translate(width/2, height/2-radius);
+    fill(0);
     stroke(0, 255, 0);
-    strokeWeight(3);
-    line(0, 0, 0, -arrowL);
-    line(0, 0, -arrowHL, -arrowHL);
-    line(0, 0, arrowHL, -arrowHL);
-    
+    strokeWeight(2);
+    strokeJoin(BEVEL);
+    beginShape();
+    vertex(0, 0);
+    vertex(longLineL*.5, -longLineL);
+    vertex(longLineL*2, -longLineL);
+    vertex(longLineL*2, -longLineL*3);
+    vertex(-longLineL*2, -longLineL*3);
+    vertex(-longLineL*2, -longLineL);
+    vertex(-longLineL*.5, -longLineL);
+    endShape(CLOSE);
+    fill(255);
+    text(nf(floor(degrees(player.angle)), 3), 0, -longLineL*1.5);
+    pop();
+
+
+    push();
+    translate(width/2, height/2);
+
+    rotate(-angleToSample);
+    translate(0, -radius);
+
+    strokeWeight(2);
+    fill(0, 255, 0);
+    stroke(0, 255, 0);
+    //fill(0);
+    beginShape();
+    strokeJoin(ROUND);
+    vertex(0, 0);
+    vertex(shortLineL, -shortLineL*2);
+    //vertex(0, -shortLineL*4);
+    vertex(-shortLineL, -shortLineL*2);
+    endShape(CLOSE);
+    pop();
+
+    push();
+    translate(width/2, height/2);
+    stroke(255);
+    strokeWeight(2);
+    float tmpa = TWO_PI/rayCount;
+    for (int i = 0; i < rayCount; i++) {
+      float x1 = cos(tmpa * i) * rayLength;
+      float y1 = sin(tmpa * i) * rayLength;
+      float x2 = cos(tmpa * (i + 0.5)) * rayLength;
+      float y2 = sin(tmpa * (i + 0.5)) * rayLength;
+      line(x1, y1, x2, y2);
+    }
+
     pop();
   }
 }

@@ -31,6 +31,8 @@ class Minimapa {
       }
     }
 
+
+
     pg.endDraw();
   }
 }
@@ -76,6 +78,12 @@ class MinimapaWindow extends PApplet {
     this.fill(255, 0, 0);
     this.noStroke();
     this.circle(minimapSamplePos.x, minimapSamplePos.y, 5);
+
+
+    for (DCross dc : dcrosses) {
+      this.fill(0, 255, 0);
+      this.circle(        map(dc.pos.x, 0, mapa.size.x, 0, this.width), map(dc.pos.y, 0, mapa.size.y, 0, this.height), 5);
+    }
   }
 
 

@@ -1,8 +1,10 @@
 class Sample {
   PVector pos;
+  int diameter;
   boolean selected = false;
   Sample(float x, float y) {
     pos = new PVector(x, y);
+    diameter = 15;
   }
   Sample(PVector p) {
     this(p.x, p.y);
@@ -16,20 +18,18 @@ class Sample {
 
   void display() {
     push();
-    noStroke();
-    fill(255, 0, 0);
-    circle(this.pos.x, this.pos.y, 10);
+    translate(pos.x, pos.y);
+    rotate(PI/4);
+    noFill();
+    strokeWeight(3);
+    stroke(0, 255, 0);
+    rectMode(CENTER);
+    rect(0, 0, diameter, diameter);
     pop();
   }
 
   boolean sampleCollected() {
-    float xdiff = player.pos.x - this.pos.x;
-    float ydiff = player.pos.y - this.pos.y;
-    float m = player.diameter/2;
-    if (xdiff < m && xdiff > -m && ydiff < m && ydiff > -m) {
-      return true;
-    }
-    return false;
+    return isDistanceLess(player.pos, pos, player.diameter/2+diameter/2);
   }
 
   void collect() {
