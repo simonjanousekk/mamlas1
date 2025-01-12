@@ -14,7 +14,7 @@ class Compass {
   
   void update() {
     angleToSample = atan2(sample.pos.x - player.pos.x, sample.pos.y - player.pos.y);
-    angleToSample += player.angle - PI / 4 + PI;
+    angleToSample += player.angle;
     
     boolean sampleInView = isDistanceLess(player.pos, sample.pos, radius + arrowSampleSpace);
     

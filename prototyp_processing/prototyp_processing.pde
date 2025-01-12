@@ -132,7 +132,7 @@ void draw() {
   if (frameCount % (60 / fakeFrameRate) == 0) {
     push();
     translate(width / 2, height / 2);
-    rotate( -player.angle - (PI / 4) * 3);
+    rotate(-player.angle);
     translate( -player.pos.x, -player.pos.y);
     background(0);
     if (kryplmod) {
