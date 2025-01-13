@@ -1,4 +1,7 @@
 
+
+
+
 Player player;
 Sample sample;
 Mapa mapa;
@@ -8,9 +11,9 @@ Compass compass;
 Info info;
 
 int rayCount = 36;
-final int rayLength = 300;
+int rayLength;
 
-color primary = color(255, 255, 0);
+color primary = color(0, 255, 255);
 
 int minimapaSize = 500;
 int mapaSize = 5000;
@@ -46,8 +49,11 @@ void setup() {
   
   noSmooth();
   
+  mbInit();
+  
   mask = loadImage("mask.png");
   mono = createFont("OCR-A.ttf", 64);
+  rayLength = width / 3;
   textFont(mono);
   
   walls.clear();
@@ -88,10 +94,10 @@ void setup() {
 
 void draw() {
   
-  push();
-  colorMode(HSB, 255);
-  primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
-  pop();
+  //push();
+  //colorMode(HSB, 255);
+  //primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
+  //pop();
   
   //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
   
