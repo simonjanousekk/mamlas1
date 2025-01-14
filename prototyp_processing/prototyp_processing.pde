@@ -50,7 +50,7 @@ ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 
 void setup() {
-  size(400, 400);
+  size(375, 375);
 
   noSmooth();
 
