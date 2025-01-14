@@ -18,6 +18,6 @@ class Info {
     int s = player.terrainSetting;
     int p = player.onTerrain;
     text("terr: s" + s + "/p" + p + "/d" + (s-p), pos.x, pos.y + 60);
-    text("vel: " + round(player.currentSpeed*10)/10.0, pos.x, pos.y+75);
+    text("vel: " + round(player.speed*10)/10.0, pos.x, pos.y+75);
   }
 }

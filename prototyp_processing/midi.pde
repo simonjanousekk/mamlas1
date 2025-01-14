@@ -4,7 +4,7 @@ MidiBus mb;
 
 void mbInit() {
   MidiBus.list(); 
-  mb = new MidiBus(this, 3, 4);
+  mb = new MidiBus(this, "Arduino Micro", "Arduino Micro");
 }
 
 void noteOn(Note note) {
@@ -31,11 +31,20 @@ void controllerChange(ControlChange change) {
   int channel = change.channel();
   int number = change.number();
   int value = change.value();
-  if (channel == 0 &&number == 1) {
+  
+  println("MIDI INPUT:");
+  print("channel: " + channel);
+  print(" number: " + number);
+  print(" value: " + value);
+  println(" ");
+  
+  if (channel == 0 && number == 1) { // rotation encoder - player rotation
     if (value == 0) {
-      player.turn(-1);
+      player.turn--;
     } else if (value == 1) {
-      player.turn(1);
+      player.turn++;
     }
+  } else if (channel == 0 && number == 2) {
+    player.setDesiredVelocity(value);
   }
 }

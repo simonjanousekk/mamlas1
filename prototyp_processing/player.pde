@@ -1,8 +1,12 @@
 class Player {
 
-  final float max_speed = 3;
-  final float max_rotationSpeed =TWO_PI/360;
-  float currentSpeed, currentRotationSpeed;
+  float max_speed = 3;
+  float max_rotationSpeed = TWO_PI/360;
+  float speed, rotationSpeed;
+
+  int turn = 0;
+
+
   final int diameter;
   PImage img;
 
@@ -99,37 +103,33 @@ class Player {
     onTerrain = mapa.grid[xi][yi].terrain;
   }
 
-  void turn(float vel) {
-    println(vel);
-    angle += vel*currentRotationSpeed;
+  void setDesiredVelocity(int v) {
+    speed = map(v, 0, 127, 0, max_speed);
   }
 
   void handleInput() {
-
-    float terrainMult = map(abs(onTerrain - terrainSetting), 0, terrainTypeCount, 1, .05);
-    currentSpeed = max_speed * terrainMult;
-    currentRotationSpeed = max_rotationSpeed * terrainMult;
-
+    //float terrainMult = map(abs(onTerrain - terrainSetting), 0, terrainTypeCount, 1, .05);
+    //turn = floor(turn*1.4);
+    
     if (godmod) {
-      currentSpeed = 7;
-      currentRotationSpeed = .03;
+      max_speed = 7;
+      rotationSpeed = .03;
     }
 
 
     float tmpa = angle - PI / 2;
-    if (moveForward) {
-      pos.add(cos(tmpa) * currentSpeed, sin(tmpa) * currentSpeed);
-    }
-    if (moveBackward) {
-      pos.sub(cos(tmpa) * currentSpeed, sin(tmpa) * currentSpeed);
-    }
-    if (turnLeft) {
-      angle -= currentRotationSpeed;
-    }
-    if (turnRight) {
-      angle += currentRotationSpeed;
-    }
+
+    if (turnLeft) angle -= max_rotationSpeed;
+    if (turnRight) angle += max_rotationSpeed;
+    if (moveForward) pos.add(cos(tmpa) * max_speed, sin(tmpa) * max_speed);
+    if (moveBackward) pos.sub(cos(tmpa) * max_speed, sin(tmpa) * max_speed);
+
+    pos.add(cos(tmpa) * speed, sin(tmpa) * speed);
+
+    rotationSpeed = turn*max_rotationSpeed;
+    angle += rotationSpeed;
 
     angle = (angle + TWO_PI) % TWO_PI;
+    turn = 0;
   }
 }
