@@ -21,7 +21,7 @@ class Sample {
     translate(pos.x, pos.y);
     rotate(PI / 4);
     noFill();
-    strokeWeight(3);
+    strokeWeight(s_thick);
     stroke(primary);
     rectMode(CENTER);
     rect(0, 0, diameter, diameter);

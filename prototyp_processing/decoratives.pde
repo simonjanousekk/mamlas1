@@ -19,17 +19,17 @@ class DCross {
     push();
     translate(pos.x, pos.y);
     stroke(primary);
-    strokeWeight(2);
+    strokeWeight(s_thick);
     line(0, -size / 2, 0, size / 2);
     line( -size / 2, 0, size / 2, 0);
     
     
     rotate(player.angle);
-    line(0, 0, size *.75, -size *.75);
-    translate(size *.75, -size *.75);
+    line(0, 0, size * .75, -size * .75);
+    translate(size * .75, -size * .75);
     textAlign(LEFT, BOTTOM);
     fill(primary);
-    textSize(24);
+    // textSize(24);
     text(label, 0, 0);
     pop();
     

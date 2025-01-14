@@ -1,34 +1,26 @@
 class Player {
 
-  float max_speed = 3;
+  float max_speed = u*.5;
   float max_rotationSpeed = TWO_PI/360;
   float speed, rotationSpeed;
 
   int turn = 0;
 
 
-  final int diameter;
-  PImage img;
-
   PVector pos;
   float angle = random(TWO_PI);
   int samplesCollected = 0;
+  final int diameter;
 
   PVector velocity = new PVector(0, 0);
   float rotationVelocity = 0;
-  float imgAspectRatio;
-  float imgW, imgH;
 
   int onTerrain;
   int terrainSetting = 0;
 
   Player(float x, float y, int d) {
     pos = new PVector(x, y);
-    img = loadImage("rover2.png");
-    imgAspectRatio = (float) img.width / img.height;
     diameter = d;
-    imgW = diameter;
-    imgH = diameter / imgAspectRatio;
     this.update();
     terrainSetting = onTerrain;
   }
