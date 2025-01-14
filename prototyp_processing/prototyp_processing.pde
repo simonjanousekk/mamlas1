@@ -22,6 +22,11 @@ int quadrantSize = 25;
 
 final float treshold =.45;
 
+boolean radio = true;
+float noiseScale = 0.01;
+float noiseCompute = 0;
+float noise_t = 0;
+int noise_s = 10;
 
 int fakeFrameRate = 59;
 
@@ -43,21 +48,21 @@ ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 void setup() {
   size(800, 800);
-  
+
   noSmooth();
-  
+
   mask = loadImage("mask.png");
   mono = createFont("OCR-A.ttf", 64);
   textFont(mono);
-  
+
   walls.clear();
   rays.clear();
   wmarkers.clear();
   dcrosses.clear();
-  
+
   randomSeed(millis());
   noiseSeed(millis());
-  
+
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
   player = new Player(randomPosOutsideWalls(), 20);
   sample = new Sample(randomPosOutsideWalls());
@@ -65,13 +70,13 @@ void setup() {
   minimapaWindow = new MinimapaWindow(this, minimapa);
   info = new Info(new PVector(10, 10));
   compass = new Compass(width / 2 - 75, 75);
-  
-  
-  
+
+
+
   for (int i = 0; i < rayCount; i++) {
     rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
   }
-  
+
   for (int x = 0; x < mapa.cols; x += quadrantSize) {
     for (int y = 0; y < mapa.rows; y += quadrantSize) {
       if (!mapa.grid[x][y].state && mapa.grid[x][y].caseValue == 0) {
@@ -81,20 +86,20 @@ void setup() {
       }
     }
   }
-  
+
   surface.setVisible(false);
   surface.setVisible(true);
 }
 
 void draw() {
-  
+
   push();
   colorMode(HSB, 255);
   primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
   pop();
-  
+
   //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
-  
+
   // get relevant walls
   float relevantDistance = rayLength * 1.3;
   ArrayList<Wall> relevantWalls = new ArrayList<Wall>(walls);
@@ -105,7 +110,7 @@ void draw() {
     }
   }
   relevantWallsC = relevantWalls.size();
-  
+
   //get relewant wmarkers
   ArrayList<WMarker> relevantWMarkers = new ArrayList<WMarker>(wmarkers);
   for (int i = relevantWMarkers.size() - 1; i >= 0; i--) {
@@ -115,14 +120,14 @@ void draw() {
     }
   }
   relevantWMarkersC = relevantWMarkers.size();
-  
-  
+
+
   for (Wall wall : relevantWalls) {
     if (!godmod) player.collide(wall);
   }
-  
+
   sample.update();
-  
+
   for (Ray ray : rays) {
     ray.update(player.pos, player.angle);
     ray.findShortestIntersection(relevantWalls);
@@ -134,9 +139,9 @@ void draw() {
     }
     wm.update();
   }
-  
+
   // realest drawing
-  
+
   if (frameCount % (60 / fakeFrameRate) == 0) {
     push();
     translate(width / 2, height / 2);
@@ -149,7 +154,7 @@ void draw() {
       }
     } else {
       mapa.display();
-      
+
       for (DCross dc : dcrosses) {
         dc.display();
       }
@@ -164,17 +169,20 @@ void draw() {
     pop();
     player.display();
   }
-  
+
   player.update();
   player.handleInput();
-  
-  
+
+
   displayMask(75);
-  
+
   compass.display();
-  
+
   info.display();
   displayFPS();
+  if (radio) {
+    radio();
+  }
 }
 
 
@@ -204,15 +212,19 @@ void keyPressed() {
   if (key == 'g') {
     godmod = !godmod;
   }
-  
+  if (key == 'x') {
+    radio = !radio;
+  }
+
+
   if (key == 'i') {
     player.terrainSetting = (player.terrainSetting + 1) % terrainTypeCount;
   }
   if (key == 'k') {
     player.terrainSetting = (player.terrainSetting - 1 + terrainTypeCount) % terrainTypeCount;
   }
-  
-  
+
+
   if (key == 'w' || key == 'W') moveForward = true;
   if (key == 's' || key == 'S') moveBackward = true;
   if (key == 'a' || key == 'A') turnLeft = true;
@@ -225,4 +237,44 @@ void keyReleased() {
   if (key == 's' || key == 'S') moveBackward = false;
   if (key == 'a' || key == 'A') turnLeft = false;
   if (key == 'd' || key == 'D') turnRight = false;
+}
+
+void radio() {
+  //noise_t = map(mouseX, 0, widtwh, 0.1, 0.7);
+  if (frameCount % 5 == 0) {
+    noise_t = random(0, 0.7);
+  }
+
+  PImage frame = get();
+
+  loadPixels();
+  frame.loadPixels();
+  for (int x = 1; x < width-2; x ++) {
+    for (int y = 1; y < height-2; y++) {
+
+      int noise = int(random(100));
+      if (noise % 4 == 0) {
+        pixels[x+y * width] = color(random(0, 255));
+        continue;
+      }
+
+      float nx = noiseScale * x;
+      float ny = noiseScale * y;
+      float nt = noiseScale * frameCount * 10;
+
+      float noiseCompute = noise(nx, nt, ny);
+
+      if (noiseCompute < noise_t) {
+        int index_shift = int(sin(frameCount));
+        int index = (x - index_shift) + ((y - index_shift) * width);
+        pixels[x+y * width] = frame.pixels[x-1 + index];
+      }
+    }
+  }
+
+  updatePixels();
+  textSize(50);
+  fill(255, 0, 0);
+
+  text("LOW SIGNAL", width/2 + 100, width/2 +10);
 }
