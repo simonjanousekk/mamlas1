@@ -34,7 +34,7 @@ void controllerChange(ControlChange change) {
   
   println("MIDI INPUT:");
   print("channel: " + channel);
-  print(" number: " + number);
+  print(" number: " + number); 
   print(" value: " + value);
   println(" ");
   
@@ -47,4 +47,20 @@ void controllerChange(ControlChange change) {
   } else if (channel == 0 && number == 2) {
     player.setDesiredVelocity(value);
   }
+}
+
+
+
+void sendDummyMIDI() {
+  // Send a Note On message
+  int channel = 0; // MIDI channel (0-15)
+  int note = 60;   // Middle C
+  int velocity = 100; // Velocity (0-127)
+  mb.sendNoteOn(channel, note, velocity);
+  println("Sent Note On: Channel " + channel + ", Note " + note + ", Velocity " + velocity);
+
+  // Wait and send a Note Off message for the same note
+  delay(500); // Half a second
+  mb.sendNoteOff(channel, note, velocity);
+  println("Sent Note Off: Channel " + channel + ", Note " + note + ", Velocity " + velocity);
 }
