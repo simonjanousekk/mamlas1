@@ -81,16 +81,16 @@ PVector randomPosOutsideWalls() {
 
 
 
-PGraphics getMask(int size, PImage m) {
+PGraphics getMask(int size, int b, PImage m) {
   PGraphics p = createGraphics(size, size);
   p.beginDraw();
-  p.fill(0);
+  p.fill(0, 255, 0);
   p.noStroke();
-  p.rect(0, 0, border, height);
-  p.rect(0, 0, height, border);
-  p.rect(height, height, -border, -height);
-  p.rect(height, height, -height, -border);
-  p.image(m, border, border, height - border * 2, height - border * 2);
+  p.rect(0, 0, b, height);
+  p.rect(0, 0, height, b);
+  p.rect(height, height, -b, -height);
+  p.rect(height, height, -height, -b);
+  p.image(m, b, b, height - b * 2, height - b * 2);
   p.endDraw();
   return p;
 }

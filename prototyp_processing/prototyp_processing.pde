@@ -14,6 +14,7 @@ int rayLength;
 color primary = color(0, 255, 255);
 
 int u = 5;
+int screenSize = 367;
 final int s_thick = 2;
 final int s_thin = 1;
 int minimapaSize = 500;
@@ -23,7 +24,7 @@ float wallNoiseScale = 0.05;
 int cellSize = 4 * u;
 int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
-int border = 5 * u;
+int border = 18;
 
 final float treshold = .45;
 
@@ -53,18 +54,17 @@ ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 
 void setup() {
-  fullScreen();
-  //size(750, 375);
+  //fullScreen();
+  size(800, 480);
   println(width, height);
   noSmooth();
 
   mbInit();
-  u = int(height / 100);
 
   mask = loadImage("mask.png");
-  mask = getMask(height, mask);
+  mask = getMask(height, border, mask);
   mono = createFont("OCR-A.ttf", 16);
-  rayLength = int ((height / 2 - border) * .66);
+  rayLength = int((height / 2 - border) * .66);
   textFont(mono);
 
   walls.clear();
