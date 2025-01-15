@@ -29,7 +29,7 @@ int border = 5 * u;
 
 final float treshold = .45;
 
-boolean radio = true;
+boolean radio = false;
 float noiseScale = 0.01;
 float noiseCompute = 0;
 float noise_t = 0;
@@ -196,6 +196,7 @@ void draw() {
     info.display();
     displayFPS();
   }
+  if (radio) { radio();}
 }
 
 
@@ -287,8 +288,10 @@ void radio() {
   }
 
   updatePixels();
-  textSize(50);
-  fill(255, 0, 0);
-
-  text("LOW SIGNAL", width/2 + 100, width/2 +10);
+  push();
+  textSize(30);
+  fill(255, 0, 0, map(sin(frameCount * 0.1), -1, 1, 0, 255));
+  textAlign(CENTER);
+  text("LOW SIGNAL", width/2 , width/2 +10);
+  pop();
 }
