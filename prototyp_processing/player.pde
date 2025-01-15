@@ -1,6 +1,6 @@
 class Player {
 
-  float max_speed = u*.5;
+  float max_speed = u*.3;
   float max_rotationSpeed = TWO_PI/360;
   float speed, rotationSpeed;
 
