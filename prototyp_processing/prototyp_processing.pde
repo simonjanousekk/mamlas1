@@ -193,7 +193,8 @@ void draw() {
     info.display();
     displayFPS();
   }
-  if (radio) { radio();}
+  if (radio) { 
+  radio(mouseX);}
 }
 
 
@@ -251,12 +252,18 @@ void keyReleased() {
   if (key == 'd' || key == 'D') turnRight = false;
 }
 
-void radio() {
-  noise_t = map(mouseX, 0, width, 0.1, 0.7);
-  if (frameCount % 5 == 0) {
-    noise_t = random(0, 0.7);
+void radio(int noiseAmount) {
+  // later on can be adjusted based on sensor value
+  float n = map(noiseAmount, 0, width, 9, 1);
+  
+  //noise_t = map(mouseX, 0, width, 0.1, 0.7);
+  
+  if (frameCount % int(n) == 0) {
+    // threshold for how many pixels are affected by the displacement effect - 0 = none, 0.7 = most of them
+    float maxRange = 1.1  - (n / 10);
+    noise_t = random(0, maxRange);
   }
-
+  
   PImage frame = get();
 
   loadPixels();
@@ -265,7 +272,7 @@ void radio() {
     for (int y = 1; y < height-2; y++) {
 
       int noise = int(random(100));
-      if (noise % 4 == 0) {
+      if (noise % int(n + 1) == 0) {
         pixels[x+y * width] = color(random(0, 255));
         continue;
       }
