@@ -3,6 +3,7 @@
 class SignalDisplay {
   PGraphics p = createGraphics(height, height);
   SignalDisplay() {
+    
   }
   void update() {
   }
@@ -16,6 +17,6 @@ class SignalDisplay {
     p.endDraw();
     
     
-    image(p, height, 0, height, height);
+    image(p, 0, 0, height, height);
   }
 }

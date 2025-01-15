@@ -6,6 +6,7 @@ Minimapa minimapa;
 MinimapaWindow minimapaWindow;
 Compass compass;
 Info info;
+SignalDisplay signalDisplay;
 
 int rayCount = 36;
 int rayLength;
@@ -61,6 +62,7 @@ void setup() {
   u = int(height / 100);
 
   mask = loadImage("mask.png");
+  mask = getMask(height, mask);
   mono = createFont("OCR-A.ttf", 16);
   rayLength = int ((height / 2 - border) * .66);
   textFont(mono);
@@ -80,6 +82,7 @@ void setup() {
   minimapaWindow = new MinimapaWindow(this, minimapa);
   info = new Info(new PVector(10, 10));
   compass = new Compass(height / 2 - border, border);
+  signalDisplay = new SignalDisplay();
 
 
 
@@ -154,7 +157,7 @@ void draw() {
 
   if (frameCount % (60 / fakeFrameRate) == 0) {
     push();
-    translate(height / 2, height / 2);
+    translate(height / 2+height, height / 2);
     rotate( -player.angle);
     translate( -player.pos.x, -player.pos.y);
     background(0);
@@ -185,15 +188,22 @@ void draw() {
 
 
 
-  displayMask(border);
 
-  compass.display();
 
   if (infoDisplay) {
     info.display();
     displayFPS();
   }
-  if (radio) { radio();}
+  if (radio) {
+    radio();
+  }
+
+  signalDisplay.display();
+
+  image(mask, 0, 0);
+  image(mask, height, 0);
+
+  compass.display();
 }
 
 
@@ -289,6 +299,6 @@ void radio() {
   textSize(30);
   fill(255, 0, 0, map(sin(frameCount * 0.1), -1, 1, 0, 255));
   textAlign(CENTER, CENTER);
-  text("LOW SIGNAL", width/2 , height/2);
+  text("LOW SIGNAL", width/2, height/2);
   pop();
 }

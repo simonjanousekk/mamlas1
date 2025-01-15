@@ -61,7 +61,7 @@ class Player {
   void display() {
     push();
     
-    translate(height / 2, height / 2);
+    translate(height / 2 + height, height / 2);
     //fill(255, 50);
     //noStroke();
     //circle(0, 0, diameter);
