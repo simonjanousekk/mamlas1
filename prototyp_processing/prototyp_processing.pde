@@ -53,7 +53,7 @@ ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 void setup() {
 
-  size(375, 375);
+  size(750, 375);
 
   noSmooth();
 
@@ -154,7 +154,7 @@ void draw() {
 
   if (frameCount % (60 / fakeFrameRate) == 0) {
     push();
-    translate(width / 2, height / 2);
+    translate(height / 2, height / 2);
     rotate( -player.angle);
     translate( -player.pos.x, -player.pos.y);
     background(0);

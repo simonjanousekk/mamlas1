@@ -94,10 +94,10 @@ void displayMask(int border) {
   fill(0);
   noStroke();
   rect(0, 0, border, height);
-  rect(0, 0, width, border);
-  rect(width, height, -border, -height);
-  rect(width, height, -width, -border);
-  image(mask, border, border, width - border * 2, height - border * 2);
+  rect(0, 0, height, border);
+  rect(height, height, -border, -height);
+  rect(height, height, -height, -border);
+  image(mask, border, border, height - border * 2, height - border * 2);
   pop();
 }
 

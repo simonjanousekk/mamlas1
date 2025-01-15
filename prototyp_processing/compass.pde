@@ -41,7 +41,7 @@ class Compass {
     // strokeWeight(2);
     noFill();
     
-    translate(width / 2, height / 2);
+    translate(height / 2, height / 2);
     rotate( -player.angle);
     
     circle(0, 0, radius * 2);
@@ -71,19 +71,19 @@ class Compass {
     pop();
     
     push();
-    translate(width / 2, height / 2 - radius);
+    translate(height / 2, height / 2 - radius);
     fill(0);
     stroke(primary);
     //strokeWeight(2);
     strokeJoin(BEVEL);
     beginShape();
     vertex(0, 0);
-    vertex(longLineL * .5, -longLineL);
+    vertex(longLineL *.5, -longLineL);
     vertex(longLineL * 2, -longLineL);
     vertex(longLineL * 2, -longLineL * 3);
     vertex( -longLineL * 2, -longLineL * 3);
     vertex( -longLineL * 2, -longLineL);
-    vertex( -longLineL * .5, -longLineL);
+    vertex( -longLineL *.5, -longLineL);
     endShape(CLOSE);
     fill(255);
     text(nf(floor(degrees(player.angle)), 3), 0, -longLineL * 1.5);
@@ -91,7 +91,7 @@ class Compass {
     
     
     push();
-    translate(width / 2, height / 2);
+    translate(height / 2, height / 2);
     
     rotate( -angleToSample);
     translate(0, -radius);
@@ -110,7 +110,7 @@ class Compass {
     pop();
     
     push();
-    translate(width / 2, height / 2);
+    translate(height / 2, height / 2);
     stroke(255);
     //strokeWeight(2);
     float tmpa = TWO_PI / rayCount;
