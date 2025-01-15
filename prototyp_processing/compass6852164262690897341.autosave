@@ -65,19 +65,19 @@ class Compass {
     
     // top square with degrees heading to
     push();
-    translate(screen2Center.x, screen2Center.y - radius);
+    translate(scren2Center.x, scren2Center.y - radius);
     fill(0);
     stroke(primary);
     //strokeWeight(2);
     strokeJoin(BEVEL);
     beginShape();
     vertex(0, 0);
-    vertex(longLineL * .5, -longLineL);
+    vertex(longLineL *.5, -longLineL);
     vertex(longLineL * 2, -longLineL);
     vertex(longLineL * 2, -longLineL * 3);
     vertex( -longLineL * 2, -longLineL * 3);
     vertex( -longLineL * 2, -longLineL);
-    vertex( -longLineL * .5, -longLineL);
+    vertex( -longLineL *.5, -longLineL);
     endShape(CLOSE);
     fill(255);
     text(nf(floor(degrees(player.angle)), 3), 0, -longLineL * 1.5);
@@ -87,7 +87,7 @@ class Compass {
     
     // sample dir arrow
     push();
-    translate(screen2Center.x, screen2Center.y);
+    translate(scren2Center.x, scren2Center.y);
     rotate( -angleToSample);
     translate(0, -radius);
     fill(primary);
@@ -104,7 +104,7 @@ class Compass {
     
     // dash line raylength
     push();
-    translate(screen2Center.x, screen2Center.y);
+    translate(scren2Center.x, scren2Center.y);
     stroke(255);
     //strokeWeight(2);
     float tmpa = TWO_PI / rayCount;

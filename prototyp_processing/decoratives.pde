@@ -25,8 +25,8 @@ class DCross {
     
     
     rotate(player.angle);
-    line(0, 0, size * .75, -size * .75);
-    translate(size * .75, -size * .75);
+    line(0, 0, size *.75, -size *.75);
+    translate(size *.75, -size *.75);
     textAlign(LEFT, BOTTOM);
     fill(primary);
     // textSize(24);
