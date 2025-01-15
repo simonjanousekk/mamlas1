@@ -1,7 +1,4 @@
 
-
-
-
 Player player;
 Sample sample;
 Mapa mapa;
@@ -255,7 +252,7 @@ void keyReleased() {
 }
 
 void radio() {
-  //noise_t = map(mouseX, 0, widtwh, 0.1, 0.7);
+  noise_t = map(mouseX, 0, width, 0.1, 0.7);
   if (frameCount % 5 == 0) {
     noise_t = random(0, 0.7);
   }
@@ -291,7 +288,7 @@ void radio() {
   push();
   textSize(30);
   fill(255, 0, 0, map(sin(frameCount * 0.1), -1, 1, 0, 255));
-  textAlign(CENTER);
-  text("LOW SIGNAL", width/2 , width/2 +10);
+  textAlign(CENTER, CENTER);
+  text("LOW SIGNAL", width/2 , height/2);
   pop();
 }
