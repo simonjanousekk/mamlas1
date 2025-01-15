@@ -35,32 +35,24 @@ class Compass {
     this.update();
     textAlign(CENTER, BOTTOM);
     
+    
+    // circle with lines
     push();
-    
     stroke(255);
-    // strokeWeight(2);
     noFill();
-    
-    translate(height / 2 + height, height / 2);
+    translate(screenCenter2.x, screenCenter2.y);
     rotate( -player.angle);
-    
     circle(0, 0, radius * 2);
-    
     int linesCount = 72;
     String[] labels = {"N", "3", "6", "E", "12", "15", "S", "21", "24", "W", "30", "33"};
     float angleInc = TWO_PI / linesCount;
-    
-    
-    
     for (int i = 0; i < linesCount; i++) {
       float l = shortLineL;
       if (i % 2 == 0) l = longLineL;
-      
       push();
       rotate(angleInc * i);
       translate(0, -radius);
       line(0, 0, 0, -l);
-      
       if (i % (linesCount / labels.length) == 0) {
         int index = floor(i / (linesCount / labels.length));
         
@@ -70,33 +62,34 @@ class Compass {
     }
     pop();
     
+    
+    // top square with degrees heading to
     push();
-    translate(height / 2  + height, height / 2 - radius);
+    translate(screenCenter2.x, screenCenter2.y - radius);
     fill(0);
     stroke(primary);
     //strokeWeight(2);
     strokeJoin(BEVEL);
     beginShape();
     vertex(0, 0);
-    vertex(longLineL *.5, -longLineL);
+    vertex(longLineL * .5, -longLineL);
     vertex(longLineL * 2, -longLineL);
     vertex(longLineL * 2, -longLineL * 3);
     vertex( -longLineL * 2, -longLineL * 3);
     vertex( -longLineL * 2, -longLineL);
-    vertex( -longLineL *.5, -longLineL);
+    vertex( -longLineL * .5, -longLineL);
     endShape(CLOSE);
     fill(255);
     text(nf(floor(degrees(player.angle)), 3), 0, -longLineL * 1.5);
     pop();
     
     
-    push();
-    translate(height / 2 + height, height / 2);
     
+    // sample dir arrow
+    push();
+    translate(screenSize / 2 + screenSize, screenCenter2.y);
     rotate( -angleToSample);
     translate(0, -radius);
-    
-    //strokeWeight(2);
     fill(primary);
     stroke(primary);
     //fill(0);
@@ -109,8 +102,9 @@ class Compass {
     endShape(CLOSE);
     pop();
     
+    // dash line raylength
     push();
-    translate(height / 2 + height, height / 2);
+    translate(screenCenter2.x, screenCenter2.y);
     stroke(255);
     //strokeWeight(2);
     float tmpa = TWO_PI / rayCount;

@@ -1,13 +1,13 @@
 
 
 class SignalDisplay {
-  PGraphics p = createGraphics(height, height);
+  PGraphics p = createGraphics(screenSize, screenSize);
   SignalDisplay() {
     
   }
   void update() {
   }
-
+  
   void display() {
     
     p.beginDraw();
@@ -17,6 +17,6 @@ class SignalDisplay {
     p.endDraw();
     
     
-    image(p, 0, 0, height, height);
+    image(p, screenCenter1.x-screenSize/2, screenCenter2.y-screenSize/2, screenSize, screenSize);
   }
 }

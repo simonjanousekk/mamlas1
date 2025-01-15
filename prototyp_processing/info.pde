@@ -6,7 +6,7 @@ class Info {
   Info(PVector p) {
     pos = p;
   }
-
+  
   void display() {
     push();
     fill(255);
@@ -30,7 +30,7 @@ void displayFPS() {
   fill(255);
   textSize(16);
   textAlign(RIGHT, BOTTOM);
-  text(fakeFrameRate, width - 5, height - 20);
-  text(int(frameRate), width - 5, height - 5);
+  text(fakeFrameRate, width - 5, screenSize - 20);
+  text(int(frameRate), width - 5, screenSize - 5);
   pop();
 }

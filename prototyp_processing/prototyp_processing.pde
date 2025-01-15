@@ -14,7 +14,6 @@ int rayLength;
 color primary = color(0, 255, 255);
 
 int u = 5;
-int screenSize = 367;
 final int s_thick = 2;
 final int s_thin = 1;
 int minimapaSize = 500;
@@ -26,7 +25,7 @@ int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
 int border = 18;
 
-final float treshold = .45;
+final float treshold =.45;
 
 boolean radio = false;
 float noiseScale = 0.01;
@@ -51,20 +50,25 @@ ArrayList<Ray> rays = new ArrayList<Ray>();
 ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
 ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
-
+int screenSize = 367;
+PVector screenCenter1, screenCenter2;
 
 void setup() {
   //fullScreen();
   size(800, 480);
-  println(width, height);
   noSmooth();
+
+  screenCenter1 = new PVector(screenSize / 2 + (width-screenSize*2)/2, screenSize / 2 + (height-screenSize) / 2);
+  screenCenter2 = new PVector(screenSize / 2 + (width-screenSize*2)/2 + screenSize, screenSize / 2 + (height-screenSize) / 2);
+
+
 
   mbInit();
 
   mask = loadImage("mask.png");
-  mask = getMask(height, border, mask);
+  mask = getMask(screenSize, border, mask);
   mono = createFont("OCR-A.ttf", 16);
-  rayLength = int((height / 2 - border) * .66);
+  rayLength = int((screenSize / 2 - border) *.66);
   textFont(mono);
 
   walls.clear();
@@ -81,7 +85,7 @@ void setup() {
   minimapa = new Minimapa(minimapaSize);
   minimapaWindow = new MinimapaWindow(this, minimapa);
   info = new Info(new PVector(10, 10));
-  compass = new Compass(height / 2 - border, border);
+  compass = new Compass(screenSize / 2 - border, border);
   signalDisplay = new SignalDisplay();
 
 
@@ -157,7 +161,7 @@ void draw() {
 
   if (frameCount % (60 / fakeFrameRate) == 0) {
     push();
-    translate(height / 2+height, height / 2);
+    translate(screenCenter2.x, screenCenter2.y);
     rotate( -player.angle);
     translate( -player.pos.x, -player.pos.y);
     background(0);
@@ -200,8 +204,8 @@ void draw() {
 
   signalDisplay.display();
 
-  image(mask, 0, 0);
-  image(mask, height, 0);
+  image(mask, screenCenter1.x-screenSize/2, screenCenter1.y-screenSize/2);
+  image(mask, screenCenter2.x-screenSize/2, screenCenter2.y-screenSize/2);
 
   compass.display();
 }
@@ -271,12 +275,12 @@ void radio() {
 
   loadPixels();
   frame.loadPixels();
-  for (int x = 1; x < width-2; x ++) {
-    for (int y = 1; y < height-2; y++) {
+  for (int x = 1; x < width - 2; x ++) {
+    for (int y = 1; y < screenSize - 2; y++) {
 
       int noise = int(random(100));
       if (noise % 4 == 0) {
-        pixels[x+y * width] = color(random(0, 255));
+        pixels[x + y * width] = color(random(0, 255));
         continue;
       }
 
@@ -289,7 +293,7 @@ void radio() {
       if (noiseCompute < noise_t) {
         int index_shift = int(sin(frameCount));
         int index = (x - index_shift) + ((y - index_shift) * width);
-        pixels[x+y * width] = frame.pixels[x-1 + index];
+        pixels[x + y * width] = frame.pixels[x - 1 + index];
       }
     }
   }
@@ -299,6 +303,6 @@ void radio() {
   textSize(30);
   fill(255, 0, 0, map(sin(frameCount * 0.1), -1, 1, 0, 255));
   textAlign(CENTER, CENTER);
-  text("LOW SIGNAL", width/2, height/2);
+  text("LOW SIGNAL", width / 2, screenSize / 2);
   pop();
 }

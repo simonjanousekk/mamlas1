@@ -1,6 +1,6 @@
 class Player {
   
-  float max_speed = u * .3;
+  float max_speed = u *.3;
   float max_rotationSpeed = TWO_PI / 360;
   float speed, rotationSpeed;
   
@@ -61,7 +61,7 @@ class Player {
   void display() {
     push();
     
-    translate(height / 2 + height, height / 2);
+    translate(screenCenter2.x, screenCenter2.y);
     //fill(255, 50);
     //noStroke();
     //circle(0, 0, diameter);
@@ -73,10 +73,10 @@ class Player {
     fill(primary);
     noStroke();
     beginShape();
-    vertex(diameter *.5, 0);
-    vertex(diameter *.1, diameter *.8);
-    vertex(diameter *.5, diameter *.6);
-    vertex(diameter *.9, diameter *.8);
+    vertex(diameter * .5, 0);
+    vertex(diameter * .1, diameter * .8);
+    vertex(diameter * .5, diameter * .6);
+    vertex(diameter * .9, diameter * .8);
     
     
     
@@ -105,7 +105,7 @@ class Player {
     
     if (godmod) {
       max_speed = 7;
-      rotationSpeed =.03;
+      rotationSpeed = .03;
     }
     
     

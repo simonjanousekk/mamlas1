@@ -86,11 +86,11 @@ PGraphics getMask(int size, int b, PImage m) {
   p.beginDraw();
   p.fill(0, 255, 0);
   p.noStroke();
-  p.rect(0, 0, b, height);
-  p.rect(0, 0, height, b);
-  p.rect(height, height, -b, -height);
-  p.rect(height, height, -height, -b);
-  p.image(m, b, b, height - b * 2, height - b * 2);
+  p.rect(0, 0, b, screenSize);
+  p.rect(0, 0, screenSize, b);
+  p.rect(screenSize, screenSize, -b, -screenSize);
+  p.rect(screenSize, screenSize, -screenSize, -b);
+  p.image(m, b, b, screenSize - b * 2, screenSize - b * 2);
   p.endDraw();
   return p;
 }
