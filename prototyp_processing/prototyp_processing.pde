@@ -15,15 +15,19 @@ int rayLength;
 
 color primary = color(0, 255, 255);
 
+int u = 5;
+final int s_thick = 2;
+final int s_thin = 1;
 int minimapaSize = 500;
-int mapaSize = 5000;
+int mapaSize = 500 * u;
 float terrainMapScale = 0.03;
 float wallNoiseScale = 0.05;
-int cellSize = 30;
+int cellSize = 4 * u;
 int terrainTypeCount = 4;
-int quadrantSize = 25;
+int quadrantSize = 3 * u;
+int border = 5 * u;
 
-final float treshold =.45;
+final float treshold = .45;
 
 boolean radio = true;
 float noiseScale = 0.01;
@@ -37,6 +41,7 @@ float battery = 100;
 int sampleCount = 1;
 boolean kryplmod = false;
 boolean godmod = false;
+boolean infoDisplay = false;
 String[] terrainTypes = {"SOFT", "DENS", "FIRM", "HARD"};
 
 PImage mask;
@@ -50,14 +55,17 @@ ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 
 void setup() {
-  size(800, 800);
+
+  size(375, 375);
 
   noSmooth();
+
   mbInit();
-  
+  u = int(height / 100);
+
   mask = loadImage("mask.png");
-  mono = createFont("OCR-A.ttf", 64);
-  rayLength = width / 3;
+  mono = createFont("OCR-A.ttf", 16);
+  rayLength = int ((height / 2 - border) * .66);
   textFont(mono);
 
   walls.clear();
@@ -69,12 +77,12 @@ void setup() {
   noiseSeed(millis());
 
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
-  player = new Player(randomPosOutsideWalls(), 20);
+  player = new Player(randomPosOutsideWalls(), 3 * u);
   sample = new Sample(randomPosOutsideWalls());
   minimapa = new Minimapa(minimapaSize);
   minimapaWindow = new MinimapaWindow(this, minimapa);
   info = new Info(new PVector(10, 10));
-  compass = new Compass(width / 2 - 75, 75);
+  compass = new Compass(height / 2 - border, border);
 
 
 
@@ -102,7 +110,7 @@ void draw() {
   //colorMode(HSB, 255);
   //primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
   //pop();
-  
+
   //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
 
   // get relevant walls
@@ -150,7 +158,7 @@ void draw() {
   if (frameCount % (60 / fakeFrameRate) == 0) {
     push();
     translate(width / 2, height / 2);
-    rotate( - player.angle);
+    rotate( -player.angle);
     translate( -player.pos.x, -player.pos.y);
     background(0);
     if (kryplmod) {
@@ -179,14 +187,14 @@ void draw() {
   player.handleInput();
 
 
-  displayMask(75);
+
+  displayMask(border);
 
   compass.display();
 
-  info.display();
-  displayFPS();
-  if (radio) {
-    radio();
+  if (infoDisplay) {
+    info.display();
+    displayFPS();
   }
 }
 
@@ -220,13 +228,14 @@ void keyPressed() {
   if (key == 'x') {
     radio = !radio;
   }
-
-
-  if (key == 'i') {
+  if (key == 'l') {
     player.terrainSetting = (player.terrainSetting + 1) % terrainTypeCount;
   }
   if (key == 'k') {
     player.terrainSetting = (player.terrainSetting - 1 + terrainTypeCount) % terrainTypeCount;
+  }
+  if (key == 'i') {
+    infoDisplay = !infoDisplay;
   }
 
 

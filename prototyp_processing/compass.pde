@@ -2,8 +2,8 @@ class Compass {
   int radius;
   float angleToSample;
   
-  int shortLineL = 10;
-  int longLineL = 20;
+  int shortLineL = u;
+  int longLineL = u * 2;
   
   //float arrowRadius;
   //int arrowL = 70;
@@ -33,35 +33,12 @@ class Compass {
   
   void display() {
     this.update();
-    
-    // push();
-    // translate(width / 2, height / 2);
-    // rotate( -angleToSample);
-    // translate(0, arrowRadius);
-    
-    
-    // stroke(0);
-    // strokeWeight(15);
-    // line(0, 0, 0, -arrowL);
-    // line(0, 0, -arrowHL, -arrowHL);
-    // line(0, 0, arrowHL, -arrowHL);
-    
-    
-    // stroke(primary);
-    // strokeWeight(3);
-    // line(0, 0, 0, -arrowL);
-    // line(0, 0, -arrowHL, -arrowHL);
-    // line(0, 0, arrowHL, -arrowHL);
-    
-    // pop();
-    
-    textSize(24);
     textAlign(CENTER, BOTTOM);
     
     push();
     
     stroke(255);
-    strokeWeight(2);
+    // strokeWeight(2);
     noFill();
     
     translate(width / 2, height / 2);
@@ -97,16 +74,16 @@ class Compass {
     translate(width / 2, height / 2 - radius);
     fill(0);
     stroke(primary);
-    strokeWeight(2);
+    //strokeWeight(2);
     strokeJoin(BEVEL);
     beginShape();
     vertex(0, 0);
-    vertex(longLineL *.5, -longLineL);
+    vertex(longLineL * .5, -longLineL);
     vertex(longLineL * 2, -longLineL);
     vertex(longLineL * 2, -longLineL * 3);
     vertex( -longLineL * 2, -longLineL * 3);
     vertex( -longLineL * 2, -longLineL);
-    vertex( -longLineL *.5, -longLineL);
+    vertex( -longLineL * .5, -longLineL);
     endShape(CLOSE);
     fill(255);
     text(nf(floor(degrees(player.angle)), 3), 0, -longLineL * 1.5);
@@ -119,7 +96,7 @@ class Compass {
     rotate( -angleToSample);
     translate(0, -radius);
     
-    strokeWeight(2);
+    //strokeWeight(2);
     fill(primary);
     stroke(primary);
     //fill(0);
@@ -135,7 +112,7 @@ class Compass {
     push();
     translate(width / 2, height / 2);
     stroke(255);
-    strokeWeight(2);
+    //strokeWeight(2);
     float tmpa = TWO_PI / rayCount;
     for (int i = 0; i < rayCount; i++) {
       float x1 = cos(tmpa * i) * rayLength;
