@@ -23,7 +23,7 @@ float wallNoiseScale = 0.05;
 int cellSize = 4 * u;
 int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
-int border = 18;
+int border = 0;
 
 final float treshold =.45;
 
@@ -51,6 +51,7 @@ ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
 ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 int screenSize = 367;
+int screenGap = 37;
 PVector screenCenter1, screenCenter2;
 
 void setup() {
@@ -58,14 +59,14 @@ void setup() {
   size(800, 480);
   noSmooth();
 
-  screenCenter1 = new PVector(screenSize / 2 + (width-screenSize*2)/2, screenSize / 2 + (height-screenSize) / 2);
-  screenCenter2 = new PVector(screenSize / 2 + (width-screenSize*2)/2 + screenSize, screenSize / 2 + (height-screenSize) / 2);
+  screenCenter1 = new PVector(screenSize / 2 + (width-screenGap-screenSize*2)/2, screenSize / 2 + (height-screenSize) / 2);
+  screenCenter2 = new PVector(screenSize / 2 + (width+screenGap-screenSize*2)/2 + screenSize, screenSize / 2 + (height-screenSize) / 2);
 
 
 
   mbInit();
 
-  mask = loadImage("mask.png");
+  mask = loadImage("mask_debug.png");
   mask = getMask(screenSize, border, mask);
   mono = createFont("OCR-A.ttf", 16);
   rayLength = int((screenSize / 2 - border) *.66);
