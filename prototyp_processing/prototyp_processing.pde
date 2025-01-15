@@ -29,6 +29,11 @@ int border = 5 * u;
 
 final float treshold = .45;
 
+boolean radio = true;
+float noiseScale = 0.01;
+float noiseCompute = 0;
+float noise_t = 0;
+int noise_s = 10;
 
 int fakeFrameRate = 59;
 
@@ -50,6 +55,7 @@ ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 
 void setup() {
+
   size(375, 375);
 
   noSmooth();
@@ -181,6 +187,7 @@ void draw() {
   player.handleInput();
 
 
+
   displayMask(border);
 
   compass.display();
@@ -218,7 +225,9 @@ void keyPressed() {
   if (key == 'g') {
     godmod = !godmod;
   }
-
+  if (key == 'x') {
+    radio = !radio;
+  }
   if (key == 'l') {
     player.terrainSetting = (player.terrainSetting + 1) % terrainTypeCount;
   }
@@ -242,4 +251,44 @@ void keyReleased() {
   if (key == 's' || key == 'S') moveBackward = false;
   if (key == 'a' || key == 'A') turnLeft = false;
   if (key == 'd' || key == 'D') turnRight = false;
+}
+
+void radio() {
+  //noise_t = map(mouseX, 0, widtwh, 0.1, 0.7);
+  if (frameCount % 5 == 0) {
+    noise_t = random(0, 0.7);
+  }
+
+  PImage frame = get();
+
+  loadPixels();
+  frame.loadPixels();
+  for (int x = 1; x < width-2; x ++) {
+    for (int y = 1; y < height-2; y++) {
+
+      int noise = int(random(100));
+      if (noise % 4 == 0) {
+        pixels[x+y * width] = color(random(0, 255));
+        continue;
+      }
+
+      float nx = noiseScale * x;
+      float ny = noiseScale * y;
+      float nt = noiseScale * frameCount * 10;
+
+      float noiseCompute = noise(nx, nt, ny);
+
+      if (noiseCompute < noise_t) {
+        int index_shift = int(sin(frameCount));
+        int index = (x - index_shift) + ((y - index_shift) * width);
+        pixels[x+y * width] = frame.pixels[x-1 + index];
+      }
+    }
+  }
+
+  updatePixels();
+  textSize(50);
+  fill(255, 0, 0);
+
+  text("LOW SIGNAL", width/2 + 100, width/2 +10);
 }
