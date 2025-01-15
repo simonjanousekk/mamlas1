@@ -32,11 +32,9 @@ class MapaCell {
   
   
   void displayAlt() {
-    if ((
-      pos.x < player.pos.x + screenSize / 2 && 
-      pos.x > player.pos.x - screenSize / 2 - cellSize && 
-      pos.y < player.pos.y + screenSize / 2 && 
-      pos.y > player.pos.y - screenSize / 2 - cellSize) && !state
+    if (
+      !state &&
+      isDistanceLess(pos, player.pos, screenSize/2)
      ) {
       push();
       

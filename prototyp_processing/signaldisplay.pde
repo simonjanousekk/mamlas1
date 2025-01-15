@@ -17,6 +17,6 @@ class SignalDisplay {
     p.endDraw();
     
     
-    image(p, screenCenter1.x-screenSize/2, screenCenter2.y-screenSize/2, screenSize, screenSize);
+    image(p, screen1Center.x - screenSize / 2, screen2Center.y - screenSize / 2, screenSize, screenSize);
   }
 }

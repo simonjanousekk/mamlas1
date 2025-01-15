@@ -61,7 +61,7 @@ class Player {
   void display() {
     push();
     
-    translate(screenCenter2.x, screenCenter2.y);
+    translate(screen2Center.x, screen2Center.y);
     //fill(255, 50);
     //noStroke();
     //circle(0, 0, diameter);
