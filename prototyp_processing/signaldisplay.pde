@@ -2,12 +2,33 @@
 
 class SignalDisplay {
 
-  SineWave sinePlayer = new SineWave(primary);
-  SineWave sineGame = new SineWave(color(255));
+  SineWave sinePlayer, sineGame;
+  
+  float noise1, noise2;
+  float noiseFac = random(100);
+  float noiseInc = 0.1;
 
   SignalDisplay() {
+    
+    calcNoise();
+    
+    sinePlayer = new SineWave(primary);
+    sineGame = new SineWave(color(255), noise1, noise2);
   }
+  
+  void calcNoise() {
+    noise1 = noise(noiseFac);
+    noise2 = noise(noiseFac + 999); // offset
+    
+    noiseFac += noiseInc;    
+  }
+
   void update() {
+    sineGame.amp = map(noise1, 0, 1, sineGame.ampConstrain.x, sineGame.ampConstrain.y);
+    sineGame.band = map(noise2, 0, 1, sineGame.bandConstrain.y, sineGame.bandConstrain.y);
+
+    sinePlayer.update();
+    sineGame.update();
   }
 
   void display() {
@@ -25,8 +46,8 @@ class SignalDisplay {
     line(0, -screenSize/2, 0, screenSize/2);
     line(-screenSize/2, 0, screenSize/2, 0);
 
-    sinePlayer.update();
-    sineGame.update();
+
+
 
     sinePlayer.display();
     sineGame.display();
@@ -42,14 +63,19 @@ class SineWave {
   PVector pos;
   color col;
   float ang = 0;
-  float band, amp, baseIncrement; 
+  float band, amp, baseIncrement;
+  PVector bandConstrain = new PVector(0.01, 0.5); // min max
+  PVector ampConstrain = new PVector(50, screenSize / 2 - screen1Border); // min max
 
   SineWave(int c) {
+    this(c, random(0.01, 0.5), random(50, screenSize / 2 - screen1Border));
+  }
+
+  SineWave(int c, float b, float a) {
     col = c;
-    band = random(0.01, 0.5);
-    amp = random(50, screenSize / 2 - screen1Border);
-    
-    baseIncrement = TWO_PI / (screenSize / band);
+    band = b;
+    amp = a;
+    baseIncrement = 0.07;
   }
 
   void update() {
@@ -57,8 +83,8 @@ class SineWave {
 
     pos = new PVector(0, map(sin(ang), -1, 1, -amp, amp));
   }
-  
-  
+
+
   void display() {
     fill(col);
     noStroke();
@@ -73,11 +99,6 @@ class SineWave {
     float a = ang;
     for (int i = 0; i < screenSize/2; i += 10) {
       curveVertex(i, map(sin(a), -1, 1, -amp, amp));
-      push();
-      fill(0, 255, 0);
-      noStroke();
-      circle(i, map(sin(a), -1, 1, -amp, amp), 5);
-      pop();
       a += band;
     }
     endShape();
