@@ -53,6 +53,7 @@ int screenSize = 366;
 int screenGap = 36;
 PVector screen1Center, screen2Center;
 int screen2Border = u * 5;
+int screen1Border = u * 10;
 PImage screen1Mask, screen2Mask;
 
 void setup() {
@@ -65,7 +66,7 @@ void setup() {
 
   mbInit();
 
-  mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
+  mask = loadImage("mask_debug.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 16);
