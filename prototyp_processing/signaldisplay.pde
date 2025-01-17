@@ -3,35 +3,37 @@
 class SignalDisplay {
 
   SineWave sinePlayer, sineGame;
-  
-  float noise1, noise2;
-  float noiseFac = random(100);
-  float noiseInc = 0.005;
+  float baseIncrement = 0.05;
   PVector bandConstrain = new PVector(0.01, 0.5); // min max
   PVector ampConstrain = new PVector(50, screenSize / 2 - screen1Border); // min max
 
+
+  float noise1, noise2;
+  float noiseFac = random(100);
+  float noiseInc = 0.005;
+
   SignalDisplay() {
-    
+
     calcNoise();
-    
+
     sinePlayer = new SineWave(primary);
     sineGame = new SineWave(color(255), noise1, noise2);
   }
-  
+
   void calcNoise() {
     noise1 = map(noise(noiseFac), 0, 1, ampConstrain.x, ampConstrain.y);
     noise2 = map(noise(noiseFac + 999), 0, 1, bandConstrain.x, bandConstrain.y); // offset
-    
-    noiseFac += noiseInc;    
+
+    noiseFac += noiseInc;
   }
 
   void update() {
     calcNoise();
-    
-    //sineGame.amp = noise1;
-    //sineGame.band = noise2;
-    
-    println(noise1, noise2);
+
+    sineGame.amp = noise1;
+    sineGame.band = noise2;
+
+    //println(noise1, noise2);
 
     sinePlayer.update();
     sineGame.update();
@@ -69,7 +71,7 @@ class SineWave {
   PVector pos;
   color col;
   float ang = 0;
-  float band, amp, baseIncrement;
+  float band, amp;
 
   SineWave(int c) {
     this(c, random(0.01, 0.5), random(50, screenSize / 2 - screen1Border));
@@ -79,11 +81,10 @@ class SineWave {
     col = c;
     band = b;
     amp = a;
-    baseIncrement = 0.07;
   }
 
   void update() {
-    ang += baseIncrement;
+    ang += signalDisplay.baseIncrement;
 
     pos = new PVector(0, map(sin(ang), -1, 1, -amp, amp));
   }
