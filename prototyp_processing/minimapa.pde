@@ -30,9 +30,6 @@ class Minimapa {
         }
       }
     }
-    
-    
-    
     pg.endDraw();
   }
 }

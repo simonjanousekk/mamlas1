@@ -3,7 +3,7 @@ import themidibus.*;
 MidiBus mb;
 
 void mbInit() {
-  MidiBus.list(); 
+  MidiBus.list();
   mb = new MidiBus(this, "Arduino Micro", "Arduino Micro");
 }
 
@@ -29,24 +29,30 @@ void noteOff(Note note) {
 
 void controllerChange(ControlChange change) {
   int channel = change.channel();
-  int number = change.number();
+  int control = change.number();
   int value = change.value();
-  
-  println("MIDI INPUT:");
-  print("channel: " + channel);
-  print(" number: " + number); 
+
+  print("MIDI INPUT:");
+  //print(" channel: " + channel);
+  print(" control: " + control);
   print(" value: " + value);
   println(" ");
   if (channel == 0) {
-  if (channel == 0 && number == 1) { // rotation encoder - player rotation
-    if (value == 0) {
-      player.turn--;
-    } else if (value == 1) {
-      player.turn++;
+    if (control == 1) { // rotation encoder - player rotation
+      if (value == 0) {
+        player.turn--;
+      } else if (value == 1) {
+        player.turn++;
+      }
+    } else if (control == 3) { // ROT POT for AMP
+      float alpha = map(value, 0, 127, signalDisplay.ampConstrain.x, signalDisplay.ampConstrain.y);
+      signalDisplay.sinePlayer.desAmp = alpha;
+    } else if (control == 4) { // ROT POT for BAND
+      float beta = map(value, 0, 127, signalDisplay.bandConstrain.x, signalDisplay.bandConstrain.y);
+      signalDisplay.sinePlayer.desBand = beta;
+    } else if (control == 5) { // SLIDER POT for SPEED
+      player.setDesiredVelocity(value);
     }
-  } else if (channel == 0 && number == 2) {
-    player.setDesiredVelocity(value);
-  }
   }
 }
 
@@ -64,4 +70,9 @@ void sendDummyMIDI() {
   delay(500); // Half a second
   mb.sendNoteOff(channel, note, velocity);
   println("Sent Note Off: Channel " + channel + ", Note " + note + ", Velocity " + velocity);
+}
+
+
+void requestPotValues() {
+  mb.sendControllerChange(1, 1, 1);
 }

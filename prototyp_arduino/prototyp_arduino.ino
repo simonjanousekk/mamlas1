@@ -9,7 +9,7 @@
 
 // Encoder pins
 RotEncoder rotEnc1(0, 1, 1);
-// RotEncoder rotEnc2(2, 3, 2);
+//RotEncoder rotEnc2(2, 3, 2);
 
 Potenciometer pot1(A0, 3);
 Potenciometer pot2(A1, 4);
@@ -32,12 +32,12 @@ void loop() {
   pot2.update();
 
   rotEnc1.update();
-  rotEnc2.update();
+  //rotEnc2.update();
 
   // Process incoming MIDI messages
   midiEventPacket_t rx = MidiUSB.read();
   if (rx.header != 0) {  // If a MIDI message is received
-    logMidiMessage(rx);
+    handleIncomingMidi(rx);
   }
 
   MidiUSB.flush();
@@ -50,7 +50,7 @@ void controlChange(byte channel, byte control, byte value) {
 }
 
 // Function to log received MIDI messages
-void logMidiMessage(midiEventPacket_t rx) {
+void handleIncomingMidi(midiEventPacket_t rx) {
   Serial.print("Received MIDI Message: ");
   Serial.print("Type: 0x");
   Serial.print(rx.header, HEX);
@@ -60,4 +60,15 @@ void logMidiMessage(midiEventPacket_t rx) {
   Serial.print(rx.byte2);
   Serial.print(", Value: ");
   Serial.println(rx.byte3);
+
+  int channel = rx.byte1 & 0x0F;
+  int control = rx.byte2;
+  int value = rx.byte3;
+
+  if (channel == 1) {
+    if (control == 1 && value == 1) {
+      pot1.sendData();
+      pot2.sendData();
+    }
+  }
 }

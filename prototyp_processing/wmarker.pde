@@ -55,6 +55,6 @@ class WMarker {
   void display() {
     fill(col);
     noStroke();
-    circle(pos.x, pos.y, int(u));
+    circle(pos.x, pos.y, int(u*.7));
   }
 }

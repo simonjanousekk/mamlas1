@@ -4,39 +4,28 @@ class SignalDisplay {
 
   SineWave sinePlayer, sineGame;
   float baseIncrement = 0.05;
-  PVector bandConstrain = new PVector(0.01, 0.5); // min max
-  PVector ampConstrain = new PVector(50, screenSize / 2 - screen1Border); // min max
+  PVector bandConstrain = new PVector(0.1, 0.6); // min max
+  PVector ampConstrain = new PVector(30, screenSize / 2 - screen1Border); // min max
 
-
-  float noise1, noise2;
-  float noiseFac = random(100);
-  float noiseInc = 0.005;
 
   SignalDisplay() {
-
-    calcNoise();
-
-    sinePlayer = new SineWave(primary);
-    sineGame = new SineWave(color(255), noise1, noise2);
-  }
-
-  void calcNoise() {
-    noise1 = map(noise(noiseFac), 0, 1, ampConstrain.x, ampConstrain.y);
-    noise2 = map(noise(noiseFac + 999), 0, 1, bandConstrain.x, bandConstrain.y); // offset
-
-    noiseFac += noiseInc;
+    requestPotValues();
+    sinePlayer = new SineWave(primary, primaryLight);
+    sineGame = new SineWave(color(255), color(150));
+    randomizeSineGame();
   }
 
   void update() {
-    calcNoise();
-
-    sineGame.amp = noise1;
-    sineGame.band = noise2;
 
     //println(noise1, noise2);
 
     sinePlayer.update();
     sineGame.update();
+  }
+
+  void randomizeSineGame() {
+    sineGame.desBand = random(bandConstrain.x, bandConstrain.y);
+    sineGame.desAmp = random(ampConstrain.x, ampConstrain.y);
   }
 
   void display() {
@@ -51,8 +40,8 @@ class SignalDisplay {
 
 
     stroke(150);
-    line(0, -screenSize/2, 0, screenSize/2);
-    line(-screenSize/2, 0, screenSize/2, 0);
+    line(0, -screenSize / 2, 0, screenSize / 2);
+    line( - screenSize / 2, 0, screenSize / 2, 0);
 
 
 
@@ -69,28 +58,37 @@ class SignalDisplay {
 class SineWave {
   PVector origin = new PVector(screen1Center.x, screen1Center.y);
   PVector pos;
-  color col;
+  color col, col2;
   float ang = 0;
   float band, amp;
+  float desBand, desAmp;
 
-  SineWave(int c) {
-    this(c, random(0.01, 0.5), random(50, screenSize / 2 - screen1Border));
+  SineWave(int c, int c2) {
+    this(c, c2, 0, 0);
   }
 
-  SineWave(int c, float b, float a) {
+  SineWave(int c, int c2, float b, float a) {
     col = c;
+    col2 = c2;
     band = b;
     amp = a;
   }
 
   void update() {
     ang += signalDisplay.baseIncrement;
-
-    pos = new PVector(0, map(sin(ang), -1, 1, -amp, amp));
+    pos = new PVector(0, map(sin(ang), -1, 1, -amp, amp)); 
+    
+    band += (desBand - band) * .1;
+    amp += (desAmp - amp) * .1;
   }
 
 
   void display() {
+    stroke(col2);
+    strokeWeight(1);
+    line(-screenSize / 2, amp, screenSize / 2, amp);
+    line(-screenSize / 2, -amp, screenSize / 2, -amp);
+
     fill(col);
     noStroke();
     circle(pos.x, pos.y, 5);
@@ -102,7 +100,7 @@ class SineWave {
 
     beginShape();
     float a = ang;
-    for (int i = 0; i < screenSize/2; i += 10) {
+    for (int i = 0; i < screenSize / 2 + 20; i += 10) {
       curveVertex(i, map(sin(a), -1, 1, -amp, amp));
       a += band;
     }
@@ -110,7 +108,7 @@ class SineWave {
 
     beginShape();
     float b = ang;
-    for (float i = 0; i > -screenSize/2; i -= 10) {
+    for (float i = 0; i > - screenSize / 2 - 20; i -= 10) {
       curveVertex(i, map(sin(b), -1, 1, -amp, amp));
       b -= band;
     }

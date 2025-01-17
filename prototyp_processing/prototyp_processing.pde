@@ -2,8 +2,8 @@
 Player player;
 Sample sample;
 Mapa mapa;
-Minimapa minimapa;
-MinimapaWindow minimapaWindow;
+//Minimapa minimapa;
+//MinimapaWindow minimapaWindow;
 Compass compass;
 Info info;
 SignalDisplay signalDisplay;
@@ -12,6 +12,7 @@ int rayCount = 36;
 int rayLength;
 
 color primary = color(0, 255, 255);
+color primaryLight = color(0, 150, 150);
 
 int u = 5;
 final int s_thick = 2;
@@ -60,43 +61,43 @@ void setup() {
   //fullScreen();
   size(800, 480);
   noSmooth();
-
+  
   screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
   screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
   screen2Left = new PVector(screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
-
+  
   mbInit();
-
+  
   mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 16);
   rayLength = int((screenSize / 2 - screen2Border) * .66);
   textFont(mono);
-
+  
   walls.clear();
   rays.clear();
   wmarkers.clear();
   dcrosses.clear();
-
+  
   randomSeed(millis());
   noiseSeed(millis());
-
+  
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
   player = new Player(randomPosOutsideWalls(), 3 * u);
   sample = new Sample(randomPosOutsideWalls());
-  minimapa = new Minimapa(minimapaSize);
-  minimapaWindow = new MinimapaWindow(this, minimapa);
+  //minimapa = new Minimapa(minimapaSize);
+  //minimapaWindow = new MinimapaWindow(this, minimapa);
   info = new Info(new PVector(10, 10));
   compass = new Compass(screenSize / 2 - screen2Border, screen2Border);
   signalDisplay = new SignalDisplay();
-
-
-
+  
+  
+  
   for (int i = 0; i < rayCount; i++) {
     rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
   }
-
+  
   for (int x = 0; x < mapa.cols; x += quadrantSize) {
     for (int y = 0; y < mapa.rows; y += quadrantSize) {
       if (!mapa.grid[x][y].state && mapa.grid[x][y].caseValue == 0) {
@@ -106,20 +107,20 @@ void setup() {
       }
     }
   }
-
+  
   surface.setVisible(false);
   surface.setVisible(true);
 }
 
 void draw() {
-
+  
   //push();
   //colorMode(HSB, 255);
   //primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
   //pop();
-
+  
   //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
-
+  
   // get relevant walls
   float relevantDistance = rayLength * 1.3;
   ArrayList<Wall> relevantWalls = new ArrayList<Wall>(walls);
@@ -130,7 +131,7 @@ void draw() {
     }
   }
   relevantWallsC = relevantWalls.size();
-
+  
   //get relewant wmarkers
   ArrayList<WMarker> relevantWMarkers = new ArrayList<WMarker>(wmarkers);
   for (int i = relevantWMarkers.size() - 1; i >= 0; i--) {
@@ -140,14 +141,14 @@ void draw() {
     }
   }
   relevantWMarkersC = relevantWMarkers.size();
-
-
+  
+  
   for (Wall wall : relevantWalls) {
     if (!godmod) player.collide(wall);
   }
-
+  
   sample.update();
-
+  
   for (Ray ray : rays) {
     ray.update(player.pos, player.angle);
     ray.findShortestIntersection(relevantWalls);
@@ -159,9 +160,9 @@ void draw() {
     }
     wm.update();
   }
-
+  
   // realest drawing
-
+  
   if (frameCount % (60 / fakeFrameRate) == 0) {
     push();
     translate(screen2Center.x, screen2Center.y);
@@ -174,7 +175,7 @@ void draw() {
       }
     } else {
       mapa.display();
-
+      
       for (DCross dc : dcrosses) {
         dc.display();
       }
@@ -189,42 +190,42 @@ void draw() {
     pop();
     player.display();
   }
-
+  
   player.update();
   player.handleInput();
-
-
-
-
-
+  
+  
+  
+  
+  
   if (infoDisplay) {
     info.display();
     displayFPS();
   }
-
+  
   signalDisplay.update();
   signalDisplay.display();
-
+  
   // draw circular masks
   image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
   image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
-
+  
   // hide empty parts of the screen, might be deleted for production
-   push();
-   fill(0);
-   noStroke();
-   float xgap = (width-screenGap-screenSize*2)/2;
-   float ygap = (height-screenSize)/2;
-   rect(0, 0, width, ygap);
-   rect(width, height, -width, -ygap);
-   rect(0, 0, xgap, height);
-   rect(width, height, -xgap, -height);
-   rect(screenSize+xgap, 0, screenGap, height);
-   pop();
-
+  push();
+  fill(0);
+  noStroke();
+  float xgap = (width - screenGap - screenSize * 2) / 2;
+  float ygap = (height - screenSize) / 2;
+  rect(0, 0, width, ygap);
+  rect(width, height, -width, -ygap);
+  rect(0, 0, xgap, height);
+  rect(width, height, -xgap, -height);
+  rect(screenSize + xgap, 0, screenGap, height);
+  pop();
+  
   compass.display();
-
-// this has to be called last since it is using graphics pixels, so we need to have already drawn everything
+  
+  //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
   if (radio) {
     radio(mouseX);
   }
@@ -235,9 +236,9 @@ boolean moveForward, moveBackward, turnLeft, turnRight;
 
 void keyPressed() {
   if (key == 'r') { // restart
-    if (minimapaWindow != null) {
-      minimapaWindow.close();
-    }
+    //if (minimapaWindow != null) {
+    //  minimapaWindow.close();
+    //}
     setup();
   }
   if (key == ' ') {
@@ -269,8 +270,11 @@ void keyPressed() {
   if (key == 'i') {
     infoDisplay = !infoDisplay;
   }
-
-
+  if (key == 'y') {
+    signalDisplay.randomizeSineGame();
+  }
+  
+  
   if (key == 'w' || key == 'W') moveForward = true;
   if (key == 's' || key == 'S') moveBackward = true;
   if (key == 'a' || key == 'A') turnLeft = true;
@@ -288,45 +292,45 @@ void keyReleased() {
 void radio(int noiseAmount) {
   // later on can be adjusted based on sensor value
   float n = map(noiseAmount, 0, width, 9, 1);
-
+  
   //noise_t = map(mouseX, 0, width, 0.1, 0.7);
   if (frameCount % int(n) == 0) {
     // threshold for how many pixels are affected by the displacement effect - 0 = none, 0.7 = most of them
     float maxRange = 1.1  - (n / 10);
     noise_t = random(0, maxRange);
   }
-
+  
   int x_corner = int(screen2Left.x);
   int y_corner = int(screen2Left.y);
   PImage frame = get(x_corner, y_corner, screenSize, screenSize);
-
+  
   loadPixels();
   frame.loadPixels();
   for (int x = x_corner + 1; x < x_corner + screenSize - 2; x ++) {
     for (int y = y_corner + 1; y < y_corner + screenSize - 2; y++) {
-
+      
       int noise = int(random(100));
       if (noise % int(n + 1) == 0) {
-        pixels[x+y * width] = color(random(0, 255));
+        pixels[x + y * width] = color(random(0, 255));
         continue;
       }
-
+      
       float nx = noiseScale * x;
       float ny = noiseScale * y;
       float nt = noiseScale * frameCount * 10;
-
+      
       float noiseCompute = noise(nx, nt, ny);
-
+      
       if (noiseCompute < noise_t) {
         int x_frame = x - x_corner;
         int y_frame = y - y_corner;
         
         int index = x_frame + y_frame * screenSize;
-        pixels[x + y * width] = frame.pixels[ x_frame - 1 + index];
+        pixels[x + y * width] = frame.pixels[x_frame - 1 + index];
       }
     }
   }
-
+  
   updatePixels();
   push();
   textSize(30);
