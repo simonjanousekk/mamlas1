@@ -56,9 +56,9 @@ class SignalDisplay {
 
 
 
+    sineGame.display();
 
     sinePlayer.display();
-    sineGame.display();
 
     pop();
   }

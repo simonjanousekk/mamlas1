@@ -1,16 +1,21 @@
 #define ENCODER_OPTIMIZE_INTERRUPTS
+// external libs
 #include <Encoder.h>
 #include <MIDIUSB.h>
+
+// my includes
 #include "potenciometer.h"
+#include "rot_encoder.h"
 
 // Encoder pins
-Encoder myEnc(0, 1);
+RotEncoder rotEnc1(0, 1, 1);
+// RotEncoder rotEnc2(2, 3, 2);
 
-Potenciometer pot1(A0, 2);
-Potenciometer pot2(A1, 3);
+Potenciometer pot1(A0, 3);
+Potenciometer pot2(A1, 4);
 
-// Potenciometer slider1(A2, 4);
-// Potenciometer slider2(A3, 5);
+// Potenciometer slider1(A2, 5);
+// Potenciometer slider2(A3, 6);
 
 // Variables
 long oldPosition = -999;
@@ -23,22 +28,11 @@ void setup() {
 
 // Main loop
 void loop() {
-
-
-  // Read encoder position and send MIDI CC
-  long newPosition = myEnc.read() / 4;
-  if (newPosition != oldPosition) {
-    if (newPosition > oldPosition) {
-      controlChange(0, 1, 1);  // Send CC with value 1 for clockwise
-    } else {
-      controlChange(0, 1, 0);  // Send CC with value 0 for counterclockwise
-    }
-    // MidiUSB.flush();
-    oldPosition = newPosition;
-  }
-
   pot1.update();
   pot2.update();
+
+  rotEnc1.update();
+  rotEnc2.update();
 
   // Process incoming MIDI messages
   midiEventPacket_t rx = MidiUSB.read();
@@ -46,7 +40,7 @@ void loop() {
     logMidiMessage(rx);
   }
 
-MidiUSB.flush();
+  MidiUSB.flush();
 }
 
 // Function to send MIDI Control Change messages
@@ -67,6 +61,3 @@ void logMidiMessage(midiEventPacket_t rx) {
   Serial.print(", Value: ");
   Serial.println(rx.byte3);
 }
-
-
-

@@ -37,7 +37,7 @@ void controllerChange(ControlChange change) {
   print(" number: " + number); 
   print(" value: " + value);
   println(" ");
-  
+  if (channel == 0) {
   if (channel == 0 && number == 1) { // rotation encoder - player rotation
     if (value == 0) {
       player.turn--;
@@ -46,6 +46,7 @@ void controllerChange(ControlChange change) {
     }
   } else if (channel == 0 && number == 2) {
     player.setDesiredVelocity(value);
+  }
   }
 }
 
