@@ -39,7 +39,6 @@ int fakeFrameRate = 59;
 
 float battery = 100;
 int sampleCount = 1;
-boolean godmod = false;
 boolean infoDisplay = false;
 String[] terrainTypes = {"SOFT", "DENS", "FIRM", "HARD"};
 
@@ -68,27 +67,27 @@ void setup() {
   //fullScreen();
   size(800, 480);
   noSmooth();
-  
+
   screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
   screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
-  
+
   mbInit();
-  
+
   mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 16);
   rayLength = int((screenSize / 2 - screen2Border) *.66);
   textFont(mono);
-  
+
   walls.clear();
   rays.clear();
   wmarkers.clear();
   dcrosses.clear();
-  
+
   randomSeed(millis());
   noiseSeed(millis());
-  
+
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
   player = new Player(randomPosOutsideWalls(), 3 * u);
   sample = new Sample(randomPosOutsideWalls());
@@ -97,15 +96,15 @@ void setup() {
   info = new Info(new PVector(10, 10));
   compass = new Compass(screenSize / 2 - screen2Border, screen2Border);
   signalDisplay = new SignalDisplay();
-  
+
   atom = new Atom();
-  
-  
-  
+
+
+
   for (int i = 0; i < rayCount; i++) {
     rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
   }
-  
+
   for (int x = 0; x < mapa.cols; x += quadrantSize) {
     for (int y = 0; y < mapa.rows; y += quadrantSize) {
       if (!mapa.grid[x][y].state && mapa.grid[x][y].caseValue == 0) {
@@ -115,20 +114,20 @@ void setup() {
       }
     }
   }
-  
+
   surface.setVisible(false);
   surface.setVisible(true);
 }
 
 void draw() {
-  
+
   //push();
   //colorMode(HSB, 255);
   //primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
   //pop();
-  
+
   //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
-  
+
   // get relevant walls
   float relevantDistance = rayLength * 1.3;
   ArrayList<Wall> relevantWalls = new ArrayList<Wall>(walls);
@@ -139,7 +138,7 @@ void draw() {
     }
   }
   relevantWallsC = relevantWalls.size();
-  
+
   //get relewant wmarkers
   ArrayList<WMarker> relevantWMarkers = new ArrayList<WMarker>(wmarkers);
   for (int i = relevantWMarkers.size() - 1; i >= 0; i--) {
@@ -149,14 +148,14 @@ void draw() {
     }
   }
   relevantWMarkersC = relevantWMarkers.size();
-  
-  
+
+
   for (Wall wall : relevantWalls) {
-    if (!godmod) player.collide(wall);
+    player.collide(wall);
   }
-  
+
   sample.update();
-  
+
   for (Ray ray : rays) {
     ray.update(player.pos, player.angle);
     ray.findShortestIntersection(relevantWalls);
@@ -168,11 +167,11 @@ void draw() {
     }
     wm.update();
   }
-  
+
   // realest drawing
-  
+
   if (frameCount % (60 / fakeFrameRate) == 0) {
-    
+
     if (screen2State == s2s.IDE) { // --- SAMPLE IDENTIFICATION ---
       push();
       background(0);
@@ -206,23 +205,23 @@ void draw() {
       pop();
     }
   }
-  
+
   player.update();
   player.handleInput();
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
   signalDisplay.update();
   signalDisplay.display();
-  
+
   // draw circular masks
   image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
   image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
-  
+
   // hide empty parts of the screen, might be deleted for production
   push();
   fill(0);
@@ -235,7 +234,7 @@ void draw() {
   rect(width, height, -xgap, -height);
   rect(screenSize + xgap, 0, screenGap, height);
   pop();
-  
+
   if (screen2State == s2s.RADAR || screen2State == s2s.GPS) {
     compass.display();
   }
@@ -243,7 +242,7 @@ void draw() {
   if (radio) {
     radio(mouseX);
   }
-  
+
   if (infoDisplay) {
     info.display();
     displayFPS();
@@ -278,9 +277,6 @@ void keyPressed() {
       screen2State = s2s.GPS;
     }
   }
-  if (key == 'g') {
-    godmod = !godmod;
-  }
   if (key == 'x') {
     radio = !radio;
   }
@@ -296,8 +292,8 @@ void keyPressed() {
   if (key == 'y') {
     signalDisplay.randomizeSineGame();
   }
-  
-  
+
+
   if (key == 'w' || key == 'W') moveForward = true;
   if (key == 's' || key == 'S') moveBackward = true;
   if (key == 'a' || key == 'A') turnLeft = true;

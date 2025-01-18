@@ -109,11 +109,6 @@ class Player {
     //float terrainMult = map(abs(onTerrain - terrainSetting), 0, terrainTypeCount, 1, .05);
     //turn = floor(turn*1.4);
 
-    if (godmod) {
-      max_speed = 7;
-      rotationSpeed = .03;
-    }
-
     // KEYBOARD CONTROLLS
     float tmpa = angle - PI / 2;
     if (turnLeft) angle -= TWO_PI/360;
