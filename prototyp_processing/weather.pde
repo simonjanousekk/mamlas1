@@ -13,8 +13,8 @@ class Weather {
     this.storm_IsStarted=false;
     this.storm_StartTime = 0;
     this.storm_maxThreshold = 200;
-    this.storm_threshold = 40;
-    this.ease_in = 20;
+    this.storm_threshold = 50;
+    this.ease_in = 15;
     this.ease_out = 8;
   }
 
