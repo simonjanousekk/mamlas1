@@ -20,6 +20,7 @@ public:
   }
 
   void sendData() {
+    Serial.println("sending pot " + midiNumber);
     midiEventPacket_t event = { 0x0B, 0xB0 | 0, midiNumber, midiValue };
     MidiUSB.sendMIDI(event);
   }

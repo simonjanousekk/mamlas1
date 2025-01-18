@@ -14,7 +14,7 @@ RotEncoder rotEnc1(0, 1, 1);
 Potenciometer pot1(A0, 3);
 Potenciometer pot2(A1, 4);
 
-// Potenciometer slider1(A2, 5);
+Potenciometer slider1(A2, 5);
 // Potenciometer slider2(A3, 6);
 
 // Variables
@@ -30,6 +30,7 @@ void setup() {
 void loop() {
   pot1.update();
   pot2.update();
+  slider1.update();
 
   rotEnc1.update();
   //rotEnc2.update();

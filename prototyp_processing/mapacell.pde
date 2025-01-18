@@ -33,12 +33,12 @@ class MapaCell {
   
   void displayAlt() {
     if (
-      !state &&
-      isDistanceLess(pos, player.pos, screenSize/2)
-     ) {
+      !state && 
+      isDistanceLess(pos, player.pos, screenSize / 2)
+     ){
       push();
       
-      stroke(150);
+      stroke(100);
       translate(pos.x, pos.y);
       
       
@@ -132,8 +132,8 @@ class MapaCell {
     }
         
         
-       void addWall(int d) {
-       if (d == 0) { // top
+        void addWall(int d) {
+        if (d == 0) { // top
         walls.add(new Wall(pos.x, pos.y, pos.x + cellSize, pos.y));
     } else if (d == 1) { // right
         walls.add(new Wall(pos.x + cellSize, pos.y, pos.x + cellSize, pos.y + cellSize));
@@ -147,7 +147,7 @@ class MapaCell {
         walls.add(new Wall(pos.x + cellSize, pos.y, pos.x, pos.y + cellSize));
     }
     }
-      }
+    }
         
         
         
@@ -174,4 +174,5 @@ class MapaCell {
         Case 14-  Binary: 1110  -  All but Bottom-Left filled      - Top, Right, Left
         Case 15-  Binary: 1111  -  Fully surrounded                - No walls
         */
+        
         
