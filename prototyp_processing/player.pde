@@ -119,7 +119,8 @@ class Player {
     
     pos.add(cos(tmpa) * speed, sin(tmpa) * speed);
     
-    rotationSpeed = turn * max_rotationSpeed;
+    
+    rotationSpeed = turn * abs(turn) * max_rotationSpeed;
     angle += rotationSpeed;
     
     angle = (angle + TWO_PI) % TWO_PI;

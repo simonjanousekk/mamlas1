@@ -10,8 +10,8 @@ public:
     : pin1(p1), pin2(p2), midiNumber(n), lastPosition(0), enc(p1, p2) {}
 
   void begin() {
-    // pinMode(pin1, INPUT);
-    // pinMode(pin2, INPUT);
+    pinMode(pin1, INPUT);
+    pinMode(pin2, INPUT);
   }
 
   void update() {

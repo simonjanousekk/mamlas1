@@ -220,8 +220,8 @@ void draw() {
   signalDisplay.display();
   
   // draw circular masks
-  //image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
-  //image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
+  image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
+  image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
   
   // hide empty parts of the screen, might be deleted for production
   push();

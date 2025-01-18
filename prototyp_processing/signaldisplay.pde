@@ -44,9 +44,18 @@ class SignalDisplay {
     line(0, -screenSize / 2, 0, screenSize / 2);
     line( -screenSize / 2, 0, screenSize / 2, 0);
     
-    for (int i = -screenSize/2; i < screenSize/2; i += 10) {
-      line(-5, i, 5, i);
+    
+    int step = screenSize/20;
+    int w = 5;
+    for (int i = -screenSize/2+step; i <= screenSize/2-step; i += step) {
+      line(-w, i, w, i);
+      line(i, -w, i, w);
+      for (int j = -screenSize/2+step; j <= screenSize/2-step; j += step) {
+        point(i, j);
+      }
     }
+    
+    
     
     
     sineGame.display();

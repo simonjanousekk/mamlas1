@@ -9,7 +9,7 @@ class Atom {
   Atom() {
     
     for (int i = 0; i < electronCount; i++) {
-      electrons.add(new Electron(size, coreSize));
+      electrons.add(new Electron(size, coreSize*1.5));
     }
   }
   
@@ -32,7 +32,6 @@ class Atom {
     }
     circle(0, 0, 18);
     
-    //circle(0, 0, coreSize);
     
     
     for (int i = 0; i < electronCount; i++) {
@@ -70,7 +69,7 @@ class Electron {
   
   void update() {
     float x = map(cos(ang), -1, 1, -xmax, xmax);
-    float y = map(sin(ang), -1, 1, -ymax, ymax);
+    float y = map(sin(ang), -1, 1, -ymax/2, ymax/2);
     pos = new PVector(x, y);
     ang += speed;
     

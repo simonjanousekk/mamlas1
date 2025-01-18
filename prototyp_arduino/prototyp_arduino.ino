@@ -3,23 +3,25 @@
 #include <Encoder.h>
 #include <MIDIUSB.h>
 
-// my includes
+// MY FILES
 #include "potenciometer.h"
 #include "rot_encoder.h"
+#include "switch.h"
 
-// Encoder pins
+
+
+// ENCODERS
 RotEncoder rotEnc1(0, 1, 1);
 //RotEncoder rotEnc2(2, 3, 2);
 
+// POTENCIOMETERS
 Potenciometer pot1(A0, 3);
 Potenciometer pot2(A1, 4);
-
 Potenciometer slider1(A2, 5);
 // Potenciometer slider2(A3, 6);
 
-// Variables
-long oldPosition = -999;
-int pot1_last_midi_value;
+// BUTTONS
+Switch button1(16, 10);
 
 void setup() {
   Serial.begin(9600);
@@ -34,6 +36,8 @@ void loop() {
 
   rotEnc1.update();
   //rotEnc2.update();
+
+  button1.update();
 
   // Process incoming MIDI messages
   midiEventPacket_t rx = MidiUSB.read();
