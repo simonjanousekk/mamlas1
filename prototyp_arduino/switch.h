@@ -6,7 +6,7 @@ public:
   Switch(int p, int n)
     : pin(p), midiNumber(n), lastPosition(-1) {}
 
-  void begin() {m
+  void begin() {
     pinMode(pin, INPUT);
   }
 
