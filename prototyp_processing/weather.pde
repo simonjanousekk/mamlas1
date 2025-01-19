@@ -110,14 +110,17 @@ class Weather2 {
   int animationStart = 99999999;
   int animationEnd = 99999999;
   boolean storm = false;
+  float rise, fall;
 
   Weather2() {
   }
 
 
-  void startStorm(int length) {
+  void startStorm(int length, float r, float f) {
     animationStart = frameCount;
     animationEnd = animationStart + length;
+    rise = r;
+    fall = f;
   }
 
   void display() {
@@ -128,6 +131,10 @@ class Weather2 {
     //rect(0, 0, 100, 100);
 
     if (frameCount > animationStart && frameCount < animationEnd) {
+
+      float t = map(frameCount, animationStart, animationEnd, 0, 1);
+      float tcurve = riseStandFall(t, rise, fall);
+      circle(screen2Center.x, screen2Center.y, tcurve*100);
 
       for (int x = int(screen2Center.x - screenHalf); x < screen2Center.x + screenHalf; x += rectSize) {
         for (int y = int(screen2Center.y - screenHalf); y < screen2Center.y + screenHalf; y += rectSize) {
@@ -151,13 +158,44 @@ class Weather2 {
           float noiseVal = noise(nx, ny);
 
           // Draw rectangles based on noise value
-          if (noiseVal > 0.6) {
+          if (noiseVal < tcurve) {
             noStroke();
-            fill(noiseVal * 255);
+            //fill(noiseVal * 255);
+            if (noiseVal > .4) {
+              fill(0, 255, 255);
+            } else if (noiseVal > .8) {
+              fill(0, 100, 100);
+            } else {
+              fill(255);
+            }
+
             rect(x, y, rectSize, rectSize);
           }
         }
       }
     }
   }
+}
+
+
+float riseStandFall(float t, float riseL, float fallL) {
+  t = constrain(t, 0, 1);
+  if (t < riseL) {
+    return mapEaseInOut(t, 0, riseL, 0, 1);
+  } else if (t < 1-fallL) {
+    return 1;
+  } else {
+    return mapEaseInOut(t, 1-fallL, 1, 1, 0);
+  }
+}
+
+float mapEaseInOut(float x, float inMin, float inMax, float outMin, float outMax) {
+  // Normalize x to [0, 1] range using map and constrain
+  float t = constrain(map(x, inMin, inMax, 0, 1), 0, 1);
+
+  // Apply ease-in-out formula (smoothstep)
+  t = t * t * (3 - 2 * t);
+
+  // Map eased t to the output range
+  return map(t, 0, 1, outMin, outMax);
 }
