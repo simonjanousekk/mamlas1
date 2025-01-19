@@ -65,6 +65,8 @@ enum s2s {
   GPS, RADAR, IDE
 }
 
+String midiDevice = "Arduino Micro"; // needs a change on rPI, for macos its "Arduino Micro", for linux its "___"
+
 s2s screen2State = s2s.GPS;
 
 void setup() {
@@ -82,7 +84,7 @@ void setup() {
   mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
-  mono = createFont("OCR-A.ttf", 16);
+  mono = createFont("OCR-A.ttf", 18);
   rayLength = int((screenSize / 2 - screen2Border) *.66);
   textFont(mono);
 
@@ -100,7 +102,7 @@ void setup() {
   //minimapa = new Minimapa(minimapaSize);
   //minimapaWindow = new MinimapaWindow(this, minimapa);
   info = new Info(new PVector(10, 10));
-  compass = new Compass(screenSize / 2 - screen2Border, screen2Border);
+  compass = new Compass(screenSize / 2 - screen2Border);
   signalDisplay = new SignalDisplay();
 
   atom = new Atom();

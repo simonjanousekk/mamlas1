@@ -4,7 +4,7 @@ MidiBus mb;
 
 void mbInit() {
   MidiBus.list();
-  mb = new MidiBus(this, "Arduino Micro", "Arduino Micro");
+  mb = new MidiBus(this, midiDevice, midiDevice);
 }
 
 void noteOn(Note note) {

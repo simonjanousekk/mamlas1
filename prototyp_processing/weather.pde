@@ -164,7 +164,8 @@ class Weather {
           float nz = frameCount * timeSpeed;
 
           // Generate noise value
-          float noiseVal = map(noise(nx, ny, nz), .05, .95, 0, 1);;
+          float noiseVal = map(noise(nx, ny, nz), .05, .95, 0, 1);
+          ;
 
           // Draw rectangles based on noise value
           if (noiseVal < tcurve) {
@@ -173,11 +174,11 @@ class Weather {
             float c = map(noiseVal, 0, tcurve, 0, 1);
 
             if (c < .4) {
-              fill(primaryLight);
+              fill(white);
             } else  if (c < .6) {
               fill(primary);
             } else {
-              fill(255);
+              fill(primaryLight);
             }
             rect(x, y, rectSize, rectSize);
           }

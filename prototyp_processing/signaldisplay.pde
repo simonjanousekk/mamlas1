@@ -62,10 +62,10 @@ class SignalDisplay {
     
     
     int step = screenSize / 20;
-    int w = 5;
+    int stepLineL = 5;
     for (int i = -screenHalf + step; i <= screenHalf - step; i += step) {
-      line( -w, i, w, i);
-      line(i, -w, i, w);
+      line( -stepLineL, i, stepLineL, i);
+      line(i, -stepLineL, i, stepLineL);
       for (int j = -screenHalf + step; j <= screenHalf - step; j += step) {
         point(i, j);
       }
