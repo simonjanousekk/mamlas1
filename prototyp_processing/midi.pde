@@ -40,9 +40,9 @@ void controllerChange(ControlChange change) {
   if (channel == 0) {
     if (control == 1) { // rotation encoder - player rotation
       if (value == 0) {
-        player.turn--;
-      } else if (value == 1) {
         player.turn++;
+      } else if (value == 1) {
+        player.turn--;
       }
     } else if (control == 3) { // ROT POT for AMP
       float alpha = map(value, 0, 127, signalDisplay.ampConstrain.x, signalDisplay.ampConstrain.y);

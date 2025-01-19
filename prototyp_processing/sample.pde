@@ -4,7 +4,7 @@ class Sample {
   boolean selected = false;
   Sample(float x, float y) {
     pos = new PVector(x, y);
-    diameter = 15;
+    diameter = 10;
   }
   Sample(PVector p) {
     this(p.x, p.y);
@@ -19,12 +19,17 @@ class Sample {
   void display() {
     push();
     translate(pos.x, pos.y);
-    rotate(PI / 4);
-    noFill();
-    strokeWeight(s_thick);
-    stroke(primary);
-    rectMode(CENTER);
-    rect(0, 0, diameter, diameter);
+    //rotate(PI / 4);
+    //noFill();
+    //strokeWeight(s_thick);
+    //stroke(primary);
+     
+    noStroke();
+    fill(primary);
+    circle(0, 0, diameter); 
+    
+    //rectMode(CENTER);
+    //rect(0, 0, diameter, diameter);
     pop();
   }
   

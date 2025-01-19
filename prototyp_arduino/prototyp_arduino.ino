@@ -22,7 +22,7 @@ Potenciometer slider1(A2, 5);
 
 // BUTTONS
 Switch button1(16, 10);
-Switch switch1(15, 11);
+Switch button2(17, 11);
 
 void setup() {
   Serial.begin(9600);
@@ -39,7 +39,7 @@ void loop() {
   //rotEnc2.update();
 
   button1.update();
-  switch1.update();
+  button2.update();
 
   // Process incoming MIDI messages
   midiEventPacket_t rx = MidiUSB.read();

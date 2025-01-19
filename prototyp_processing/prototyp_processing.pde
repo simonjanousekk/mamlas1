@@ -40,7 +40,6 @@ int fakeFrameRate = 59;
 
 float battery = 100;
 int sampleCount = 1;
-boolean godmod = false;
 boolean infoDisplay = false;
 String[] terrainTypes = {"SOFT", "DENS", "FIRM", "HARD"};
 
@@ -157,7 +156,7 @@ void draw() {
 
 
   for (Wall wall : relevantWalls) {
-    if (!godmod) player.collide(wall);
+    player.collide(wall);
   }
 
   sample.update();
@@ -218,6 +217,9 @@ void draw() {
   if (screen2State == s2s.GPS) {
     weather.display();
   }
+
+
+
 
 
 
@@ -286,9 +288,6 @@ void keyPressed() {
     } else if (screen2State == s2s.IDE) {
       screen2State = s2s.GPS;
     }
-  }
-  if (key == 'g') {
-    godmod = !godmod;
   }
   if (key == 'x') {
     radio = !radio;

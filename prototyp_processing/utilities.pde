@@ -156,4 +156,7 @@ PVector random2DVector() {
   float y = sin(angle);
 
   return new PVector(x, y);
+  }
+boolean isCloseEnough(float x, float y, float t) {
+  return abs(x - y) <= t;
 }
