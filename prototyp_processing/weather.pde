@@ -104,8 +104,15 @@ class Weather {
 
 
 class Weather2 {
-  int rectSize = 10;
-  float noiseScale = 0.1;
+  int rectSize = 4;
+  float noiseScale = 0.05;
+  float timeSpeed = 0.0001;
+
+  float windSpeed = .000001;
+  PVector windDirection = random2DVector();
+  PVector windVelocity = windDirection.copy().mult(windSpeed);
+  PVector wind = new PVector(0, 0);
+
 
   int animationStart = 99999999;
   int animationEnd = 99999999;
@@ -121,6 +128,7 @@ class Weather2 {
     animationEnd = animationStart + length;
     rise = r;
     fall = f;
+    println(windVelocity.x, windVelocity.y);
   }
 
   void display() {
@@ -134,7 +142,9 @@ class Weather2 {
 
       float t = map(frameCount, animationStart, animationEnd, 0, 1);
       float tcurve = riseStandFall(t, rise, fall);
-      circle(screen2Center.x, screen2Center.y, tcurve*100);
+      
+      // debug animation curve
+      //circle(screen2Center.x, screen2Center.y, tcurve*100);
 
       for (int x = int(screen2Center.x - screenHalf); x < screen2Center.x + screenHalf; x += rectSize) {
         for (int y = int(screen2Center.y - screenHalf); y < screen2Center.y + screenHalf; y += rectSize) {
@@ -149,24 +159,28 @@ class Weather2 {
 
           float rotatedX = cos(player.angle) * dx - sin(player.angle) * dy + player.pos.x;
           float rotatedY = sin(player.angle) * dx + cos(player.angle) * dy + player.pos.y;
+          
+          wind.add(windVelocity);
 
           // Scale for noise
-          float nx = rotatedX / rectSize * noiseScale;
-          float ny = rotatedY / rectSize * noiseScale;
-
+          float nx = rotatedX / rectSize * noiseScale + wind.x;
+          float ny = rotatedY / rectSize * noiseScale + wind.y;
+          float nz = frameCount * timeSpeed;
+          
           // Generate noise value
-          float noiseVal = noise(nx, ny);
+          float noiseVal = noise(nx, ny, nz);
 
           // Draw rectangles based on noise value
           if (noiseVal < tcurve) {
             noStroke();
             //fill(noiseVal * 255);
-            if (noiseVal > .4) {
-              fill(0, 255, 255);
-            } else if (noiseVal > .8) {
-              fill(0, 100, 100);
-            } else {
+            float c = map(noiseVal, 0, tcurve, 0, 1);
+            if (c < .33) {
               fill(255);
+            } else if (c < .66) {
+              fill(primaryLight);
+            } else {
+              fill(primary);
             }
 
             rect(x, y, rectSize, rectSize);
