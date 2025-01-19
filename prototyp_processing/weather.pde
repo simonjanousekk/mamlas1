@@ -7,7 +7,7 @@ class Weather {
   int ease_in, ease_out;
   float leftShift = 0;
   float s_noiseScale = 0.005;
-  
+
   int rectSize = 4;
 
   Weather() {
@@ -59,7 +59,7 @@ class Weather {
           push();
 
           if (c > storm_threshold) {
-            fill(0, 10);
+            fill(0, 0);
           } else if (c < storm_threshold && c > storm_threshold - 50) {
             fill(0, 128, 128);
           } else if (c < storm_threshold - 50 && c > storm_threshold - 80) {
@@ -72,7 +72,7 @@ class Weather {
           pop();
         }
       }
-      
+
       leftShift += 0.002;
 
       storm_threshold += calculateThreshold(storm_threshold, duration);
@@ -109,9 +109,16 @@ class Weather2 {
 
   int animationStart = 99999999;
   int animationEnd = 99999999;
+  boolean storm = false;
+
   Weather2() {
   }
 
+
+  void startStorm(int length) {
+    animationStart = frameCount;
+    animationEnd = animationStart + length;
+  }
 
   void display() {
 
@@ -120,32 +127,35 @@ class Weather2 {
     //rectMode(CENTER);
     //rect(0, 0, 100, 100);
 
-    for (int x = int(screen2Center.x - screenHalf); x < screen2Center.x + screenHalf; x += rectSize) {
-      for (int y = int(screen2Center.y - screenHalf); y < screen2Center.y + screenHalf; y += rectSize) {
+    if (frameCount > animationStart && frameCount < animationEnd) {
 
-        // Convert screen coordinates to world coordinates
-        float worldX = player.pos.x + (x - screen2Center.x);
-        float worldY = player.pos.y + (y - screen2Center.y);
+      for (int x = int(screen2Center.x - screenHalf); x < screen2Center.x + screenHalf; x += rectSize) {
+        for (int y = int(screen2Center.y - screenHalf); y < screen2Center.y + screenHalf; y += rectSize) {
 
-        // Rotate world coordinates around the player
-        float dx = worldX - player.pos.x;
-        float dy = worldY - player.pos.y;
+          // Convert screen coordinates to world coordinates
+          float worldX = player.pos.x + (x - screen2Center.x);
+          float worldY = player.pos.y + (y - screen2Center.y);
 
-        float rotatedX = cos(player.angle) * dx - sin(player.angle) * dy + player.pos.x;
-        float rotatedY = sin(player.angle) * dx + cos(player.angle) * dy + player.pos.y;
+          // Rotate world coordinates around the player
+          float dx = worldX - player.pos.x;
+          float dy = worldY - player.pos.y;
 
-        // Scale for noise
-        float nx = rotatedX / rectSize * noiseScale;
-        float ny = rotatedY / rectSize * noiseScale;
+          float rotatedX = cos(player.angle) * dx - sin(player.angle) * dy + player.pos.x;
+          float rotatedY = sin(player.angle) * dx + cos(player.angle) * dy + player.pos.y;
 
-        // Generate noise value
-        float noiseVal = noise(nx, ny);
+          // Scale for noise
+          float nx = rotatedX / rectSize * noiseScale;
+          float ny = rotatedY / rectSize * noiseScale;
 
-        // Draw rectangles based on noise value
-        if (noiseVal > 0.6) {
-          noStroke();
-          fill(noiseVal * 255);
-          rect(x, y, rectSize, rectSize);
+          // Generate noise value
+          float noiseVal = noise(nx, ny);
+
+          // Draw rectangles based on noise value
+          if (noiseVal > 0.6) {
+            noStroke();
+            fill(noiseVal * 255);
+            rect(x, y, rectSize, rectSize);
+          }
         }
       }
     }

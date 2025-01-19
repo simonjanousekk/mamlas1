@@ -9,7 +9,7 @@ Info info;
 SignalDisplay signalDisplay;
 
 Atom atom;
-Weather weather;
+Weather2 weather2;
 
 int rayCount = 36;
 int rayLength;
@@ -104,7 +104,7 @@ void setup() {
 
   atom = new Atom();
 
-  weather = new Weather();
+  weather2 = new Weather2();
 
 
   for (int i = 0; i < rayCount; i++) {
@@ -216,7 +216,7 @@ void draw() {
   player.handleInput();
 
   if (screen2State == s2s.GPS) {
-  weather.display();
+    weather2.display();
   }
 
 
@@ -307,7 +307,7 @@ void keyPressed() {
   }
 
   if (key =='o') {
-    weather.storm = !weather.storm;
+    weather2.storm = !weather.storm;
   }
 
   if (key == 'w' || key == 'W') moveForward = true;
