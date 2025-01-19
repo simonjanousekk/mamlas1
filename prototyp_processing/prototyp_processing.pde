@@ -307,7 +307,7 @@ void keyPressed() {
   }
 
   if (key =='o') {
-    weather.startStorm(60*20, .5, .5);
+    weather.startStorm(60*50, .5, .5);
   }
 
   if (key == 'w' || key == 'W') moveForward = true;

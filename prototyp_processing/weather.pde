@@ -133,11 +133,6 @@ class Weather {
 
   void display() {
 
-    //translate(screen2Center.x, screen2Center.y);
-    //rotate(-player.angle);
-    //rectMode(CENTER);
-    //rect(0, 0, 100, 100);
-
     if (frameCount > animationStart && frameCount < animationEnd) {
 
       float t = map(frameCount, animationStart, animationEnd, 0, 1);
