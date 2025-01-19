@@ -1,5 +1,7 @@
 
+ 
 void radio(int noiseAmount) {
+  noiseDetail(3,0.5);
   // later on can be adjusted based on sensor value
   float n = map(noiseAmount, 0, width, 9, 1);
 
@@ -10,14 +12,12 @@ void radio(int noiseAmount) {
     noise_t = random(0, maxRange);
   }
 
-  int x_corner = int(screen2Center.x - screenSize / 2);
-  int y_corner = int(screen2Center.y - screenSize / 2);
-  PImage frame = get(x_corner, y_corner, screenSize, screenSize);
+  PImage frame = get(screen2_cornerX, screen2_cornerY, screenSize, screenSize);
 
   loadPixels();
   frame.loadPixels();
-  for (int x = x_corner + 1; x < x_corner + screenSize - 2; x ++) {
-    for (int y = y_corner + 1; y < y_corner + screenSize - 2; y++) {
+  for (int x = screen2_cornerX + 1; x < screen2_cornerX + screenSize - 2; x ++) {
+    for (int y = screen2_cornerY + 1; y < screen2_cornerY + screenSize - 2; y++) {
 
       int noise = int(random(100));
       if (noise % int(n + 1) == 0) {
@@ -32,8 +32,8 @@ void radio(int noiseAmount) {
       float noiseCompute = noise(nx, nt, ny);
 
       if (noiseCompute < noise_t) {
-        int x_frame = x - x_corner;
-        int y_frame = y - y_corner;
+        int x_frame = x - screen2_cornerX;
+        int y_frame = y - screen2_cornerY;
 
         int index = x_frame + y_frame * screenSize;
         pixels[x + y * width] = frame.pixels[x_frame - 1 + index];

@@ -148,6 +148,15 @@ char getLetterFromAlphabet(int index) {
   return char('A' + index);
 }
 
+
+PVector random2DVector() {
+  float angle = random(TWO_PI);
+
+  float x = cos(angle);
+  float y = sin(angle);
+
+  return new PVector(x, y);
+  }
 boolean isCloseEnough(float x, float y, float t) {
   return abs(x - y) <= t;
 }

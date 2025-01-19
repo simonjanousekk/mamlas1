@@ -63,10 +63,10 @@ class SignalDisplay {
 
     int step = screenSize/20;
     int w = 5;
-    for (int i = -screenSize/2+step; i <= screenSize/2-step; i += step) {
-      line(-w, i, w, i);
+    for (int i = -screenHalf + step; i <= screenHalf - step; i += step) {
+      line( - w, i, w, i);
       line(i, -w, i, w);
-      for (int j = -screenSize/2+step; j <= screenSize/2-step; j += step) {
+      for (int j = -screenHalf + step; j <= screenHalf - step; j += step) {
         point(i, j);
       }
     }
@@ -107,21 +107,19 @@ class SineWave {
 
   void update() {
     ang += signalDisplay.baseIncrement;
-    pos = new PVector(0, map(sin(ang), -1, 1, -amp, amp));
-
-    band += (desBand - band) *.1;
-    amp += (desAmp - amp) *.1;
+    pos = new PVector(0, map(sin(ang), -1, 1, -amp, amp)); 
+    
+    band += (desBand - band) * .1;
+    amp += (desAmp - amp) * .1;
   }
 
 
   void display() {
     stroke(isRight ? col : col2);
     strokeWeight(1);
-    line( - screenSize / 2, amp, screenSize / 2, amp);
-    line( - screenSize / 2, -amp, screenSize / 2, -amp);
-
-
-
+    line( -screenSize / 2, amp, screenSize / 2, amp);
+    line( -screenSize / 2, -amp, screenSize / 2, -amp);
+    
     fill(col);
     noStroke();
     circle(pos.x, pos.y, 5);
@@ -150,7 +148,7 @@ class SineWave {
 
 
     //for (float i = 0; i < TWO_PI; i += 0.01) {
-    //  circle(i*10, map(sin(i), -1, 1, -screenSize/2-screen1Border, screenSize/2-screen1Border), 2);
+    //  circle(i*10, map(sin(i), -1, 1, -screenHalf-screen1Border, screenHalf-screen1Border), 2);
     //}
   }
 }

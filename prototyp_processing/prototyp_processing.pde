@@ -9,6 +9,7 @@ Info info;
 SignalDisplay signalDisplay;
 
 Atom atom;
+Weather weather;
 
 int rayCount = 36;
 int rayLength;
@@ -51,12 +52,13 @@ ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
 ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 int screenSize = 360;
+int screenHalf = 180;
 int screenGap = 36;
 PVector screen1Center, screen2Center;
 int screen2Border = u * 5;
 int screen1Border = u * 10;
 PImage screen1Mask, screen2Mask;
-
+int screen2_cornerX, screen2_cornerY;
 enum s2s {
   GPS, RADAR, IDE
 }
@@ -71,6 +73,8 @@ void setup() {
   screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
   screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
 
+  screen2_cornerX = int(screen2Center.x - screenSize / 2);
+  screen2_cornerY = int(screen2Center.y - screenSize / 2);
   mbInit();
 
   mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
@@ -99,6 +103,7 @@ void setup() {
 
   atom = new Atom();
 
+  weather = new Weather();
 
 
   for (int i = 0; i < rayCount; i++) {
@@ -209,6 +214,9 @@ void draw() {
   player.update();
   player.handleInput();
 
+  if (screen2State == s2s.GPS) {
+    weather.display();
+  }
 
 
 
@@ -217,6 +225,8 @@ void draw() {
 
   signalDisplay.update();
   signalDisplay.display();
+
+
 
   // draw circular masks
   image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
@@ -238,6 +248,8 @@ void draw() {
   if (screen2State == s2s.RADAR || screen2State == s2s.GPS) {
     compass.display();
   }
+
+
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
   if (radio) {
     radio(mouseX);
@@ -293,6 +305,9 @@ void keyPressed() {
     signalDisplay.randomizeSineGame();
   }
 
+  if (key =='o') {
+    weather.startStorm(60*50, .5, .5);
+  }
 
   if (key == 'w' || key == 'W') moveForward = true;
   if (key == 's' || key == 'S') moveBackward = true;

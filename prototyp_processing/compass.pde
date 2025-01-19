@@ -55,7 +55,7 @@ class Compass {
       line(0, 0, 0, -l);
       if (i % (linesCount / labels.length) == 0) {
         int index = floor(i / (linesCount / labels.length));
-        
+        fill(255);
         text(labels[index], 0, -l);
       }
       pop();
