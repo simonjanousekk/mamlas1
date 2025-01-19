@@ -9,7 +9,7 @@ Info info;
 SignalDisplay signalDisplay;
 
 Atom atom;
-Weather2 weather2;
+Weather weather;
 
 int rayCount = 36;
 int rayLength;
@@ -104,7 +104,7 @@ void setup() {
 
   atom = new Atom();
 
-  weather2 = new Weather2();
+  weather = new Weather();
 
 
   for (int i = 0; i < rayCount; i++) {
@@ -196,7 +196,6 @@ void draw() {
         }
       } else if (screen2State == s2s.GPS) { // --- GPS ---
         mapa.display();
-
         for (DCross dc : dcrosses) {
           dc.display();
         }
@@ -216,12 +215,9 @@ void draw() {
   player.update();
   player.handleInput();
 
-  //if (screen2State == s2s.GPS) {
-  weather2.display();
-  //}
-
-
-  println("screen st888te :", screen2State);
+  if (screen2State == s2s.GPS) {
+  weather.display();
+  }
 
 
 
@@ -231,8 +227,8 @@ void draw() {
 
 
   // draw circular masks
-  //image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
-  //image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
+  image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
+  image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
 
   // hide empty parts of the screen, might be deleted for production
   push();
@@ -310,9 +306,9 @@ void keyPressed() {
     signalDisplay.randomizeSineGame();
   }
 
-  //if (key =='o') {
-  //  weather.storm = !weather.storm;
-  //}
+  if (key =='o') {
+    weather.storm = !weather.storm;
+  }
 
   if (key == 'w' || key == 'W') moveForward = true;
   if (key == 's' || key == 'S') moveBackward = true;
