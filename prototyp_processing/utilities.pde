@@ -155,7 +155,7 @@ PVector random2DVector() {
   float x = cos(angle);
   float y = sin(angle);
 
-  return new PVector(x, y);
+  return new PVector(x, y).normalize();
   }
 boolean isCloseEnough(float x, float y, float t) {
   return abs(x - y) <= t;

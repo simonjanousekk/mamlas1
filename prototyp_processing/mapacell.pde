@@ -38,7 +38,7 @@ class MapaCell {
      ){
       push();
       
-      stroke(100);
+      stroke(gray);
       translate(pos.x, pos.y);
       
       

@@ -15,7 +15,9 @@ int rayCount = 36;
 int rayLength;
 
 color primary = color(0, 255, 255);
-color primaryLight = color(0, 100, 100);
+color primaryLight = color(0, 150, 150);
+color white = color(255);
+color gray = color(150);
 
 int u = 5;
 final int s_thick = 2;
@@ -306,7 +308,11 @@ void keyPressed() {
   }
 
   if (key =='o') {
-    weather.startStorm(60*50, .5, .5);
+    weather.startStorm(60*20, .5, .5);
+  }
+  
+  if (key == 'q') {
+    exit();
   }
 
   if (key == 'w' || key == 'W') moveForward = true;

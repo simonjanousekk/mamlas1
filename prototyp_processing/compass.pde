@@ -38,7 +38,7 @@ class Compass {
     
     // circle with lines
     push();
-    stroke(255);
+    stroke(white);
     noFill();
     translate(screen2Center.x, screen2Center.y);
     rotate( -player.angle);
@@ -79,7 +79,7 @@ class Compass {
     vertex( -longLineL * 2, -longLineL);
     vertex( -longLineL * .5, -longLineL);
     endShape(CLOSE);
-    fill(255);
+    fill(white);
     text(nf(floor(degrees(player.angle)), 3), 0, -longLineL * 1.5);
     pop();
     

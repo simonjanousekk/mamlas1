@@ -128,7 +128,8 @@ class Weather {
     animationEnd = animationStart + length;
     rise = r;
     fall = f;
-    println(windVelocity.x, windVelocity.y);
+    windDirection = random2DVector();
+    println(windDirection.x, windDirection.y, windVelocity.x, windVelocity.y);
   }
 
   void display() {
@@ -163,7 +164,7 @@ class Weather {
           float nz = frameCount * timeSpeed;
 
           // Generate noise value
-          float noiseVal = noise(nx, ny, nz);
+          float noiseVal = map(noise(nx, ny, nz), .05, .95, 0, 1);;
 
           // Draw rectangles based on noise value
           if (noiseVal < tcurve) {
@@ -191,11 +192,11 @@ class Weather {
 float riseStandFall(float t, float riseL, float fallL) {
   t = constrain(t, 0, 1);
   if (t < riseL) {
-    return mapEaseInOut(t, 0, riseL, 0, 1);
+    return map(t, 0, riseL, 0, 1);
   } else if (t < 1-fallL) {
     return 1;
   } else {
-    return mapEaseInOut(t, 1-fallL, 1, 1, 0);
+    return map(t, 1-fallL, 1, 1, 0);
   }
 }
 
