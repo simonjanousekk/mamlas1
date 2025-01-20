@@ -1,3 +1,26 @@
+//LCD Specific
+import com.pi4j.catalog.components.base.I2CDevice;
+import com.pi4j.catalog.components.LcdDisplay;
+
+enum Conditions {
+    STABLE("INFO:\n Conditions are stable"),
+    SANDSTORM("WARNING:\n Sandstorm"),
+    MAGNETIC("WARNING:\n Magnetic storm"),
+    WIND("WARNING:\n High wind"),
+    NOON("WARNING:\n Temperatures rising rapidly"),
+    NIGHT("WARNING:\n Temperatures falling rapidly");
+
+  String message;
+
+  Conditions(String message) {
+    this.message = message;
+  }
+  String getMessage() {
+    return message;
+  }
+}
+
+
 // this is not over - probably the noise should move based on player rotation and movement but I will do it later {._.}
 //class Weather {
 //  boolean storm = false, storm_IsStarted = false;
@@ -101,6 +124,52 @@
 //  }
 //}
 
+class HazardMonitor {
+
+  LcdDisplay lcd;
+  int i2cBus = 1;
+  int lcdAddress = 0x27;
+  String forecast;
+  Conditions c;
+  boolean interference = false;
+  float lastInterference = 0;
+  Thread lcdInterference;
+  Thread lcdMain;
+
+  HazardMonitor() {
+    // initialize lcd display
+    Context pi4j = Pi4J.newAutoContext();
+    lcd = new LcdDisplay(pi4j, 4, 20);
+    lcd.clearDisplay();
+  }
+
+  void displayWeather(Conditions c) {
+    forecast = c.getMessage();
+    lcdMain = new Thread(() -> {
+    lcd.displayText(forecast); });
+    lcdMain.start();
+    
+    this.c = c;
+  }
+
+  void interference(int noiseAmount) {
+    // cannot be done like this, because using thread means draw and LCD Class is desynchronised
+    //So I kant use a ref. variable i would update inside the function. will solve later
+    if (frameCount - lastInterference < 60) {
+      return;
+    }
+    lcdInterference = new Thread(() -> {
+    lcd.displayText(forecast);
+    int n = int(map(noiseAmount, 0, width, 0, 40));
+    for (int i = 0; i< n; i++) {
+      int randomCharCode = int(random(256));
+      lcd.writeCharacter((char) randomCharCode, int(random(4)), int(random(20)));
+    }
+  });
+  lcdInterference.start();
+  
+
+  }}
 
 
 class Storm {
