@@ -219,10 +219,12 @@ void keyPressed() {
   if (key == 'b') {
     if (weatherMonitor.c == Conditions.STABLE) {
       weatherMonitor.displayWeather(Conditions.SANDSTORM);
+      weatherMonitor.interference = true;
     } else if  (weatherMonitor.c == Conditions.SANDSTORM) {
       weatherMonitor.displayWeather(Conditions.WIND);
     } else {
       weatherMonitor.displayWeather(Conditions.STABLE);
+      weatherMonitor.interference = false;
     }
   }
 

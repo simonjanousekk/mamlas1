@@ -259,7 +259,9 @@ void draw() {
     compass.display();
   }
 
-
+  if(weatherMonitor.interference && frameCount % 30 == 0){
+    weatherMonitor.interference(mouseX);
+  }
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
   if (radio) {
     radio(mouseX);
