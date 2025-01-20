@@ -1,4 +1,4 @@
-#define ENCODER_OPTIMIZE_INTERRUPTS
+// #define ENCODER_OPTIMIZE_INTERRUPTS
 // external libs
 #include <Encoder.h>
 #include <MIDIUSB.h>
@@ -6,6 +6,7 @@
 // MY FILES
 #include "potenciometer.h"
 #include "rot_encoder.h"
+#include "shiftRegister.h"
 #include "switch.h"
 
 // #include "sevenSeg.h"

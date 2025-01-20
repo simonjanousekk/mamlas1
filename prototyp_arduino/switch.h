@@ -1,3 +1,4 @@
+
 class Switch {
 private:
   int pin, midiNumber, lastPosition;
@@ -14,8 +15,11 @@ public:
     int position = digitalRead(pin);
 
     if (position != lastPosition) {
+      setSingleBit(3, position);
+      // setSingleBit(2, position);
 
-      midiEventPacket_t event = { 0x0B, 0xB0 | 0, midiNumber, position};
+
+      midiEventPacket_t event = { 0x0B, 0xB0 | 0, midiNumber, position };
       MidiUSB.sendMIDI(event);
 
       lastPosition = position;

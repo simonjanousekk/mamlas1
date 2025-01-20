@@ -40,40 +40,25 @@ volatile uint8_t currentDigit = 0;                         // Keeps track of whi
 const uint32_t targetFrequency = 300;  // 200 Hz frequency for the ISR
 const uint32_t timerPrescaler = 64;    // Timer prescaler
 
-void SR_init() {
-  pinMode(DATA_PIN, OUTPUT);
-  pinMode(LATCH_PIN, OUTPUT);
-  pinMode(CLOCK_PIN, OUTPUT);
 
-  setupTimerInterrupt(targetFrequency, timerPrescaler);
-
-  updateBuffer();
-  updateShiftRegister();
-}
-
-
-
-void setSingleBit(uint8_t* buffer, uint8_t bitIndex, bool value) {
+void setSingleBit(uint8_t bitIndex, bool value) {
   uint8_t byteIndex = bitIndex / 8;  // Determine the byte index
   uint8_t bitPosition = bitIndex % 8;  // Determine the bit position within the byte
-
   if (value) {
-    buffer[byteIndex] |= (1 << bitPosition);  // Set the bit
+    shiftRegisterBuffer[byteIndex] |= (1 << bitPosition);  // Set the bit
   } else {
-    buffer[byteIndex] &= ~(1 << bitPosition);  // Clear the bit
+    shiftRegisterBuffer[byteIndex] &= ~(1 << bitPosition);  // Clear the bit
   }
 }
 
 
-void setMultiBit(uint8_t* buffer, uint8_t startIndex, uint8_t numBits, uint16_t value) {
+void setMultiBit(uint8_t startIndex, uint8_t numBits, uint16_t value) {
   for (uint8_t i = 0; i < numBits; i++) {
     uint8_t currentBitIndex = startIndex + i;  // Calculate the current bit position
     bool bitValue = (value & (1 << i)) != 0;   // Extract the corresponding bit from the value
-    setSingleBit(buffer, currentBitIndex, bitValue);  // Set the bit in the buffer
+    setSingleBit(currentBitIndex, bitValue);  // Set the bit in the buffer
   }
 }
-
-
 
 
 
@@ -145,5 +130,19 @@ ISR(TIMER1_COMPA_vect) {
   shiftRegisterBuffer[5] = digit[currentDigit];  // Activate current digit
 
   // Update shift registers with the new buffer
+  updateShiftRegister();
+}
+
+
+
+
+void SR_init() {
+  pinMode(DATA_PIN, OUTPUT);
+  pinMode(LATCH_PIN, OUTPUT);
+  pinMode(CLOCK_PIN, OUTPUT);
+
+  setupTimerInterrupt(targetFrequency, timerPrescaler);
+
+  updateBuffer();
   updateShiftRegister();
 }

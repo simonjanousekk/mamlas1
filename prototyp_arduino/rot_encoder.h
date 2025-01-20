@@ -19,7 +19,7 @@ public:
     if (newPosition != lastPosition) {
       midiEventPacket_t event;
       if (newPosition > lastPosition) {
-        event = { 0x0B, 0xB0 | 0, midiNumber, 1 };   
+        event = { 0x0B, 0xB0 | 0, midiNumber, 1 };
       } else {
         event = { 0x0B, 0xB0 | 0, midiNumber, 0 };
       }
