@@ -8,25 +8,28 @@
 #include "rot_encoder.h"
 #include "switch.h"
 
-
+// #include "sevenSeg.h"
 
 // ENCODERS
-RotEncoder rotEnc1(0, 1, 1);
+RotEncoder rotEnc1(0, 1, 1);  // pin1, pin2, CC
 //RotEncoder rotEnc2(2, 3, 2);
 
 // POTENCIOMETERS
-Potenciometer pot1(A0, 3);
+Potenciometer pot1(A0, 3);  // pin, CC
 Potenciometer pot2(A1, 4);
 Potenciometer slider1(A2, 5);
 // Potenciometer slider2(A3, 6);
 
 // BUTTONS
-Switch button1(16, 10);
+Switch button1(16, 10);  // pin, CC
 Switch button2(17, 11);
 
+
 void setup() {
-  Serial.begin(9600);
-  Serial.println("START");
+
+  // randomSeed(analogRead(A5) + millis());
+
+  SR_init();
 }
 
 // Main loop
@@ -41,6 +44,7 @@ void loop() {
   button1.update();
   button2.update();
 
+
   // Process incoming MIDI messages
   midiEventPacket_t rx = MidiUSB.read();
   if (rx.header != 0) {  // If a MIDI message is received
@@ -48,6 +52,12 @@ void loop() {
   }
 
   MidiUSB.flush();
+
+
+  // while (true) {
+  //   // Keep all LEDs on indefinitely  
+  //   delay(100);
+  // }
 }
 
 // Function to send MIDI Control Change messages
@@ -76,6 +86,7 @@ void handleIncomingMidi(midiEventPacket_t rx) {
     if (control == 1 && value == 1) {
       pot1.sendData();
       pot2.sendData();
+      slider1.sendData();
     }
   }
 }
