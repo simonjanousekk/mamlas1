@@ -156,7 +156,7 @@ PVector random2DVector() {
   float y = sin(angle);
 
   return new PVector(x, y).normalize();
-  }
+}
 boolean isCloseEnough(float x, float y, float t) {
   return abs(x - y) <= t;
 }
@@ -164,7 +164,7 @@ boolean isCloseEnough(float x, float y, float t) {
 
 
 
-// KEY HANDLING 
+// KEY HANDLING
 
 boolean moveForward, moveBackward, turnLeft, turnRight;
 
@@ -212,9 +212,18 @@ void keyPressed() {
   if (key =='o') {
     storm.startStorm(60*20, .5, .5);
   }
-  
+
   if (key == 'q') {
     exit();
+  }
+  if (key == 'b') {
+    if (weatherMonitor.c == Conditions.STABLE) {
+      weatherMonitor.displayWeather(Conditions.SANDSTORM);
+    } else if  (weatherMonitor.c == Conditions.SANDSTORM) {
+      weatherMonitor.displayWeather(Conditions.WIND);
+    } else {
+      weatherMonitor.displayWeather(Conditions.STABLE);
+    }
   }
 
   if (key == 'w' || key == 'W') moveForward = true;

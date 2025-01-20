@@ -1,3 +1,8 @@
+// libraries for GPIO Stuff
+import com.pi4j.Pi4J;
+import com.pi4j.context.Context;
+import com.pi4j.io.i2c.I2C;
+
 
 Player player;
 Sample sample;
@@ -7,6 +12,7 @@ Mapa mapa;
 Compass compass;
 Info info;
 SignalDisplay signalDisplay;
+WeatherMonitor weatherMonitor;
 
 Atom atom;
 Storm storm;
@@ -108,9 +114,9 @@ void setup() {
   atom = new Atom();
 
   storm = new Storm();
+  weatherMonitor = new WeatherMonitor();
 
-
-  for (int i = 0; i < rayCount; i++) {
+    for (int i = 0; i < rayCount; i++) {
     rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
   }
 
