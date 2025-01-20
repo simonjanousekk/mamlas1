@@ -1,3 +1,8 @@
+// libraries for GPIO Stuff
+import com.pi4j.Pi4J;
+import com.pi4j.context.Context;
+import com.pi4j.io.i2c.I2C;
+
 
 Player player;
 Sample sample;
@@ -7,9 +12,10 @@ Mapa mapa;
 Compass compass;
 Info info;
 SignalDisplay signalDisplay;
+HazardMonitor hazardMonitor;
 
 Atom atom;
-Weather weather;
+Storm storm;
 
 int rayCount = 36;
 int rayLength;
@@ -107,10 +113,10 @@ void setup() {
 
   atom = new Atom();
 
-  weather = new Weather();
+  storm = new Storm();
+  hazardMonitor = new HazardMonitor();
 
-
-  for (int i = 0; i < rayCount; i++) {
+    for (int i = 0; i < rayCount; i++) {
     rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
   }
 
@@ -219,7 +225,7 @@ void draw() {
   player.handleInput();
 
   if (screen2State == s2s.GPS) {
-    weather.display();
+    storm.display();
   }
 
 
@@ -253,7 +259,9 @@ void draw() {
     compass.display();
   }
 
-
+  if(hazardMonitor.interference && frameCount % 30 == 0){
+    hazardMonitor.interference(mouseX);
+  }
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
   if (radio) {
     radio(mouseX);
