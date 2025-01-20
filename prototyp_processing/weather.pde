@@ -3,7 +3,7 @@ import com.pi4j.catalog.components.base.I2CDevice;
 import com.pi4j.catalog.components.LcdDisplay;
 
 enum Conditions {
-  STABLE("INFO:\n Weather conditions stable"),
+    STABLE("INFO:\n Conditions are stable"),
     SANDSTORM("WARNING:\n Sandstorm"),
     MAGNETIC("WARNING:\n Magnetic storm"),
     WIND("WARNING:\n High wind"),
@@ -124,7 +124,7 @@ enum Conditions {
 //  }
 //}
 
-class WeatherMonitor {
+class HazardMonitor {
 
   LcdDisplay lcd;
   int i2cBus = 1;
@@ -136,7 +136,8 @@ class WeatherMonitor {
   Thread lcdInterference;
   Thread lcdMain;
 
-  WeatherMonitor() {
+  HazardMonitor() {
+    // initialize lcd display
     Context pi4j = Pi4J.newAutoContext();
     lcd = new LcdDisplay(pi4j, 4, 20);
     lcd.clearDisplay();

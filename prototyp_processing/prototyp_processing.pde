@@ -12,7 +12,7 @@ Mapa mapa;
 Compass compass;
 Info info;
 SignalDisplay signalDisplay;
-WeatherMonitor weatherMonitor;
+HazardMonitor hazardMonitor;
 
 Atom atom;
 Storm storm;
@@ -114,7 +114,7 @@ void setup() {
   atom = new Atom();
 
   storm = new Storm();
-  weatherMonitor = new WeatherMonitor();
+  hazardMonitor = new HazardMonitor();
 
     for (int i = 0; i < rayCount; i++) {
     rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
@@ -259,8 +259,8 @@ void draw() {
     compass.display();
   }
 
-  if(weatherMonitor.interference && frameCount % 30 == 0){
-    weatherMonitor.interference(mouseX);
+  if(hazardMonitor.interference && frameCount % 30 == 0){
+    hazardMonitor.interference(mouseX);
   }
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
   if (radio) {

@@ -217,14 +217,14 @@ void keyPressed() {
     exit();
   }
   if (key == 'b') {
-    if (weatherMonitor.c == Conditions.STABLE) {
-      weatherMonitor.displayWeather(Conditions.SANDSTORM);
-      weatherMonitor.interference = true;
-    } else if  (weatherMonitor.c == Conditions.SANDSTORM) {
-      weatherMonitor.displayWeather(Conditions.WIND);
+    if (hazardMonitor.c == Conditions.STABLE) {
+      hazardMonitor.displayWeather(Conditions.SANDSTORM);
+      hazardMonitor.interference = true;
+    } else if  (hazardMonitor.c == Conditions.SANDSTORM) {
+      hazardMonitor.displayWeather(Conditions.WIND);
     } else {
-      weatherMonitor.displayWeather(Conditions.STABLE);
-      weatherMonitor.interference = false;
+      hazardMonitor.displayWeather(Conditions.STABLE);
+      hazardMonitor.interference = false;
     }
   }
 
