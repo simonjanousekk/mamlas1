@@ -18,12 +18,11 @@ public:
     long newPosition = enc.read() / 4;
     if (newPosition != lastPosition) {
       if (newPosition > lastPosition) {
-        midiEventPacket_t event = { 0x0B, 0xB0 | 0, midiNumber, 1 };
-        MidiUSB.sendMIDI(event);
+        midiEventPacket_t event = { 0x0B, 0xB0 | 0, midiNumber, 1 };   
       } else {
         midiEventPacket_t event = { 0x0B, 0xB0 | 0, midiNumber, 0 };
-        MidiUSB.sendMIDI(event);
       }
+      MidiUSB.sendMIDI(event);
       lastPosition = newPosition;
     }
   }

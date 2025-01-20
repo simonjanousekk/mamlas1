@@ -160,3 +160,77 @@ PVector random2DVector() {
 boolean isCloseEnough(float x, float y, float t) {
   return abs(x - y) <= t;
 }
+
+
+
+
+// KEY HANDLING 
+
+boolean moveForward, moveBackward, turnLeft, turnRight;
+
+void keyPressed() {
+  if (key == 'r') { // restart
+    //if (minimapaWindow != null) {
+    //  minimapaWindow.close();
+    //}
+    setup();
+  }
+  if (key == ' ') {
+    for (Ray r : rays) {
+      r.findWallAnimation();
+    }
+  }
+  if (key == 'm') { //radar
+    if (screen2State == s2s.GPS) {
+      wmarkers.clear();
+      for (Ray r : rays) {
+        r.findWallAnimation();
+      }
+      screen2State = s2s.RADAR;
+    } else if (screen2State == s2s.RADAR) {
+      screen2State = s2s.IDE;
+    } else if (screen2State == s2s.IDE) {
+      screen2State = s2s.GPS;
+    }
+  }
+  if (key == 'x') {
+    radio = !radio;
+  }
+  if (key == 'l') {
+    player.terrainSetting = (player.terrainSetting + 1) % terrainTypeCount;
+  }
+  if (key == 'k') {
+    player.terrainSetting = (player.terrainSetting - 1 + terrainTypeCount) % terrainTypeCount;
+  }
+  if (key == 'i') {
+    infoDisplay = !infoDisplay;
+  }
+  if (key == 'y') {
+    signalDisplay.randomizeSineGame();
+  }
+
+  if (key =='o') {
+    weather.startStorm(60*20, .5, .5);
+  }
+  
+  if (key == 'q') {
+    exit();
+  }
+
+  if (key == 'w' || key == 'W') moveForward = true;
+  if (key == 's' || key == 'S') moveBackward = true;
+  if (key == 'a' || key == 'A') turnLeft = true;
+  if (key == 'd' || key == 'D') turnRight = true;
+}
+
+
+
+
+
+// Handle key releases
+void keyReleased() {
+  if (key == 'w' || key == 'W') moveForward = false;
+  if (key == 's' || key == 'S') moveBackward = false;
+  if (key == 'a' || key == 'A') turnLeft = false;
+  if (key == 'd' || key == 'D') turnRight = false;
+}

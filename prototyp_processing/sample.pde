@@ -19,14 +19,14 @@ class Sample {
   void display() {
     push();
     translate(pos.x, pos.y);
-    //rotate(PI / 4);
-    //noFill();
-    //strokeWeight(s_thick);
-    //stroke(primary);
-     
+    rotate(PI / 4);
     noStroke();
+    //strokeWeight(s_thick);
     fill(primary);
-    circle(0, 0, diameter); 
+     
+    //noStroke();
+    //fill(primary);
+    //circle(0, 0, diameter); 
     
     //rectMode(CENTER);
     //rect(0, 0, diameter, diameter);
