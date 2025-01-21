@@ -32,32 +32,39 @@ Potenciometer slider1(A2, 5);
 Switch button1(16, 10);  // pin, CC
 Switch button2(17, 11);
 
+
 // ----
 // OUTPUTS
 // ----
+
+
+int tempTens = -8;
+int tempOnes = 65;
 
 Bargraph b1 = Bargraph(0);
 
 void setup() {
 
   // randomSeed(analogRead(A5) + millis());
-
   SR_init();
+
+  updateDisplayValues(tempTens, tempOnes);
+
 
   b1.update(5);
 }
 
 // Main loop
 void loop() {
-  pot1.update();
-  pot2.update();
-  slider1.update();
+  // pot1.update();
+  // pot2.update();
+  // slider1.update();
 
-  rotEnc1.update();
-  //rotEnc2.update();
+  // rotEnc1.update();
+  // //rotEnc2.update();
 
-  button1.update();
-  button2.update();
+  // button1.update();
+  // button2.update();
 
 
   // Process incoming MIDI messages
@@ -70,7 +77,7 @@ void loop() {
 
 
   // while (true) {
-  //   // Keep all LEDs on indefinitely  
+  //   // Keep all LEDs on indefinitely
   //   delay(100);
   // }
 }
@@ -102,6 +109,12 @@ void handleIncomingMidi(midiEventPacket_t rx) {
       pot1.sendData();
       pot2.sendData();
       slider1.sendData();
+    } else if (control == 10) {
+      tempTens = value;
+      updateDisplayValues(tempTens, tempOnes);
+    } else if (control == 11) {
+      tempOnes = value;
+      updateDisplayValues(tempTens, tempOnes);
     }
   }
 }

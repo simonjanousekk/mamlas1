@@ -5,38 +5,33 @@
 uint8_t shiftRegisterBuffer[7] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 const uint8_t number[] = {
-  0b00010000,  // 0
-  0b01111001,  // 1
-  0b00001110,  // 2
-  0b00011100,  // 3
-  0b00111101,  // 4
-  0b00010110,  // 5
+  0b00010001,  // 0
+  0b11011101,  // 1
+  0b00111000,  // 2
+  0b10011000,  // 3
+  0b11010100,  // 4
+  0b10010010,  // 5
   0b00010010,  // 6
-  0b01111000,  // 7
+  0b11011001,  // 7
   0b00010000,  // 8
-  0b00010100,  // 9
-  0b00111111,  // -  (10)
-  0b01101110,  // °  (11)
-  0b01011110,  // C  (12)
-  0b01111111,  // nothing (13)
-  0b00101110,  // P  (14)
-  0b00011110,  // E  (15)
-  0b01001101   // N  (16)
+  0b10010000,  // 9
+  0b11111111,  // 10 nothing
+  0b11111110,  // 11 -
+  0b11110000,  // 12 °
+  0b00110011,  // 13 C
 };
-
-
-
 const uint8_t digit[] = {
-  0b00000001,  // D1
-  0b00000010,  // D2
-  0b00000100,  // D3
-  0b00001000,  // D4
-  0b00010000,  // D5
-  0b00100000   // D6
+  0b00000100,  // D1
+  0b00001000,  // D2
+  0b00010000,  // D3
+  0b00100000,  // D4
+  0b01000000,  // D5
+  0b10000000   // D6
 };
 
-volatile uint8_t displayValues[6] = { 0, 1, 2, 3, 4, 5 };  // Example: Display 012345
-volatile uint8_t currentDigit = 0;                         // Keeps track of which digit to update
+
+volatile uint8_t displayValues[6] = { 10, 10, 10, 10, 12, 13 };
+volatile uint8_t currentDigit = 0;
 
 // Timer settings
 const uint32_t targetFrequency = 300;  // 200 Hz frequency for the ISR
@@ -74,6 +69,35 @@ void updateBuffer() {
   // 7-Segment display data will be handled by the ISR (last two bytes)
 }
 
+
+void updateDisplayValues(int tens, int ones) {
+  // Clear displayValues
+  for (int i = 0; i < 4; i++) {
+    displayValues[i] = 10;  // Set to "nothing" initially
+  }
+
+  // Handle tens place
+  if (tens < 0) {
+    displayValues[0] = 11;     // Display '-' for negative sign
+    displayValues[1] = -tens;  // Map the absolute value of tens
+    // displayValues[1] = 8;  // Map the absolute value of tens
+  } else {
+    displayValues[1] = tens;  // Map the tens directly
+    // displayValues[1] = 8;  // Map the tens directly
+  }
+
+  // Handle ones place
+  // displayValues[2] = 7;  // Extract and map the first digit of ones
+  // displayValues[3] = 6;  // Extract and map the second digit of ones
+  displayValues[2] = (ones / 10);  // Extract and map the first digit of ones
+  displayValues[3] = (ones % 10);  // Extract and map the second digit of ones
+}
+
+
+
+
+
+
 // Function to update the shift register with the buffer
 void updateShiftRegister() {
   digitalWrite(LATCH_PIN, LOW);
@@ -82,10 +106,6 @@ void updateShiftRegister() {
   }
   digitalWrite(LATCH_PIN, HIGH);
 }
-
-
-
-
 
 
 void setupTimerInterrupt(uint32_t frequency, uint32_t prescaler) {

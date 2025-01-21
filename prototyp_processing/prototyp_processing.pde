@@ -3,7 +3,7 @@ import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 //import com.pi4j.io.i2c.I2C;
 
-
+GameState gameState;
 Player player;
 Sample sample;
 Mapa mapa;
@@ -101,7 +101,8 @@ void setup() {
 
   randomSeed(millis());
   noiseSeed(millis());
-
+  
+  gameState = new GameState();
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
   player = new Player(randomPosOutsideWalls(), 3 * u);
   sample = new Sample(randomPosOutsideWalls());
@@ -114,10 +115,11 @@ void setup() {
   atom = new Atom();
 
   storm = new Storm();
-  
+
   try {
     hazardMonitor = new HazardMonitor();
-  } catch (Throwable t) {
+  }
+  catch (Throwable t) {
     println("LCD could not be created");
     hazardMonitor = null;
   }
@@ -141,7 +143,9 @@ void setup() {
 }
 
 void draw() {
-
+  
+  gameState.update();
+  
   //push();
   //colorMode(HSB, 255);
   //primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
@@ -265,11 +269,11 @@ void draw() {
     compass.display();
   }
 
-if(hazardMonitor != null) {
-  if (hazardMonitor.interference && frameCount % 30 == 0) {
-    hazardMonitor.interference(mouseX);
+  if (hazardMonitor != null) {
+    if (hazardMonitor.interference && frameCount % 30 == 0) {
+      hazardMonitor.interference(mouseX);
+    }
   }
-}
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
   if (radio) {
     radio(mouseX);
