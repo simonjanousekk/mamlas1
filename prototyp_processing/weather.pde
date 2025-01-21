@@ -1,9 +1,12 @@
 //LCD Specific
 import com.pi4j.catalog.components.base.I2CDevice;
 import com.pi4j.catalog.components.LcdDisplay;
+import com.pi4j.Pi4J;
+import com.pi4j.context.Context;
+import com.pi4j.io.i2c.I2C;
 
 enum Conditions {
-  STABLE("INFO:\n Conditions are stable"),
+    STABLE("INFO:\n Conditions are stable"),
     SANDSTORM("WARNING:\n Sandstorm"),
     MAGNETIC("WARNING:\n Magnetic storm"),
     WIND("WARNING:\n High wind"),
@@ -129,18 +132,15 @@ class HazardMonitor {
   LcdDisplay lcd;
   int i2cBus = 1;
   int lcdAddress = 0x27;
+  
   String forecast = "";
-  String displayedForecast;
   Conditions c = Conditions.STABLE;
   boolean interference = false;
   boolean threadActive = false;
 
-  float lastInterference = 0;
-  //Thread lcdInterference;
   Thread lcdMain;
   int noiseAmount = 0;
-
-
+    
   HazardMonitor() {
     // initialize lcd display
     Context pi4j = Pi4J.newAutoContext();
@@ -161,7 +161,6 @@ class HazardMonitor {
     if (threadActive) {
       // There is no way to stop an active thread. all attempts were disasters. the best is to let the thread tell itself
       // when it is finished (by setting threadActive = false at the end of the thread) And not do ANYTHING if it is active.
-      println("Returning... ");
       return;
     }
     

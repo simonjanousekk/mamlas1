@@ -227,7 +227,6 @@ void keyPressed() {
     } else {
       hazardMonitor.displayHazard(Conditions.STABLE);
     }
-    println("Current weather :", hazardMonitor.c );
   }
 
   if (key == 'w' || key == 'W') moveForward = true;

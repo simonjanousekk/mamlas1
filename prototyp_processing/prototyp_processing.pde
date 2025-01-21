@@ -1,8 +1,3 @@
-// libraries for GPIO Stuff
-import com.pi4j.Pi4J;
-import com.pi4j.context.Context;
-//import com.pi4j.io.i2c.I2C;
-
 GameState gameState;
 Player player;
 Sample sample;
@@ -13,6 +8,8 @@ Compass compass;
 Info info;
 SignalDisplay signalDisplay;
 HazardMonitor hazardMonitor;
+float LcdRefresh = 400;
+float lastLcdRefresh = 0;
 
 Atom atom;
 Storm storm;
@@ -71,7 +68,7 @@ enum s2s {
   GPS, RADAR, IDE
 }
 
-String midiDevice = "Arduino Micro"; // needs a change on rPI, for macos its "Arduino Micro", for linux its "___"
+String midiDevice = "Micro [hw:2,0,0]"; // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
 
 s2s screen2State = s2s.GPS;
 
@@ -269,8 +266,9 @@ void draw() {
     compass.display();
   }
 
-  if (hazardMonitor != null) {
-    if (hazardMonitor.interference && frameCount % 30 == 0) {
+  if (hazardMonitor != null && millis() - lastLcdRefresh > LcdRefresh) {
+    lastLcdRefresh = millis();
+    if (hazardMonitor.interference) {
       hazardMonitor.noiseAmount = mouseX;
       hazardMonitor.displayHazard(hazardMonitor.c);
     } else if (hazardMonitor.c.getMessage() != hazardMonitor.forecast) {
