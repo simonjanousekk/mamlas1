@@ -269,10 +269,20 @@ void draw() {
     compass.display();
   }
 
+<<<<<<< Updated upstream
   if (hazardMonitor != null) {
     if (hazardMonitor.interference && frameCount % 30 == 0) {
       hazardMonitor.interference(mouseX);
     }
+=======
+if(hazardMonitor != null) {
+  if (hazardMonitor.interference && frameCount % 30 == 0) {
+    hazardMonitor.noiseAmount = mouseX;
+    hazardMonitor.displayHazard(hazardMonitor.c);
+  } else if (hazardMonitor.c.getMessage() != hazardMonitor.forecast) {
+    // synchronising thread with real state
+     hazardMonitor.displayHazard(hazardMonitor.c);
+>>>>>>> Stashed changes
   }
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
   if (radio) {
