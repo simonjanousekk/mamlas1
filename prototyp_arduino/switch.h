@@ -15,7 +15,7 @@ public:
     int position = digitalRead(pin);
 
     if (position != lastPosition) {
-      setSingleBit(3, position);
+      setSingleBit(40, position);
       // setSingleBit(2, position);
 
 

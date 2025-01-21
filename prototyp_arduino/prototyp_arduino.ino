@@ -4,12 +4,19 @@
 #include <MIDIUSB.h>
 
 // MY FILES
-#include "potenciometer.h"
-#include "rot_encoder.h"
 #include "shiftRegister.h"
+
+#include "potenciometer.h"
 #include "switch.h"
+#include "rot_encoder.h"
+#include "bargraph.h"
 
 // #include "sevenSeg.h"
+
+
+// ----
+// INPUTS
+// ----
 
 // ENCODERS
 RotEncoder rotEnc1(0, 1, 1);  // pin1, pin2, CC
@@ -25,12 +32,19 @@ Potenciometer slider1(A2, 5);
 Switch button1(16, 10);  // pin, CC
 Switch button2(17, 11);
 
+// ----
+// OUTPUTS
+// ----
+
+Bargraph b1 = Bargraph(0);
 
 void setup() {
 
   // randomSeed(analogRead(A5) + millis());
 
   SR_init();
+
+  b1.update(5);
 }
 
 // Main loop
