@@ -114,9 +114,15 @@ void setup() {
   atom = new Atom();
 
   storm = new Storm();
-  //hazardMonitor = new HazardMonitor();
+  
+  try {
+    hazardMonitor = new HazardMonitor();
+  } catch (Throwable t) {
+    println("LCD could not be created");
+    hazardMonitor = null;
+  }
 
-    for (int i = 0; i < rayCount; i++) {
+  for (int i = 0; i < rayCount; i++) {
     rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
   }
 
@@ -258,11 +264,12 @@ void draw() {
   if (screen2State == s2s.RADAR || screen2State == s2s.GPS) {
     compass.display();
   }
-  /*
-  if(hazardMonitor.interference && frameCount % 30 == 0){
+
+if(hazardMonitor != null) {
+  if (hazardMonitor.interference && frameCount % 30 == 0) {
     hazardMonitor.interference(mouseX);
   }
-  */
+}
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
   if (radio) {
     radio(mouseX);
