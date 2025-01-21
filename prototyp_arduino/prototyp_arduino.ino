@@ -37,34 +37,39 @@ Switch button2(17, 11);
 // OUTPUTS
 // ----
 
+Bargraph battery = Bargraph(0);
+Bargraph power = Bargraph(10);
 
-int tempTens = -8;
-int tempOnes = 65;
 
-Bargraph b1 = Bargraph(0);
+int tempTens = 6;
+int tempOnes = 66;
+bool isNegative = true;
+
+
 
 void setup() {
 
   // randomSeed(analogRead(A5) + millis());
   SR_init();
 
-  updateDisplayValues(tempTens, tempOnes);
+  updateDisplayValues(tempTens, tempOnes, isNegative);
 
 
-  b1.update(5);
+  battery.update(5);
+  power.update(3);
 }
 
 // Main loop
 void loop() {
-  // pot1.update();
-  // pot2.update();
-  // slider1.update();
+  pot1.update();
+  pot2.update();
+  slider1.update();
 
-  // rotEnc1.update();
-  // //rotEnc2.update();
+  rotEnc1.update();
+  //rotEnc2.update();
 
-  // button1.update();
-  // button2.update();
+  button1.update();
+  button2.update();
 
 
   // Process incoming MIDI messages
@@ -111,10 +116,13 @@ void handleIncomingMidi(midiEventPacket_t rx) {
       slider1.sendData();
     } else if (control == 10) {
       tempTens = value;
-      updateDisplayValues(tempTens, tempOnes);
+      updateDisplayValues(tempTens, tempOnes, isNegative);
     } else if (control == 11) {
       tempOnes = value;
-      updateDisplayValues(tempTens, tempOnes);
+      updateDisplayValues(tempTens, tempOnes, isNegative);
+    } else if (control == 12) {
+      isNegative = value;
+      updateDisplayValues(tempTens, tempOnes, isNegative);
     }
   }
 }

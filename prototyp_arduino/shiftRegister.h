@@ -70,27 +70,25 @@ void updateBuffer() {
 }
 
 
-void updateDisplayValues(int tens, int ones) {
-  // Clear displayValues
-  for (int i = 0; i < 4; i++) {
-    displayValues[i] = 10;  // Set to "nothing" initially
-  }
+void updateDisplayValues(int tens, int ones, bool negative) {
+  int value = tens * 100 + ones;  // Reconstruct the value
 
-  // Handle tens place
-  if (tens < 0) {
-    displayValues[0] = 11;     // Display '-' for negative sign
-    displayValues[1] = -tens;  // Map the absolute value of tens
-    // displayValues[1] = 8;  // Map the absolute value of tens
+  // Default to "nothing"
+  for (int i = 0; i < 4; i++) displayValues[i] = 10;
+
+  if (value > 99) {
+    displayValues[3] = ones % 10;
+    displayValues[2] = ones / 10;
+    displayValues[1] = tens;
+    displayValues[0] = negative ? 11 : 10;
+  } else if (value > 9) {
+    displayValues[3] = ones % 10;
+    displayValues[2] = ones / 10;
+    displayValues[1] = negative ? 11 : 10;
   } else {
-    displayValues[1] = tens;  // Map the tens directly
-    // displayValues[1] = 8;  // Map the tens directly
+    displayValues[3] = ones;
+    displayValues[2] = negative ? 11 : 10;
   }
-
-  // Handle ones place
-  // displayValues[2] = 7;  // Extract and map the first digit of ones
-  // displayValues[3] = 6;  // Extract and map the second digit of ones
-  displayValues[2] = (ones / 10);  // Extract and map the first digit of ones
-  displayValues[3] = (ones % 10);  // Extract and map the second digit of ones
 }
 
 

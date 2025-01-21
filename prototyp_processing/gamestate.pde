@@ -1,6 +1,6 @@
 class GameState {
 
-  int temperature = 0;
+  int temperature = -150;
 
   GameState() {
   }
@@ -9,15 +9,15 @@ class GameState {
   void update() {
 
 
-    if (frameCount % 60 == 0) {
-      temperature += random(100);
+    if (frameCount % 120 == 0) {
+      temperature = (int) random(-999, 999);
 
       temperature = temperature > 999 ? -999 : temperature;
       temperature = temperature < -999 ? 999 : temperature;
 
       sendTemperature(temperature);
 
-      println(temperature);
+      
     }
   }
 }
@@ -25,8 +25,10 @@ class GameState {
 
 
 void sendTemperature(int t) {
-  int tens = t / 100;
-  int units = t % 100; 
+  int tens = abs(t / 100);
+  int units = abs(t % 100);
+  boolean isNegative = t < 0;
   mb.sendControllerChange(1, 10, tens);
   mb.sendControllerChange(1, 11, units);
+  mb.sendControllerChange(1, 12, int(isNegative));
 }
