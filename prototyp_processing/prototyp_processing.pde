@@ -1,7 +1,7 @@
 // libraries for GPIO Stuff
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
-import com.pi4j.io.i2c.I2C;
+//import com.pi4j.io.i2c.I2C;
 
 
 Player player;
@@ -114,9 +114,15 @@ void setup() {
   atom = new Atom();
 
   storm = new Storm();
-  hazardMonitor = new HazardMonitor();
+  
+  try {
+    hazardMonitor = new HazardMonitor();
+  } catch (Throwable t) {
+    println("LCD could not be created");
+    hazardMonitor = null;
+  }
 
-    for (int i = 0; i < rayCount; i++) {
+  for (int i = 0; i < rayCount; i++) {
     rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
   }
 
@@ -259,9 +265,11 @@ void draw() {
     compass.display();
   }
 
-  if(hazardMonitor.interference && frameCount % 30 == 0){
+if(hazardMonitor != null) {
+  if (hazardMonitor.interference && frameCount % 30 == 0) {
     hazardMonitor.interference(mouseX);
   }
+}
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
   if (radio) {
     radio(mouseX);
