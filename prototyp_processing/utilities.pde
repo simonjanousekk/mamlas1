@@ -218,14 +218,16 @@ void keyPressed() {
   }
   if (key == 'b') {
     if (hazardMonitor.c == Conditions.STABLE) {
-      hazardMonitor.displayWeather(Conditions.SANDSTORM);
-      hazardMonitor.interference = true;
-    } else if  (hazardMonitor.c == Conditions.SANDSTORM) {
-      hazardMonitor.displayWeather(Conditions.WIND);
-    } else {
-      hazardMonitor.displayWeather(Conditions.STABLE);
+      hazardMonitor.displayHazard(Conditions.SANDSTORM);
       hazardMonitor.interference = false;
+    } else if  (hazardMonitor.c == Conditions.SANDSTORM) {
+      hazardMonitor.displayHazard(Conditions.WIND);
+      hazardMonitor.interference = true;
+      hazardMonitor.noiseAmount = mouseX;
+    } else {
+      hazardMonitor.displayHazard(Conditions.STABLE);
     }
+    println("Current weather :", hazardMonitor.c );
   }
 
   if (key == 'w' || key == 'W') moveForward = true;

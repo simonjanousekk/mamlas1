@@ -3,7 +3,7 @@ import com.pi4j.catalog.components.base.I2CDevice;
 import com.pi4j.catalog.components.LcdDisplay;
 
 enum Conditions {
-    STABLE("INFO:\n Conditions are stable"),
+  STABLE("INFO:\n Conditions are stable"),
     SANDSTORM("WARNING:\n Sandstorm"),
     MAGNETIC("WARNING:\n Magnetic storm"),
     WIND("WARNING:\n High wind"),
@@ -129,12 +129,17 @@ class HazardMonitor {
   LcdDisplay lcd;
   int i2cBus = 1;
   int lcdAddress = 0x27;
-  String forecast;
-  Conditions c;
+  String forecast = "";
+  String displayedForecast;
+  Conditions c = Conditions.STABLE;
   boolean interference = false;
+  boolean threadActive = false;
+
   float lastInterference = 0;
-  Thread lcdInterference;
+  //Thread lcdInterference;
   Thread lcdMain;
+  int noiseAmount = 0;
+
 
   HazardMonitor() {
     // initialize lcd display
@@ -142,34 +147,47 @@ class HazardMonitor {
     lcd = new LcdDisplay(pi4j, 4, 20);
     lcd.clearDisplay();
   }
-
-  void displayWeather(Conditions c) {
-    forecast = c.getMessage();
-    lcdMain = new Thread(() -> {
-    lcd.displayText(forecast); });
-    lcdMain.start();
-    
+  
+  void displayHazard(Conditions c) {
     this.c = c;
+    if(!interference) {
+      sendLcd(c, false, 0);
+    } else if (interference) {
+      sendLcd(c, true, noiseAmount);
+    }
   }
 
-  void interference(int noiseAmount) {
-    // cannot be done like this, because using thread means draw and LCD Class is desynchronised
-    //So I kant use a ref. variable i would update inside the function. will solve later
-    if (frameCount - lastInterference < 60) {
+  void sendLcd(Conditions c, boolean interference, int noiseAmount) {
+    if (threadActive) {
+      // There is no way to stop an active thread. all attempts were disasters. the best is to let the thread tell itself
+      // when it is finished (by setting threadActive = false at the end of the thread) And not do ANYTHING if it is active.
+      println("Returning... ");
       return;
     }
-    lcdInterference = new Thread(() -> {
-    lcd.displayText(forecast);
-    int n = int(map(noiseAmount, 0, width, 0, 40));
-    for (int i = 0; i< n; i++) {
-      int randomCharCode = int(random(256));
-      lcd.writeCharacter((char) randomCharCode, int(random(4)), int(random(20)));
+    
+    lcdMain = new Thread(() -> {
+      println("Thread started for " , c.getMessage());
+      threadActive = true;
+      while (threadActive) {
+        forecast = c.getMessage();
+        if(!interference) { 
+          lcd.clearDisplay();
+        }
+        lcd.displayText(forecast);
+        if (interference) {
+          int n = int(map(noiseAmount, 0, width, 0, 40));
+          for (int i = 0; i< n; i++) {
+            int randomCharCode = int(random(256));
+            lcd.writeCharacter((char) randomCharCode, int(random(4)), int(random(20)));
+          }
+        } 
+        threadActive = false;
+      }
     }
-  });
-  lcdInterference.start();
-  
-
-  }}
+    );
+    lcdMain.start();
+  }
+}
 
 
 class Storm {

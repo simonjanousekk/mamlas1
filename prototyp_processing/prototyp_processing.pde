@@ -101,7 +101,7 @@ void setup() {
 
   randomSeed(millis());
   noiseSeed(millis());
-  
+
   gameState = new GameState();
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
   player = new Player(randomPosOutsideWalls(), 3 * u);
@@ -143,9 +143,9 @@ void setup() {
 }
 
 void draw() {
-  
+
   gameState.update();
-  
+
   //push();
   //colorMode(HSB, 255);
   //primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
@@ -271,7 +271,11 @@ void draw() {
 
   if (hazardMonitor != null) {
     if (hazardMonitor.interference && frameCount % 30 == 0) {
-      hazardMonitor.interference(mouseX);
+      hazardMonitor.noiseAmount = mouseX;
+      hazardMonitor.displayHazard(hazardMonitor.c);
+    } else if (hazardMonitor.c.getMessage() != hazardMonitor.forecast) {
+      // synchronising thread with real state
+      hazardMonitor.displayHazard(hazardMonitor.c);
     }
   }
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
