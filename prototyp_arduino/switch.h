@@ -5,11 +5,9 @@ private:
 
 public:
   Switch(int p, int n)
-    : pin(p), midiNumber(n), lastPosition(-1) {}
-
-  void begin() {
-    pinMode(pin, INPUT_PULLUP);
-  }
+    : pin(p), midiNumber(n), lastPosition(-1) {
+      pinMode(pin, INPUT_PULLUP);
+    }
 
   void update() {
     int position = digitalRead(pin);

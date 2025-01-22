@@ -7,12 +7,10 @@ private:
 
 public:
   RotEncoder(int p1, int p2, int n)
-    : pin1(p1), pin2(p2), midiNumber(n), lastPosition(0), enc(p1, p2) {}
-
-  void begin() {
-    pinMode(pin1, INPUT);
+    : pin1(p1), pin2(p2), midiNumber(n), lastPosition(0), enc(p1, p2) {
+      pinMode(pin1, INPUT);
     pinMode(pin2, INPUT);
-  }
+    }
 
   void update() {
     long newPosition = enc.read() / 4;

@@ -23,15 +23,15 @@ RotEncoder rotEnc1(0, 1, 1);  // pin1, pin2, CC
 //RotEncoder rotEnc2(2, 3, 2);
 
 // POTENCIOMETERS
-// Potenciometer pot1(A0, 3);  // pin, CC
-// Potenciometer pot2(A1, 4);
-// Potenciometer slider1(A2, 5);
+Potenciometer pot1(A0, 3);  // pin, CC
+Potenciometer pot2(A1, 4);
+Potenciometer slider1(A2, 5);
 // Potenciometer slider2(A3, 6);
 
 // BUTTONS
-Switch button1(15, 10);  // pin, CC
-Switch button2(17, 11);
-Switch button3(19, 12);
+Switch button1(A5, 10);  // pin, CC
+Switch button2(15, 11);
+Switch button3(17, 12);
 
 
 // ----
@@ -51,16 +51,19 @@ bool isNegative = true;
 void setup() {
 
   // randomSeed(analogRead(A5) + millis());
-  SR_init();
+  // SR_init();
+
 
   updateDisplayValues(tempTens, tempOnes, isNegative);
 }
 
+int lastPosition = -1;
+
 // Main loop
 void loop() {
-  // pot1.update();
-  // pot2.update();
-  // slider1.update();
+  pot1.update();
+  pot2.update();
+  slider1.update();
 
   rotEnc1.update();
   //rotEnc2.update();

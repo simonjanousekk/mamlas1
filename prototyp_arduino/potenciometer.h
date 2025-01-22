@@ -10,9 +10,6 @@ public:
   Potenciometer(int p, int n)
     : pin(p), midiNumber(n), lastMidiValue(-1) {
     memset(values, 0, sizeof(values)); // Initialize the array to 0
-  }
-
-  void begin() {
     pinMode(pin, INPUT);
     update();
   }
