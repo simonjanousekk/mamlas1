@@ -1,6 +1,6 @@
 
  
-void radio(int noiseAmount) {
+void radio2(int noiseAmount) {
   noiseDetail(3,0.5);
   // later on can be adjusted based on sensor value
   float n = map(noiseAmount, 0, width, 9, 1);
@@ -48,4 +48,28 @@ void radio(int noiseAmount) {
   textAlign(CENTER, CENTER);
   text("LOW SIGNAL", screen2Center.x, screen2Center.y);
   pop();
+}
+
+void radio(int ammount) {
+  
+  int min = 5;
+  int max = 20;
+  
+  loadPixels();
+  for (int i = 0; i < ammount / 10; i++) {
+    int w = floor(random(min, max));
+    int h = floor(random(min, max));
+    int x1 = floor(random(screen2_cornerX, screen2_cornerX+screenSize-w));
+    int y1 = floor(random(screen2_cornerY, screen2_cornerX+screenSize-h));
+    
+    int x2 = floor(random(screen2_cornerX, screen2_cornerX+screenSize-w));
+    int y2 = floor(random(screen2_cornerY, screen2_cornerX+screenSize-h));
+    println(w, h, x1, y1, x2, y2);
+    set(x2, y2, get(x1, y1, w, h));
+  }
+  
+  
+  updatePixels();
+  
+  
 }

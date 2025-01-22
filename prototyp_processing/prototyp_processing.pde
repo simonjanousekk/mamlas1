@@ -8,12 +8,17 @@ Compass compass;
 Info info;
 SignalDisplay signalDisplay;
 HazardMonitor hazardMonitor;
-// could cause race condition if too low but so far fine ?
-float LcdRefresh = 300;
-float lastLcdRefresh = 0;
 
 Atom atom;
 Storm storm;
+
+ArrayList<Wall> walls = new ArrayList<Wall>();
+ArrayList<Ray> rays = new ArrayList<Ray>();
+ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
+ArrayList<DCross> dcrosses = new ArrayList<DCross>();
+
+PImage mask;
+PFont mono;
 
 int rayCount = 36;
 int rayLength;
@@ -44,16 +49,14 @@ int noise_s = 10;
 
 int fakeFrameRate = 59;
 
-boolean infoDisplay = false;
+boolean infoDisplay = true;
 String[] terrainTypes = {"SOFT", "DENS", "FIRM", "HARD"};
 
-PImage mask;
-PFont mono;
 
-ArrayList<Wall> walls = new ArrayList<Wall>();
-ArrayList<Ray> rays = new ArrayList<Ray>();
-ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
-ArrayList<DCross> dcrosses = new ArrayList<DCross>();
+
+// could cause race condition if too low but so far fine ?
+float LcdRefresh = 300;
+float lastLcdRefresh = 0;
 
 int screenSize = 360;
 int screenHalf = 180;
@@ -61,6 +64,8 @@ int screenGap = 36;
 PVector screen1Center, screen2Center;
 int screen2Border = u * 5;
 int screen1Border = u * 10;
+
+
 PImage screen1Mask, screen2Mask;
 int screen2_cornerX, screen2_cornerY;
 enum s2s {
@@ -83,6 +88,7 @@ void setup() {
 
   screen2_cornerX = int(screen2Center.x - screenSize / 2);
   screen2_cornerY = int(screen2Center.y - screenSize / 2);
+
   mbInit();
 
   mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
@@ -280,11 +286,11 @@ void draw() {
   }
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
   if (radio) {
-    radio(mouseX);
+    radio(int(map(mouseX, 0, width, 0, 100)));
   }
 
   if (infoDisplay) {
     info.display();
-    displayFPS();
   }
+  displayFPS();
 }
