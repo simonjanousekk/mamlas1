@@ -114,6 +114,7 @@ class HazardMonitor {
     lcdMain = new Thread(() -> {
       threadActive = true;
       while (threadActive) {
+        println("new thread ", frameCount);
         if (!interference) {
           // Make sure cleaning random symbol after signal problems are resolvd
           lcd.clearDisplay();
