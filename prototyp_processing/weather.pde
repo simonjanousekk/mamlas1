@@ -5,17 +5,15 @@ import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import com.pi4j.io.i2c.I2C;
 
-enum Conditions {
-    STABLE("INFO:\n Conditions are stable"),
-    SANDSTORM("WARNING:\n Sandstorm"),
-    MAGNETIC("WARNING:\n Magnetic storm"),
-    WIND("WARNING:\n High wind"),
-    NOON("WARNING:\n Temperatures rising rapidly"),
-    NIGHT("WARNING:\n Temperatures falling rapidly");
+// What will be displayed on line1 when there is no alert
+enum DailyCycle {
+  MORNING("Good morning :3"),
+    NOON("Good afternoon :V"),
+    NIGHT("Good night zZzz");
 
   String message;
 
-  Conditions(String message) {
+  DailyCycle(String message) {
     this.message = message;
   }
   String getMessage() {
@@ -23,154 +21,115 @@ enum Conditions {
   }
 }
 
+// Displayed lines 2, 3 and 4 - should display weather and maybe some info / recommendations.
+// These are NOT Critical, which are in enum class "Alerts"
+enum Weather {
+  STABLE("FORECAST:\nConditions stable"),
+    WIND("FORECAST:\nHigh wind, impact on rover course"),
+    HOT("FORECAST:\nTemperature rise imminent"),
+    COLD("FORECAST:\nTemperature drop imminent");
 
-// this is not over - probably the noise should move based on player rotation and movement but I will do it later {._.}
-//class Weather {
-//  boolean storm = false, storm_IsStarted = false;
-//  float storm_StartTime = 0;
-//  float storm_threshold, storm_maxThreshold;
-//  int[] sequenceTiming;
-//  int ease_in, ease_out;
-//  float leftShift = 0;
-//  float s_noiseScale = 0.005;
+  String message;
 
-//  int rectSize = 4;
+  Weather(String message) {
+    this.message = message;
+  }
+  String getMessage() {
+    return message;
+  }
+}
 
-//  Weather() {
-//    storm_maxThreshold = 200;
-//    storm_threshold = 50;
-//    ease_in = 15;
-//    ease_out = 8;
-//  }
+// These are ALERTS / CRITICAL information. When they will be set, the screen will flash and display the alert until its resolved. 
+// IMPORTANT: So far, no handling of more than 1 alert. Maybe not necessary ?
+enum Alerts {
+  CONSUMPTION("WARNING:\n Energy consumption high - monitor systems"),
+    OVERHEATING("WARNING:\n Core temperature high - cooling required"),
+    FREEZE("WARNING:\n Core temperature low - heating required"),
+    NONE("");
 
-//  void display() {
+  String message;
 
-//    if (storm) {
-//      stormSequence(40);
-//    }
-//  }
-
-//  void stormSequence(int duration) {
-//    noStroke();
-//    noiseDetail(5, 0.5);
-//    if (!storm_IsStarted) {
-//      storm_StartTime = millis();
-//      storm_IsStarted = true;
-//      storm_threshold = 40;
-//    }
-
-//    if (storm_StartTime + (duration * 1000) > millis()) {
-
-//      for (int x = screen2_cornerX; x < screen2_cornerX + screenSize; x += rectSize) {
-//        for (int y = screen2_cornerY; y < screen2_cornerY + screenSize; y += rectSize) {
-//          // Convert screen coordinates to world coordinates
-//          float worldX = player.pos.x + (x - screen2Center.x);
-//          float worldY = player.pos.y + (y - screen2Center.y);
-
-//          // Rotate world coordinates around the player
-//          float dx = worldX - player.pos.x;
-//          float dy = worldY - player.pos.y;
-
-//          float rotatedX = cos(player.angle) * dx - sin(player.angle) * dy + player.pos.x;
-//          float rotatedY = sin(player.angle) * dx + cos(player.angle) * dy + player.pos.y;
-
-//          // Scale for noise
-//          float nx = rotatedX / rectSize * noiseScale + leftShift;
-//          float ny = rotatedY / rectSize * noiseScale + leftShift;
-
-//          float nt = s_noiseScale *  frameCount / 10 ;
-//          float noiseCompute = noise(nx, ny, nt);
-
-//          float c = 255 * noiseCompute;
-//          push();
-
-//          if (c > storm_threshold) {
-//            fill(0, 0);
-//          } else if (c < storm_threshold && c > storm_threshold - 50) {
-//            fill(0, 128, 128);
-//          } else if (c < storm_threshold - 50 && c > storm_threshold - 80) {
-//            fill(0, 255, 255);
-//          } else if (c < storm_threshold - 80 && c > storm_threshold - 180) {
-//            fill(255);
-//          }
-
-//          rect(x, y, rectSize, rectSize);
-//          pop();
-//        }
-//      }
-
-//      leftShift += 0.002;
-
-//      storm_threshold += calculateThreshold(storm_threshold, duration);
-//    } else if (storm_StartTime + (duration * 1000) < millis()) {
-//      storm_IsStarted = false;
-//      storm = false;
-//    }
-//  }
-
-//  float calculateThreshold(float t, int duration) {
-//    float t_inc = 0;
-
-//    if (millis() - storm_StartTime <(ease_in * 1000) && t <= storm_maxThreshold) {
-//      // ease in period
-//      float increase_amout = storm_maxThreshold - t;
-//      float time_left = ease_in - ((millis() - storm_StartTime) / 1000);
-//      t_inc = increase_amout / (time_left * frameRate);
-//    } else if (storm_StartTime + (duration * 1000) - (ease_out * 1000) < millis()) {
-//      // ease out period
-//      float decrease_amount = 0 - t;
-//      float time_left = ((storm_StartTime + duration * 1000) - millis()) / 1000;
-//      t_inc = decrease_amount / (time_left * frameRate);
-//      leftShift += 0.002;
-//    }
-//    return t_inc;
-//  }
-//}
+  Alerts(String message) {
+    this.message = message;
+  }
+  String getMessage() {
+    return message;
+  }
+}
 
 class HazardMonitor {
 
   LcdDisplay lcd;
   int i2cBus = 1;
   int lcdAddress = 0x27;
-  
+
+  String last_forecast = "";
   String forecast = "";
-  Conditions c = Conditions.STABLE;
+  String new_alert = "";
+  DailyCycle d = DailyCycle.MORNING;
+  Weather w = Weather.STABLE;
+  Alerts alert = Alerts.NONE;
+
   boolean interference = false;
   boolean threadActive = false;
+  boolean last_interference = false;
+  boolean flash = false;
 
   Thread lcdMain;
   int noiseAmount = 0;
-    
+
   HazardMonitor() {
     // initialize lcd display
     Context pi4j = Pi4J.newAutoContext();
     lcd = new LcdDisplay(pi4j, 4, 20);
     lcd.clearDisplay();
+    displayHazard();
   }
-  
-  void displayHazard(Conditions c) {
-    this.c = c;
-    if(!interference) {
-      sendLcd(c, false, 0);
+
+  void displayHazard() {
+    if (alert == Alerts.NONE) {
+      forecast = String.join("\n", d.getMessage(), w.getMessage());
+    } else {
+      forecast = alert.getMessage();
+      if(forecast != new_alert){
+        // new alert, we must flash
+        flash = true;
+        new_alert = forecast;
+      }
+    }
+    if (!interference) {
+      sendLcd(forecast, false, 0);
     } else if (interference) {
-      sendLcd(c, true, noiseAmount);
+      sendLcd(forecast, true, noiseAmount);
     }
   }
 
-  void sendLcd(Conditions c, boolean interference, int noiseAmount) {
+  void sendLcd(String forecast, boolean interference, int noiseAmount) {
     if (threadActive) {
       // There is no way to stop an active thread. all attempts were disasters. the best is to let the thread tell itself
       // when it is finished (by setting threadActive = false at the end of the thread) And not do ANYTHING if it is active.
       return;
     }
-    
+
     lcdMain = new Thread(() -> {
-      println("Thread started for " , c.getMessage());
       threadActive = true;
       while (threadActive) {
-        forecast = c.getMessage();
-        if(!interference) { 
+        if (!interference) {
+          // Make sure cleaning random symbol after signal problems are resolvd
           lcd.clearDisplay();
+          delay(100);
+        }
+        // Flashing when there is new Alert
+        if (flash) {
+          boolean lightstate = true;
+          for (int s = 0; s < 5; s++) {
+            lcd.setDisplayBacklight(lightstate);
+            lightstate = !lightstate;
+            delay(50);
+          }
+          //make sure we finish with the lights on
+          lcd.setDisplayBacklight(true);
+          flash = false;
         }
         lcd.displayText(forecast);
         if (interference) {
@@ -179,8 +138,10 @@ class HazardMonitor {
             int randomCharCode = int(random(256));
             lcd.writeCharacter((char) randomCharCode, int(random(4)), int(random(20)));
           }
-        } 
+        }
         threadActive = false;
+        last_forecast = forecast;
+        last_interference = interference;
       }
     }
     );
