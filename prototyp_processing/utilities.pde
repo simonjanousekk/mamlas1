@@ -227,9 +227,7 @@ void keyPressed() {
 
     hazardMonitor.w = random_weather;
     hazardMonitor.alert = random_alert;
-    if (random_alert != Alerts.NONE) {
-      hazardMonitor.flash = true;
-    }
+
     hazardMonitor.displayHazard();
     println("Current weather :", random_weather);
     println("Current alert :", random_alert);

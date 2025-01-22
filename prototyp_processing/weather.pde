@@ -5,10 +5,11 @@ import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
 import com.pi4j.io.i2c.I2C;
 
+// What will be displayed on line1 when there is no alert
 enum DailyCycle {
-  MORNING("Good morning :)"),
-    NOON("Good afternoon"),
-    NIGHT("Good night");
+  MORNING("Good morning :3"),
+    NOON("Good afternoon :V"),
+    NIGHT("Good night zZzz");
 
   String message;
 
@@ -20,11 +21,13 @@ enum DailyCycle {
   }
 }
 
+// Displayed lines 2, 3 and 4 - should display weather and maybe some info / recommendations.
+// These are NOT Critical, which are in enum class "Alerts"
 enum Weather {
   STABLE("FORECAST:\nConditions stable"),
     WIND("FORECAST:\nHigh wind, impact on rover course"),
     HOT("FORECAST:\nTemperature rise imminent"),
-    COLD("WARNING:\nTemperature drop imminent");
+    COLD("FORECAST:\nTemperature drop imminent");
 
   String message;
 
@@ -36,6 +39,8 @@ enum Weather {
   }
 }
 
+// These are ALERTS / CRITICAL information. When they will be set, the screen will flash and display the alert until its resolved. 
+// IMPORTANT: So far, no handling of more than 1 alert. Maybe not necessary ?
 enum Alerts {
   CONSUMPTION("WARNING:\n Energy consumption high - monitor systems"),
     OVERHEATING("WARNING:\n Core temperature high - cooling required"),
@@ -60,6 +65,7 @@ class HazardMonitor {
 
   String last_forecast = "";
   String forecast = "";
+  String new_alert = "";
   DailyCycle d = DailyCycle.MORNING;
   Weather w = Weather.STABLE;
   Alerts alert = Alerts.NONE;
@@ -85,6 +91,11 @@ class HazardMonitor {
       forecast = String.join("\n", d.getMessage(), w.getMessage());
     } else {
       forecast = alert.getMessage();
+      if(forecast != new_alert){
+        // new alert, we must flash
+        flash = true;
+        new_alert = forecast;
+      }
     }
     if (!interference) {
       sendLcd(forecast, false, 0);
@@ -104,9 +115,11 @@ class HazardMonitor {
       threadActive = true;
       while (threadActive) {
         if (!interference) {
+          // Make sure cleaning random symbol after signal problems are resolvd
           lcd.clearDisplay();
           delay(100);
         }
+        // Flashing when there is new Alert
         if (flash) {
           boolean lightstate = true;
           for (int s = 0; s < 5; s++) {

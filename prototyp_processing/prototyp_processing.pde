@@ -8,7 +8,7 @@ Compass compass;
 Info info;
 SignalDisplay signalDisplay;
 HazardMonitor hazardMonitor;
-float LcdRefresh = 400;
+float LcdRefresh = 300;
 float lastLcdRefresh = 0;
 
 Atom atom;
