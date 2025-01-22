@@ -204,6 +204,9 @@ void keyPressed() {
   if (key == 'q') {
     exit();
   }
+  if (key == 'm') {
+    sampleIdentification = !sampleIdentification;
+  }
   if (key == 'b') {
 
     hazardMonitor.interference = (random(2) < 1) ? true : false ;

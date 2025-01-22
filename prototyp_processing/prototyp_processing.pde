@@ -262,7 +262,7 @@ void draw() {
   rect(screenSize + xgap, 0, screenGap, height);
   pop();
 
-  if (screen2State == s2s.RADAR || screen2State == s2s.GPS) {
+  if (!sampleIdentification) {
     compass.display();
   }
 

@@ -103,6 +103,7 @@ class Player {
 
   void setDesiredVelocity(int v) {
     speed = map(v, 1, 126, 0, max_speed);
+    speed = constrain(speed, 0, max_speed);
   }
 
   void handleInput() {
