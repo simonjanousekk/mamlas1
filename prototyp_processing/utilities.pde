@@ -217,15 +217,15 @@ void keyPressed() {
     exit();
   }
   if (key == 'b') {
-    if (hazardMonitor.c == Conditions.STABLE) {
-      hazardMonitor.displayHazard(Conditions.SANDSTORM);
+    if (hazardMonitor.w == Weather.STABLE) {
+      hazardMonitor.w = Weather.WIND;
       hazardMonitor.interference = false;
-    } else if  (hazardMonitor.c == Conditions.SANDSTORM) {
-      hazardMonitor.displayHazard(Conditions.WIND);
+    } else if  (hazardMonitor.w == Weather.WIND) {
+      hazardMonitor.w = Weather.HOT;
       hazardMonitor.interference = true;
       hazardMonitor.noiseAmount = mouseX;
     } else {
-      hazardMonitor.displayHazard(Conditions.STABLE);
+      hazardMonitor.w = Weather.STABLE;
     }
   }
 

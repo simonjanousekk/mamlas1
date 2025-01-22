@@ -270,10 +270,10 @@ void draw() {
     lastLcdRefresh = millis();
     if (hazardMonitor.interference) {
       hazardMonitor.noiseAmount = mouseX;
-      hazardMonitor.displayHazard(hazardMonitor.c);
-    } else if (hazardMonitor.c.getMessage() != hazardMonitor.forecast) {
+      hazardMonitor.displayHazard();
+    } else if (hazardMonitor.forecast!= hazardMonitor.forecast) {
       // synchronising thread with real state
-      hazardMonitor.displayHazard(hazardMonitor.c);
+      hazardMonitor.displayHazard();
     }
   }
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
