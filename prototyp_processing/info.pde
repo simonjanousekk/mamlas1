@@ -12,7 +12,7 @@ class Info {
     fill(255);
     textAlign(LEFT, TOP);
     textSize(16);
-    text("batt: " + int(battery) + "%", pos.x, pos.y);
+    text("batt: " + int(gameState.battery) + "%", pos.x, pos.y);
     text("walls: " + relevantWallsC + "/" + walls.size(), pos.x, pos.y + 15);
     text("wmarks: " + relevantWMarkersC + "/" + wmarkers.size(), pos.x, pos.y + 30);
     text("samp: " + player.samplesCollected, pos.x, pos.y + 45);

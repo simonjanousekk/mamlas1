@@ -8,17 +8,13 @@ public:
     : pin(p), midiNumber(n), lastPosition(-1) {}
 
   void begin() {
-    pinMode(pin, INPUT);
+    pinMode(pin, INPUT_PULLUP);
   }
 
   void update() {
     int position = digitalRead(pin);
 
     if (position != lastPosition) {
-      // setSingleBit(40, position);
-      // setSingleBit(2, position);
-
-
       midiEventPacket_t event = { 0x0B, 0xB0 | 0, midiNumber, position };
       MidiUSB.sendMIDI(event);
 

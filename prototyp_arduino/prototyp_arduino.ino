@@ -23,14 +23,15 @@ RotEncoder rotEnc1(0, 1, 1);  // pin1, pin2, CC
 //RotEncoder rotEnc2(2, 3, 2);
 
 // POTENCIOMETERS
-Potenciometer pot1(A0, 3);  // pin, CC
-Potenciometer pot2(A1, 4);
-Potenciometer slider1(A2, 5);
+// Potenciometer pot1(A0, 3);  // pin, CC
+// Potenciometer pot2(A1, 4);
+// Potenciometer slider1(A2, 5);
 // Potenciometer slider2(A3, 6);
 
 // BUTTONS
-Switch button1(16, 10);  // pin, CC
+Switch button1(15, 10);  // pin, CC
 Switch button2(17, 11);
+Switch button3(19, 12);
 
 
 // ----
@@ -53,23 +54,20 @@ void setup() {
   SR_init();
 
   updateDisplayValues(tempTens, tempOnes, isNegative);
-
-
-  battery.update(5);
-  power.update(3);
 }
 
 // Main loop
 void loop() {
-  pot1.update();
-  pot2.update();
-  slider1.update();
+  // pot1.update();
+  // pot2.update();
+  // slider1.update();
 
   rotEnc1.update();
   //rotEnc2.update();
 
   button1.update();
   button2.update();
+  button3.update();
 
 
   // Process incoming MIDI messages
@@ -111,18 +109,22 @@ void handleIncomingMidi(midiEventPacket_t rx) {
 
   if (channel == 1) {
     if (control == 1 && value == 1) {
-      pot1.sendData();
-      pot2.sendData();
-      slider1.sendData();
-    } else if (control == 10) {
+      // pot1.sendData();
+      // pot2.sendData();
+      // slider1.sendData();
+    } else if (control == 10) {  // SEVEN SEGMENT DISPLAY DATA
       tempTens = value;
       updateDisplayValues(tempTens, tempOnes, isNegative);
-    } else if (control == 11) {
+    } else if (control == 11) {  // SEVEN SEGMENT DISPLAY DATA
       tempOnes = value;
       updateDisplayValues(tempTens, tempOnes, isNegative);
-    } else if (control == 12) {
+    } else if (control == 12) {  // SEVEN SEGMENT DISPLAY DATA
       isNegative = value;
       updateDisplayValues(tempTens, tempOnes, isNegative);
+    } else if (control == 15) {  // battery bargraph data
+      battery.update(value);
+    } else if (control == 16) {  // power usage bargraph data
+      power.update(value);
     }
   }
 }

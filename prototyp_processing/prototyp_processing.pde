@@ -43,8 +43,6 @@ int noise_s = 10;
 
 int fakeFrameRate = 59;
 
-float battery = 100;
-int sampleCount = 1;
 boolean infoDisplay = false;
 String[] terrainTypes = {"SOFT", "DENS", "FIRM", "HARD"};
 
@@ -68,7 +66,7 @@ enum s2s {
   GPS, RADAR, IDE
 }
 
-String midiDevice = "Micro [hw:2,0,0]"; // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
+String midiDevice = "Arduino Micro"; // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
 
 s2s screen2State = s2s.GPS;
 

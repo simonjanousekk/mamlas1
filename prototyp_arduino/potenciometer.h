@@ -1,7 +1,7 @@
 class Potenciometer {
 private:
   int pin, lastMidiValue, midiNumber, midiValue;
-  static const int arraySize = 10;  // Size of the array
+  static const int arraySize = 20;  // Size of the array
   int values[arraySize];            // Array to store potentiometer readings
   int valueIndex = 0;               // Current index in the array
   bool isFilled = false;            // Flag to check if the array is filled
