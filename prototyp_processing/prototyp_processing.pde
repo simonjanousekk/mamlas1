@@ -8,7 +8,7 @@ Compass compass;
 Info info;
 SignalDisplay signalDisplay;
 HazardMonitor hazardMonitor;
-// should be kept over 300/400 , otherwise, race condition happens
+// could cause race condition if too low but so far fine ?
 float LcdRefresh = 300;
 float lastLcdRefresh = 0;
 
