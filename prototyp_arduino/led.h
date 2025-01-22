@@ -3,7 +3,7 @@ class Led {
 private:
   int index;
   bool state = false;
-  unsigned long interval = 200;
+  unsigned long interval = 400;
   unsigned long lastToggleTime = 0;
 
 public:

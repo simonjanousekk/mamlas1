@@ -175,6 +175,7 @@ void keyPressed() {
     //}
     setup();
   }
+  
   if (key == ' ') {
     for (Ray r : rays) {
       r.findWallAnimation();

@@ -1,8 +1,8 @@
 #define DATA_PIN 6   // SER = DATA PIN
 #define LATCH_PIN 5  // RCLK = LATCH PIN
 #define CLOCK_PIN 4  // SRCLK = SHIFT CLOCK PIN
-// uint8_t shiftRegisterBuffer[7] = { 0 };
-uint8_t shiftRegisterBuffer[7] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+uint8_t shiftRegisterBuffer[7] = { 0 };
+// uint8_t shiftRegisterBuffer[7] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 const uint8_t number[] = {
   0b00010001,  // 0

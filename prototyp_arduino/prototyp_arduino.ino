@@ -21,7 +21,7 @@
 
 // ENCODERS
 RotEncoder rotEnc1(0, 1, 1);  // pin1, pin2, CC
-//RotEncoder rotEnc2(2, 3, 2);
+RotEncoder rotEnc2(2, 3, 2);
 
 // POTENCIOMETERS
 Potenciometer pot1(A0, 3);  // pin, CC
@@ -54,18 +54,12 @@ bool isNegative = true;
 
 
 void setup() {
-
   // randomSeed(analogRead(A5) + millis());
   SR_init();
 
   for (int i = 0; i < numLeds; i++) {
     leds[i] = Led(ledIndexes[i]);
   }
-
-  leds[1].on();
-  leds[2].on();
-  leds[3].on();
-  leds[4].on();
 }
 
 int lastPosition = -1;
@@ -77,7 +71,7 @@ void loop() {
   slider1.update();
 
   rotEnc1.update();
-  //rotEnc2.update();
+  rotEnc2.update();
 
   button1.update();
   button2.update();
@@ -142,6 +136,12 @@ void handleIncomingMidi(midiEventPacket_t rx) {
       battery.update(value);
     } else if (control == 16) {  // power usage bargraph data
       power.update(value);
+    }
+  } else if (channel == 2) {
+    if (value == 0) {
+      leds[control].off();
+    } else {
+      leds[control].on();
     }
   }
 }
