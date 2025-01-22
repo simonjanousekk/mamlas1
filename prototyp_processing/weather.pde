@@ -6,7 +6,7 @@ import com.pi4j.context.Context;
 import com.pi4j.io.i2c.I2C;
 
 enum DailyCycle {
-    MORNING("Good morning"),
+  MORNING("Good morning :)"),
     NOON("Good afternoon"),
     NIGHT("Good night");
 
@@ -21,10 +21,10 @@ enum DailyCycle {
 }
 
 enum Weather {
-    STABLE("FORECAST:\nConditions stable"),
-    WIND("FORECAST:\nHigh wind"),
-    HOT("FORECAST:\nTemperatures rising"),
-    COLD("WARNING:\nTemperatures falling");
+  STABLE("FORECAST:\nConditions stable"),
+    WIND("FORECAST:\nHigh wind, impact on rover course"),
+    HOT("FORECAST:\nTemperature rise imminent"),
+    COLD("WARNING:\nTemperature drop imminent");
 
   String message;
 
@@ -36,17 +36,15 @@ enum Weather {
   }
 }
 
-enum Warnings {
-    STABLE("INFO:\n All systems stable"),
-    SANDSTORM("WARNING:\n Sandstorm"),
-    MAGNETIC("WARNING:\n Magnetic storm"),
-    WIND("WARNING:\n High wind"),
-    NOON("WARNING:\n Temperatures rising rapidly"),
-    NIGHT("WARNING:\n Temperatures falling rapidly");
+enum Alerts {
+  CONSUMPTION("WARNING:\n Energy consumption high - monitor systems"),
+    OVERHEATING("WARNING:\n Core temperature high - cooling required"),
+    FREEZE("WARNING:\n Core temperature low - heating required"),
+    NONE("");
 
   String message;
 
-  Warnings(String message) {
+  Alerts(String message) {
     this.message = message;
   }
   String getMessage() {
@@ -64,10 +62,12 @@ class HazardMonitor {
   String forecast = "";
   DailyCycle d = DailyCycle.MORNING;
   Weather w = Weather.STABLE;
+  Alerts alert = Alerts.NONE;
 
   boolean interference = false;
   boolean threadActive = false;
-  boolean warnings = false;
+  boolean last_interference = false;
+  boolean flash = false;
 
   Thread lcdMain;
   int noiseAmount = 0;
@@ -77,11 +77,14 @@ class HazardMonitor {
     Context pi4j = Pi4J.newAutoContext();
     lcd = new LcdDisplay(pi4j, 4, 20);
     lcd.clearDisplay();
+    displayHazard();
   }
 
   void displayHazard() {
-    if (!warnings) {
-      forecast = String.join("\n", d.getMessage(), w.getMessage()); 
+    if (alert == Alerts.NONE) {
+      forecast = String.join("\n", d.getMessage(), w.getMessage());
+    } else {
+      forecast = alert.getMessage();
     }
     if (!interference) {
       sendLcd(forecast, false, 0);
@@ -98,11 +101,22 @@ class HazardMonitor {
     }
 
     lcdMain = new Thread(() -> {
-      println("Thread started for ", forecast);
       threadActive = true;
       while (threadActive) {
         if (!interference) {
           lcd.clearDisplay();
+          delay(100);
+        }
+        if (flash) {
+          boolean lightstate = true;
+          for (int s = 0; s < 5; s++) {
+            lcd.setDisplayBacklight(lightstate);
+            lightstate = !lightstate;
+            delay(50);
+          }
+          //make sure we finish with the lights on
+          lcd.setDisplayBacklight(true);
+          flash = false;
         }
         lcd.displayText(forecast);
         if (interference) {
@@ -114,6 +128,7 @@ class HazardMonitor {
         }
         threadActive = false;
         last_forecast = forecast;
+        last_interference = interference;
       }
     }
     );

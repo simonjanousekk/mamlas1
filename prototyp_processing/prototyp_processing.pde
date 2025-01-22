@@ -271,7 +271,7 @@ void draw() {
     if (hazardMonitor.interference) {
       hazardMonitor.noiseAmount = mouseX;
       hazardMonitor.displayHazard();
-    } else if (hazardMonitor.forecast!= hazardMonitor.forecast) {
+    } else if (hazardMonitor.last_forecast!= hazardMonitor.forecast || hazardMonitor.last_interference != hazardMonitor.interference) {
       // synchronising thread with real state
       hazardMonitor.displayHazard();
     }
