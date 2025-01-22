@@ -180,19 +180,6 @@ void keyPressed() {
       r.findWallAnimation();
     }
   }
-  if (key == 'm') { //radar
-    if (screen2State == s2s.GPS) {
-      wmarkers.clear();
-      for (Ray r : rays) {
-        r.findWallAnimation();
-      }
-      screen2State = s2s.RADAR;
-    } else if (screen2State == s2s.RADAR) {
-      screen2State = s2s.IDE;
-    } else if (screen2State == s2s.IDE) {
-      screen2State = s2s.GPS;
-    }
-  }
   if (key == 'x') {
     radio = !radio;
   }

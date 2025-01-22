@@ -10,6 +10,7 @@
 #include "switch.h"
 #include "rot_encoder.h"
 #include "bargraph.h"
+#include "led.h"
 
 // #include "sevenSeg.h"
 
@@ -25,14 +26,15 @@ RotEncoder rotEnc1(0, 1, 1);  // pin1, pin2, CC
 // POTENCIOMETERS
 Potenciometer pot1(A0, 3);  // pin, CC
 Potenciometer pot2(A1, 4);
+
 Potenciometer slider1(A2, 5);
 // Potenciometer slider2(A3, 6);
 
 // BUTTONS
 Switch button1(A5, 10);  // pin, CC
 Switch button2(15, 11);
-Switch button3(17, 12);
 
+Switch switch1(14, 20);
 
 // ----
 // OUTPUTS
@@ -41,6 +43,9 @@ Switch button3(17, 12);
 Bargraph battery = Bargraph(0);
 Bargraph power = Bargraph(10);
 
+int ledIndexes[] = { 40, 41, 42, 43, 45, 46, 47, 48, 49, 50, 51, 52, 54, 55 };  // Array of indexes
+const int numLeds = sizeof(ledIndexes) / sizeof(ledIndexes[0]);
+Led leds[numLeds];
 
 int tempTens = 6;
 int tempOnes = 66;
@@ -51,10 +56,16 @@ bool isNegative = true;
 void setup() {
 
   // randomSeed(analogRead(A5) + millis());
-  // SR_init();
+  SR_init();
 
+  for (int i = 0; i < numLeds; i++) {
+    leds[i] = Led(ledIndexes[i]);
+  }
 
-  updateDisplayValues(tempTens, tempOnes, isNegative);
+  leds[1].on();
+  leds[2].on();
+  leds[3].on();
+  leds[4].on();
 }
 
 int lastPosition = -1;
@@ -70,7 +81,13 @@ void loop() {
 
   button1.update();
   button2.update();
-  button3.update();
+
+  switch1.update();
+
+
+  for (int i = 0; i < numLeds; i++) {
+    leds[i].update();
+  }
 
 
   // Process incoming MIDI messages
@@ -80,12 +97,6 @@ void loop() {
   }
 
   MidiUSB.flush();
-
-
-  // while (true) {
-  //   // Keep all LEDs on indefinitely
-  //   delay(100);
-  // }
 }
 
 // Function to send MIDI Control Change messages
@@ -111,10 +122,13 @@ void handleIncomingMidi(midiEventPacket_t rx) {
   int value = rx.byte3;
 
   if (channel == 1) {
-    if (control == 1 && value == 1) {
-      // pot1.sendData();
-      // pot2.sendData();
-      // slider1.sendData();
+    if (control == 1 && value == 1) {  // REQUEST FROM PROCESSING TO SEND ANALOG VALUES
+      pot1.sendData();
+      pot2.sendData();
+      slider1.sendData();
+      // slider2.sendData();
+
+      switch1.sendData();
     } else if (control == 10) {  // SEVEN SEGMENT DISPLAY DATA
       tempTens = value;
       updateDisplayValues(tempTens, tempOnes, isNegative);

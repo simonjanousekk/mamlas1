@@ -63,8 +63,10 @@ int screen1Border = u * 10;
 PImage screen1Mask, screen2Mask;
 int screen2_cornerX, screen2_cornerY;
 enum s2s {
-  GPS, RADAR, IDE
+  GPS, RADAR
 }
+boolean sampleIdentification = false;
+
 
 String midiDevice = "Arduino Micro"; // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
 
@@ -191,8 +193,7 @@ void draw() {
   // realest drawing
 
   if (frameCount % (60 / fakeFrameRate) == 0) {
-
-    if (screen2State == s2s.IDE) { // --- SAMPLE IDENTIFICATION ---
+    if (sampleIdentification) { // --- SAMPLE IDENTIFICATION ---
       push();
       background(0);
       translate(screen2Center.x, screen2Center.y);

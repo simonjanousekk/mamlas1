@@ -48,13 +48,18 @@ void setSingleBit(uint8_t bitIndex, bool value) {
   }
 }
 
-
 void setMultiBit(uint8_t startIndex, uint8_t numBits, uint16_t value) {
   for (uint8_t i = 0; i < numBits; i++) {
     uint8_t currentBitIndex = startIndex + i;  // Calculate the current bit position
     bool bitValue = (value & (1 << i)) != 0;   // Extract the corresponding bit from the value
     setSingleBit(currentBitIndex, bitValue);   // Set the bit in the buffer
   }
+}
+
+void toggleSingleBit(uint8_t bitIndex) {
+  uint8_t byteIndex = bitIndex / 8;    // Determine the byte index
+  uint8_t bitPosition = bitIndex % 8;  // Determine the bit position within the byte
+  shiftRegisterBuffer[byteIndex] ^= (1 << bitPosition); // Toggle the bit
 }
 
 
