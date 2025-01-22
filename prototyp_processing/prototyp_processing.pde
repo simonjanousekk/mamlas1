@@ -8,7 +8,7 @@ Compass compass;
 Info info;
 SignalDisplay signalDisplay;
 HazardMonitor hazardMonitor;
-// Probably this should be kept over 300 / 400 ms., because otherwise there is race condition happening
+// should be kept over 300/400 , otherwise, race condition happens
 float LcdRefresh = 600;
 float lastLcdRefresh = 0;
 
@@ -272,7 +272,7 @@ void draw() {
     if (hazardMonitor.interference) {
       hazardMonitor.noiseAmount = mouseX;
       hazardMonitor.displayHazard();
-    } else if (hazardMonitor.forecast != hazardMonitor.last_forecast ) {
+    } else if (hazardMonitor.forecast.equals(hazardMonitor.last_forecast) || hazardMonitor.last_interference != hazardMonitor.interference) {
       // synchronising thread with real state
       println("last forecast :", hazardMonitor.last_forecast);
       println(" Current forecast :", hazardMonitor.forecast);
