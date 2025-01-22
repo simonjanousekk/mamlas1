@@ -205,16 +205,20 @@ void keyPressed() {
     exit();
   }
   if (key == 'b') {
-    if (hazardMonitor.c == Conditions.STABLE) {
-      hazardMonitor.displayHazard(Conditions.SANDSTORM);
-      hazardMonitor.interference = false;
-    } else if  (hazardMonitor.c == Conditions.SANDSTORM) {
-      hazardMonitor.displayHazard(Conditions.WIND);
-      hazardMonitor.interference = true;
-      hazardMonitor.noiseAmount = mouseX;
-    } else {
-      hazardMonitor.displayHazard(Conditions.STABLE);
-    }
+
+    hazardMonitor.interference = (random(2) < 1) ? true : false ;
+    Weather [] randomw = Weather.values();
+    Weather random_weather = randomw[int(random(randomw.length))];
+
+    Alerts [] randoma = Alerts.values();
+    Alerts random_alert = randoma[int(random(randoma.length))];
+
+    hazardMonitor.w = random_weather;
+    hazardMonitor.alert = random_alert;
+
+    hazardMonitor.displayHazard();
+    println("Current weather :", random_weather);
+    println("Current alert :", random_alert);
   }
 
   if (key == 'w' || key == 'W') moveForward = true;

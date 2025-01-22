@@ -8,7 +8,8 @@ Compass compass;
 Info info;
 SignalDisplay signalDisplay;
 HazardMonitor hazardMonitor;
-float LcdRefresh = 400;
+// could cause race condition if too low but so far fine ?
+float LcdRefresh = 300;
 float lastLcdRefresh = 0;
 
 Atom atom;
@@ -269,10 +270,12 @@ void draw() {
     lastLcdRefresh = millis();
     if (hazardMonitor.interference) {
       hazardMonitor.noiseAmount = mouseX;
-      hazardMonitor.displayHazard(hazardMonitor.c);
-    } else if (hazardMonitor.c.getMessage() != hazardMonitor.forecast) {
+      hazardMonitor.displayHazard();
+    } else if (!hazardMonitor.forecast.equals(hazardMonitor.last_forecast) || hazardMonitor.last_interference != hazardMonitor.interference) {
       // synchronising thread with real state
-      hazardMonitor.displayHazard(hazardMonitor.c);
+      println("last forecast :", hazardMonitor.last_forecast);
+      println(" Current forecast :", hazardMonitor.forecast);
+      hazardMonitor.displayHazard();
     }
   }
   //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
