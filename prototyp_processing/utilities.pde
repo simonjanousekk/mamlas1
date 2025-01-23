@@ -181,9 +181,6 @@ void keyPressed() {
       r.findWallAnimation();
     }
   }
-  if (key == 'x') {
-    radio = !radio;
-  }
   if (key == 'l') {
     player.terrainSetting = (player.terrainSetting + 1) % terrainTypeCount;
   }

@@ -7,20 +7,25 @@ class SignalDisplay {
   PVector bandConstrain = new PVector(0.1, 0.6); // min max
   PVector ampConstrain = new PVector(30, screenSize / 2 - screen1Border); // min max
 
+  float interference = 0;
+  boolean sineGameSet = false;
+
 
   SignalDisplay() {
     //randomizeSineGame();
+    requestPotValues();
+
 
     sinePlayer = new SineWave(primary, primaryLight);
     sineGame = new SineWave(white, gray);
-
-    requestPotValues();
-    sineGame.amp = sinePlayer.amp;
-    sineGame.band = sinePlayer.band;
   }
 
   void update() {
-    //println(noise1, noise2);
+    if (!sineGameSet && sinePlayer.desAmp != 0 && sinePlayer.desBand != 0) { // this is fucking piss but i cannot solve for delay that arduino midi brings.
+      sineGame.desAmp = sinePlayer.desAmp;
+      sineGame.desBand = sinePlayer.desBand;
+      sineGameSet = true;
+    }
 
     sinePlayer.update();
     sineGame.update();
@@ -36,9 +41,16 @@ class SignalDisplay {
     if (isCloseEnough(pAmp, gAmp, ampTolerance) && isCloseEnough(pBand, gBand, bandTolerance)) {
       //sinePlayer.col = white;
       sinePlayer.isRight = true;
+      interference = 0;
     } else {
-      //sinePlayer.col = primary;
       sinePlayer.isRight = false;
+
+      // Calculate normalized difference
+      float ampDiff = max(0, abs(pAmp - gAmp) - ampTolerance) / (ampConstrain.y - ampConstrain.x);
+      float bandDiff = max(0, abs(pBand - gBand) - bandTolerance) / (bandConstrain.y - bandConstrain.x);
+
+      // Combine differences, capped at 1
+      interference = min(ampDiff + bandDiff, 1);
     }
   }
 
@@ -54,9 +66,6 @@ class SignalDisplay {
     fill(0);
     rectMode(CENTER);
     rect(0, 0, screenSize, screenSize);
-
-
-
 
 
     stroke(gray);

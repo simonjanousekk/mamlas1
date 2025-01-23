@@ -6,7 +6,7 @@ class Compass {
 
   int shortLineL = u;
   int longLineL = u * 2;
-  
+
   int sampleArrowSpace = u*2;
 
 
@@ -35,39 +35,12 @@ class Compass {
     }
   }
 
-  void display() {
+  void displayInside() {
     this.update();
     textAlign(CENTER, BOTTOM);
 
 
-    // circle with lines
-    push();
-    stroke(white);
-    noFill();
-    translate(screen2Center.x, screen2Center.y);
-    rotate( -player.angle);
-    strokeWeight(s_thick);
-    circle(0, 0, radius * 2);
-    int linesCount = 72;
-    String[] labels = {"N", "3", "6", "E", "12", "15", "S", "21", "24", "W", "30", "33"};
-    float angleInc = TWO_PI / linesCount;
-    for (int i = 0; i < linesCount; i++) {
-      float l = shortLineL;
-      if (i % 2 == 0) l = longLineL;
-      push();
-      rotate(angleInc * i);
-      translate(0, -radius);
 
-      line(0, 0, 0, -l);
-      if (i % (linesCount / labels.length) == 0) {
-        int index = floor(i / (linesCount / labels.length));
-        fill(255);
-        noStroke();
-        text(labels[index], -2, -l);
-      }
-      pop();
-    }
-    pop();
 
 
     push();
@@ -151,5 +124,36 @@ class Compass {
     //vertex( -shortLineL, -shortLineL * 2);
     //endShape(CLOSE);
     //pop();
+  }
+
+  void displayOutside() {
+    // circle with lines
+    push();
+    stroke(white);
+    noFill();
+    translate(screen2Center.x, screen2Center.y);
+    rotate( -player.angle);
+    strokeWeight(s_thick);
+    circle(0, 0, radius * 2);
+    int linesCount = 72;
+    String[] labels = {"N", "3", "6", "E", "12", "15", "S", "21", "24", "W", "30", "33"};
+    float angleInc = TWO_PI / linesCount;
+    for (int i = 0; i < linesCount; i++) {
+      float l = shortLineL;
+      if (i % 2 == 0) l = longLineL;
+      push();
+      rotate(angleInc * i);
+      translate(0, -radius);
+
+      line(0, 0, 0, -l);
+      if (i % (linesCount / labels.length) == 0) {
+        int index = floor(i / (linesCount / labels.length));
+        fill(255);
+        noStroke();
+        text(labels[index], -2, -l);
+      }
+      pop();
+    }
+    pop();
   }
 }

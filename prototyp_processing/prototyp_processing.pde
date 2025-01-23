@@ -41,7 +41,6 @@ int quadrantSize = 3 * u;
 
 final float treshold =.45;
 
-boolean radio = false;
 float noiseScale = 0.01;
 float noiseCompute = 0;
 float noise_t = 0;
@@ -77,6 +76,12 @@ boolean sampleIdentification = false;
 String midiDevice = "Arduino Micro"; // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
 
 s2s screen2State = s2s.GPS;
+
+void settings() {
+  System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
+  System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
+  System.setProperty("com.pi4j.logging.level", "ERROR");
+}
 
 void setup() {
   //fullScreen();
@@ -244,11 +249,14 @@ void draw() {
 
   signalDisplay.update();
   signalDisplay.display();
-  //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
-  if (radio) {
-    radio(map(mouseX, 0, width, 0, 1));
-  }
 
+  if (!sampleIdentification) {
+    compass.displayInside();
+  }
+  //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
+  if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
+    radio(signalDisplay.interference);
+  }
 
   // draw circular masks
   image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
@@ -268,7 +276,7 @@ void draw() {
   pop();
 
   if (!sampleIdentification) {
-    compass.display();
+    compass.displayOutside();
   }
 
   if (hazardMonitor != null && millis() - lastLcdRefresh > LcdRefresh) {
