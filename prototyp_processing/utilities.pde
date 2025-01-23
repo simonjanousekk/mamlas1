@@ -161,6 +161,14 @@ boolean isCloseEnough(float x, float y, float t) {
   return abs(x - y) <= t;
 }
 
+void restartGame() {
+  //if (mb != null) {
+  //  mb.stop();
+  //  //mb = null;
+  //}
+  setup();
+}
+
 
 
 
@@ -170,16 +178,11 @@ boolean moveForward, moveBackward, turnLeft, turnRight;
 
 void keyPressed() {
   if (key == 'r') { // restart
-    //if (minimapaWindow != null) {
-    //  minimapaWindow.close();
-    //}
-    setup();
+    restartGame();
   }
   
   if (key == ' ') {
-    for (Ray r : rays) {
-      r.findWallAnimation();
-    }
+    player.scan();
   }
   if (key == 'l') {
     player.terrainSetting = (player.terrainSetting + 1) % terrainTypeCount;

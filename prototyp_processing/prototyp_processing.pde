@@ -13,7 +13,6 @@ Atom atom;
 Storm storm;
 
 ArrayList<Wall> walls = new ArrayList<Wall>();
-ArrayList<Ray> rays = new ArrayList<Ray>();
 ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
 ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
@@ -39,7 +38,7 @@ int cellSize = 5 * u;
 int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
 
-final float treshold =.45;
+final float treshold = .45;
 
 float noiseScale = 0.01;
 float noiseCompute = 0;
@@ -50,8 +49,6 @@ int fakeFrameRate = 59;
 
 boolean infoDisplay = true;
 String[] terrainTypes = {"SOFT", "DENS", "FIRM", "HARD"};
-
-
 
 // could cause race condition if too low but so far fine ?
 float LcdRefresh = 300;
@@ -79,37 +76,38 @@ s2s screen2State = s2s.GPS;
 
 
 void setup() {
-  // this should disable warnings from pi4j (some of them at least) =^..^= 
+  // this should disable warnings from pi4j (some of them at least) =^..^=
   System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
   System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
   System.setProperty("com.pi4j.logging.level", "ERROR");
 
   //fullScreen();
   size(800, 480);
+
   noSmooth();
+  randomSeed(millis());
+  noiseSeed(millis());
+
+  walls.clear();
+  //player.rays.clear();
+  wmarkers.clear();
+  dcrosses.clear();
 
   screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
   screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
-
   screen2_cornerX = int(screen2Center.x - screenSize / 2);
   screen2_cornerY = int(screen2Center.y - screenSize / 2);
 
-  mbInit();
+  if (mb == null) {
+    mbInit();
+  }
 
   mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 18);
-  rayLength = int((screenSize / 2 - screen2Border) *.66);
+  rayLength = int((screenSize / 2 - screen2Border) * .66);
   textFont(mono);
-
-  walls.clear();
-  rays.clear();
-  wmarkers.clear();
-  dcrosses.clear();
-
-  randomSeed(millis());
-  noiseSeed(millis());
 
   gameState = new GameState();
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
@@ -121,20 +119,20 @@ void setup() {
   compass = new Compass(screenSize / 2 - screen2Border);
   signalDisplay = new SignalDisplay();
 
-  atom = new Atom();
 
+  atom = new Atom();
   storm = new Storm();
 
   try {
     hazardMonitor = new HazardMonitor();
   }
-  catch (Throwable t) {
+  catch(Throwable t) {
     println("LCD could not be created");
     hazardMonitor = null;
   }
 
   for (int i = 0; i < rayCount; i++) {
-    rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
+    player.rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
   }
 
   for (int x = 0; x < mapa.cols; x += quadrantSize) {
@@ -185,7 +183,7 @@ void draw() {
 
   sample.update();
 
-  for (Ray ray : rays) {
+  for (Ray ray : player.rays) {
     ray.update(player.pos, player.angle);
     ray.findShortestIntersection(relevantWalls);
   }
@@ -224,9 +222,6 @@ void draw() {
         for (Wall wall : relevantWalls) {
           wall.display();
         }
-        //for (Ray ray : rays) {
-        //  ray.display();
-        //}
       }
       sample.display();
       player.display();
@@ -247,7 +242,7 @@ void draw() {
   if (!sampleIdentification) { // draw only the things inside the mask
     compass.displayInside();
   }
-  
+
   if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
     radio(signalDisplay.interference);
   }
@@ -291,6 +286,6 @@ void draw() {
   if (infoDisplay) {
     info.display();
   }
-  
+
   displayFPS();
 }

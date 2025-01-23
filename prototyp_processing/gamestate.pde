@@ -3,7 +3,7 @@ class GameState {
 
   // TIME PHASES STUFF
   int dayPhaseIndex = 0;
-  int dayLength = 1000 * 60 * 2;
+  int dayLength = 1000 * 60 * 8;
   String[] dayPhases = {"DAWN", "MORNING", "NOON", "AFTERNOON", "DUSK", "EVENING", "MIDNIGHT", "NIGHT"};
   String dayPhase = dayPhases[dayPhaseIndex];
   int dayStart = 0;
@@ -55,15 +55,17 @@ class GameState {
     powerUsage = constrain(powerUsage, 0, 100);
   }
 
+
   int prevDayPhaseIndex = -1;
   void updateTimePhase() {
-    if (millis() > dayStart + dayLength) {
+    if (millis() >= dayStart + dayLength) {
       dayStart = millis();
     }
     dayTime = millis() - dayStart;
     dayPhaseIndex = (int) map(millis(), dayStart, dayStart+dayLength, 0, dayPhases.length);
     dayPhase = dayPhases[dayPhaseIndex];
 
+    // generates random temperature for current and next phase
     if (prevDayPhaseIndex != dayPhaseIndex) {
       int cR[] = outTemperaturePhases[dayPhaseIndex];
       int nR[] = outTemperaturePhases[(dayPhaseIndex + 1) % outTemperaturePhases.length];
@@ -76,7 +78,7 @@ class GameState {
   void updateTemperature() {
     float progressInPhase = map(dayTime % phaseLength, 0, phaseLength, 0, 1);
     progressInPhase = applyEasing(progressInPhase, "easeInOutCubic");
-    
+
     outTemperature = lerp(currentPhaseTemp, nextPhaseTemp, progressInPhase);
 
 
@@ -98,8 +100,9 @@ class GameState {
   void updatePowerUsage() {
     int pu = 0;
     if (player.onTerrain != player.terrainSetting && player.moving) pu += batteryDrain;
-    if (heating) pu += batteryDrain;
-    if (cooling) pu += batteryDrain;
+    if (heating) pu += batteryDrain*2;
+    if (cooling) pu += batteryDrain*2;
+    if (screen2State == s2s.GPS) pu += batteryDrain*3;
 
     powerUsage = pu;
     sendPowerUsage(powerUsage);

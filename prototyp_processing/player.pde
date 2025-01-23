@@ -23,12 +23,17 @@ class Player {
   int onTerrain;
   int terrainSetting = 0;
 
+  boolean scanning = false;
+  ArrayList<Ray> rays = new ArrayList<Ray>();
+
+
   Player(float x, float y, int d) {
     pos = new PVector(x, y);
     diameter = d;
     this.update();
     terrainSetting = onTerrain;
   }
+
   Player(PVector p, int d) {
     this(p.x, p.y, d);
   }
@@ -38,6 +43,15 @@ class Player {
     if (wall.collided) {
       resolveCollision(player.pos, player.diameter / 2, wall.pos1, wall.pos2);
       //println("debil naboural");
+    }
+  }
+
+  void scan() {
+    if (screen2State == s2s.RADAR) {
+      scanning = true;
+      for (Ray r : rays) {
+        r.findWallAnimation();
+      }
     }
   }
 
@@ -116,7 +130,7 @@ class Player {
     if (turnRight) angle += TWO_PI/360;
     if (moveForward) pos.add(cos(tmpa) * max_speed, sin(tmpa) * max_speed);
     if (moveBackward) pos.sub(cos(tmpa) * max_speed, sin(tmpa) * max_speed);
-    
+
     if (turnLeft || turnRight || moveForward || moveBackward || speed > 0) {
       moving = true;
     } else {

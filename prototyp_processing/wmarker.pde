@@ -6,7 +6,7 @@ class WMarker {
   boolean destroy = false;
   boolean finished = false;
   boolean isWall;
-  int animationL = 60;
+  int animationL = 40;
   int animationStart, animationEnd;
 
   color col = color(255, 255);

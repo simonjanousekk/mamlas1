@@ -66,11 +66,7 @@ void controllerChange(ControlChange change) {
       // --- SWITCHES ---
     } else if (control == 20) { // GPS / RADAR switch
       screen2State = value == 0 ? s2s.GPS : s2s.RADAR;
-      if (screen2State == s2s.RADAR) {
-        for (Ray r : rays) {
-          r.findWallAnimation();
-        }
-      }
+      player.scan();
     } else if (control == 21) { // REVERSE
     } else if (control == 22) { // HEATING
       if (value == 0) {
@@ -90,14 +86,12 @@ void controllerChange(ControlChange change) {
       }
 
       // --- BUTTONS ---
-    } else if (control == 10 && value == 0 && screen2State == s2s.RADAR) { // RADAR button
-      for (Ray r : rays) {
-        r.findWallAnimation();
-      }
+    } else if (control == 10 && value == 0) { // RADAR button
+      player.scan();
     } else if (control == 11 && value == 0) { // SAMPLE IDENTIFICATION button
       // confirm sample selection
     } else if (control == 12 && value == 0) { // RESTART button
-      setup();
+      restartGame();
     }
   }
 }
@@ -118,7 +112,6 @@ void turnOnLed(int index) {
 }
 
 void turnOffLed(int index) {
-
   mb.sendControllerChange(2, index, 0);
 }
 
