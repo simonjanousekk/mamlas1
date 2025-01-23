@@ -2,18 +2,18 @@ class GameState {
 
 
   // TIME PHASES STUFF
-  int phaseIndex = 0;
+  int dayPhaseIndex = 0;
   int dayLength = 1000 * 60 * 2;
-  String[] timePhases = {"DAWN", "MORNING", "NOON", "AFTERNOON", "DUSK", "EVENING", "MIDNIGHT", "NIGHT"};
-  String timePhase = timePhases[phaseIndex];
+  String[] dayPhases = {"DAWN", "MORNING", "NOON", "AFTERNOON", "DUSK", "EVENING", "MIDNIGHT", "NIGHT"};
+  String dayPhase = dayPhases[dayPhaseIndex];
   int dayStart = 0;
+  float phaseLength = dayLength / dayPhases.length;
 
   // TEMPERATURE STUFF
   int outTemperaturePhases[] = {-40, 40, 100, 20, -50, -100, -150, -80};
-  float temperature = outTemperaturePhases[phaseIndex];
-  //float temperatureChangeSpeed = .1;
-  float outTemperature = outTemperaturePhases[phaseIndex];
-  float outTemperatureChangeSpeed = .2;
+  //float temperature = outTemperaturePhases[phaseIndex];
+  float temperature = 0;
+  float outTemperature = outTemperaturePhases[dayPhaseIndex];
 
   boolean heating;
   boolean cooling;
@@ -34,7 +34,7 @@ class GameState {
   GameState() {
     //handle arduino stuff
     turnAllLedOff();
-    turnAllLedOn();
+    //turnAllLedOn();
 
 
 
@@ -60,25 +60,30 @@ class GameState {
     if (millis() > dayStart + dayLength) {
       dayStart = millis();
     }
-    phaseIndex = (int) map(millis(), dayStart, dayStart+dayLength, 0, timePhases.length);
-    timePhase = timePhases[phaseIndex];
+    dayPhaseIndex = (int) map(millis(), dayStart, dayStart+dayLength, 0, dayPhases.length);
+    dayPhase = dayPhases[dayPhaseIndex];
   }
 
   void updateTemperature() {
-    if (!isCloseEnough(outTemperature, outTemperaturePhases[phaseIndex], 2)) {
-      if (outTemperature > outTemperaturePhases[phaseIndex]) {
-        outTemperature -= outTemperatureChangeSpeed;
-      } else if (outTemperature < outTemperaturePhases[phaseIndex]) {
-        outTemperature += outTemperatureChangeSpeed;
-      }
-    }
-
-    float temperatureChange = map(outTemperature-temperature, 0, 100, 0, .2);
-    temperature += temperatureChange;
+    //if (!isCloseEnough(outTemperature, outTemperaturePhases[phaseIndex], 2)) {
+    //  if (outTemperature > outTemperaturePhases[phaseIndex]) {
+    //    outTemperature -= outTemperatureChangeSpeed;
+    //  } else if (outTemperature < outTemperaturePhases[phaseIndex]) {
+    //    outTemperature += outTemperatureChangeSpeed;
+    //  }
+    //}
     
+    float t = map(millis(), dayStart+phaseLength*dayPhaseIndex, dayStart+phaseLength*(dayPhaseIndex+1), 0, 1);
+    circle(screen2Center.x, screen2Center.y, t*100);
+
+
+
+    float temperatureChange = (outTemperature - temperature) * 0.005; // Proportional to the difference
+    temperature += temperatureChange;
+
     if (heating) temperature += heatingStrength;
     if (cooling) temperature -= coolingStrength;
-    
+
     //if (temperature > outTemperature) {
     //  temperature -= temperatureChangeSpeed;
     //} else if (temperature < outTemperature) {

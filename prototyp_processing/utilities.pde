@@ -202,7 +202,7 @@ void keyPressed() {
   }
 
   if (key == 'q') {
-    exit();
+    System.exit(0);
   }
   if (key == 'm') {
     sampleIdentification = !sampleIdentification;
