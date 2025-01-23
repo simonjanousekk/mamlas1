@@ -7,13 +7,14 @@ class GameState {
   String[] dayPhases = {"DAWN", "MORNING", "NOON", "AFTERNOON", "DUSK", "EVENING", "MIDNIGHT", "NIGHT"};
   String dayPhase = dayPhases[dayPhaseIndex];
   int dayStart = 0;
+  int dayTime = 0;
   float phaseLength = dayLength / dayPhases.length;
+  float currentPhaseTemp, nextPhaseTemp;
 
   // TEMPERATURE STUFF
-  int outTemperaturePhases[] = {-40, 40, 100, 20, -50, -100, -150, -80};
-  //float temperature = outTemperaturePhases[phaseIndex];
+  int outTemperaturePhases[][] = {{30, 60}, {80, 110}, {140, 160}, {70, 100}, {0, 40}, {-40, -80}, {-100, -120}, {-20, -70}};
   float temperature = 0;
-  float outTemperature = outTemperaturePhases[dayPhaseIndex];
+  float outTemperature = 0;
 
   boolean heating;
   boolean cooling;
@@ -23,7 +24,7 @@ class GameState {
 
   // POWER STUFF
   int powerUsage = 0;
-  float batteryDrain = 100/5;
+  float batteryDrain = 100/10;
   float battery = 100;
 
 
@@ -45,7 +46,6 @@ class GameState {
 
 
   void update() {
-
     updatePowerUsage();
     updateBattery();
     updateTimePhase();
@@ -55,27 +55,29 @@ class GameState {
     powerUsage = constrain(powerUsage, 0, 100);
   }
 
-
+  int prevDayPhaseIndex = -1;
   void updateTimePhase() {
     if (millis() > dayStart + dayLength) {
       dayStart = millis();
     }
+    dayTime = millis() - dayStart;
     dayPhaseIndex = (int) map(millis(), dayStart, dayStart+dayLength, 0, dayPhases.length);
     dayPhase = dayPhases[dayPhaseIndex];
+
+    if (prevDayPhaseIndex != dayPhaseIndex) {
+      int cR[] = outTemperaturePhases[dayPhaseIndex];
+      int nR[] = outTemperaturePhases[(dayPhaseIndex + 1) % outTemperaturePhases.length];
+      currentPhaseTemp = random(cR[0], cR[1]);
+      nextPhaseTemp = random(nR[0], nR[1]);
+      prevDayPhaseIndex = dayPhaseIndex;
+    }
   }
 
   void updateTemperature() {
-    //if (!isCloseEnough(outTemperature, outTemperaturePhases[phaseIndex], 2)) {
-    //  if (outTemperature > outTemperaturePhases[phaseIndex]) {
-    //    outTemperature -= outTemperatureChangeSpeed;
-    //  } else if (outTemperature < outTemperaturePhases[phaseIndex]) {
-    //    outTemperature += outTemperatureChangeSpeed;
-    //  }
-    //}
+    float progressInPhase = map(dayTime % phaseLength, 0, phaseLength, 0, 1);
+    progressInPhase = applyEasing(progressInPhase, "easeInOutCubic");
     
-    float t = map(millis(), dayStart+phaseLength*dayPhaseIndex, dayStart+phaseLength*(dayPhaseIndex+1), 0, 1);
-    circle(screen2Center.x, screen2Center.y, t*100);
-
+    outTemperature = lerp(currentPhaseTemp, nextPhaseTemp, progressInPhase);
 
 
     float temperatureChange = (outTemperature - temperature) * 0.005; // Proportional to the difference
@@ -109,14 +111,18 @@ class GameState {
   }
 }
 
-
+int lastTemperature = -1000;
 void sendTemperature(int t) {
-  int tens = abs(t / 100);
-  int units = abs(t % 100);
-  boolean isNegative = t < 0;
-  mb.sendControllerChange(1, 10, tens);
-  mb.sendControllerChange(1, 11, units);
-  mb.sendControllerChange(1, 12, int(isNegative));
+  if (lastTemperature != t) {
+    //println("sending temp: " + lastTemperature + " " + t);
+    int tens = abs(t / 100);
+    int units = abs(t % 100);
+    boolean isNegative = t < 0;
+    mb.sendControllerChange(1, 10, tens);
+    mb.sendControllerChange(1, 11, units);
+    mb.sendControllerChange(1, 12, int(isNegative));
+    lastTemperature = t;
+  }
 }
 
 int lastBatteryUnit = -1;

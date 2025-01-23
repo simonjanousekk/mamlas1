@@ -35,7 +35,7 @@ int minimapaSize = 500;
 int mapaSize = 500 * u;
 float terrainMapScale = 0.03;
 float wallNoiseScale = 0.05;
-int cellSize = 4 * u;
+int cellSize = 5 * u;
 int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
 
@@ -108,7 +108,7 @@ void setup() {
 
   gameState = new GameState();
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
-  player = new Player(randomPosOutsideWalls(), 3 * u);
+  player = new Player(randomPosOutsideWalls(), 4 * u);
   sample = new Sample(randomPosOutsideWalls());
   //minimapa = new Minimapa(minimapaSize);
   //minimapaWindow = new MinimapaWindow(this, minimapa);
@@ -242,13 +242,12 @@ void draw() {
   }
 
 
-
-
-
-
   signalDisplay.update();
   signalDisplay.display();
-
+  //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
+  if (radio) {
+    radio(map(mouseX, 0, width, 0, 1));
+  }
 
 
   // draw circular masks
@@ -284,10 +283,8 @@ void draw() {
       hazardMonitor.displayHazard();
     }
   }
-  //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
-  if (radio) {
-    radio(int(map(mouseX, 0, width, 0, 100)));
-  }
+
+
 
   if (infoDisplay) {
     info.display();

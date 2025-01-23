@@ -202,6 +202,7 @@ void keyPressed() {
   }
 
   if (key == 'q') {
+    turnAllLedOff();
     System.exit(0);
   }
   if (key == 'm') {
