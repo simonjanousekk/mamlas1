@@ -180,7 +180,7 @@ void keyPressed() {
   if (key == 'r') { // restart
     restartGame();
   }
-  
+
   if (key == ' ') {
     player.scan();
   }
@@ -206,6 +206,8 @@ void keyPressed() {
     System.exit(0);
   }
   if (key == 'm') {
+    atomAnl = new AtomAnalyzer();
+
     sampleIdentification = !sampleIdentification;
   }
   if (key == 'b') {
