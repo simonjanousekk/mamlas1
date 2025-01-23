@@ -77,13 +77,13 @@ String midiDevice = "Arduino Micro"; // needs a change on rPI, for macos its "Ar
 
 s2s screen2State = s2s.GPS;
 
-void settings() {
+
+void setup() {
+  // this should disable warnings from pi4j (some of them at least) =^..^= 
   System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
   System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
   System.setProperty("com.pi4j.logging.level", "ERROR");
-}
 
-void setup() {
   //fullScreen();
   size(800, 480);
   noSmooth();
@@ -154,11 +154,6 @@ void setup() {
 void draw() {
 
   gameState.update();
-
-  //push();
-  //colorMode(HSB, 255);
-  //primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
-  //pop();
 
   //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
 
@@ -246,14 +241,13 @@ void draw() {
     storm.display();
   }
 
-
   signalDisplay.update();
   signalDisplay.display();
 
-  if (!sampleIdentification) {
+  if (!sampleIdentification) { // draw only the things inside the mask
     compass.displayInside();
   }
-  //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
+  
   if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
     radio(signalDisplay.interference);
   }
@@ -275,7 +269,7 @@ void draw() {
   rect(screenSize + xgap, 0, screenGap, height);
   pop();
 
-  if (!sampleIdentification) {
+  if (!sampleIdentification) { // draw the ouside compass
     compass.displayOutside();
   }
 
@@ -297,5 +291,6 @@ void draw() {
   if (infoDisplay) {
     info.display();
   }
+  
   displayFPS();
 }
