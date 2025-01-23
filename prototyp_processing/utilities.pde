@@ -175,7 +175,7 @@ void keyPressed() {
     //}
     setup();
   }
-  
+
   if (key == ' ') {
     for (Ray r : rays) {
       r.findWallAnimation();
@@ -203,6 +203,8 @@ void keyPressed() {
     System.exit(0);
   }
   if (key == 'm') {
+    atomAnl = new AtomAnalyzer();
+
     sampleIdentification = !sampleIdentification;
   }
   if (key == 'b') {

@@ -10,7 +10,9 @@ SignalDisplay signalDisplay;
 HazardMonitor hazardMonitor;
 
 Atom atom;
+AtomAnalyzer atomAnl;
 Storm storm;
+Element [] elements = new Element[6];
 
 ArrayList<Wall> walls = new ArrayList<Wall>();
 ArrayList<Ray> rays = new ArrayList<Ray>();
@@ -66,6 +68,9 @@ int screen1Border = u * 10;
 
 
 PImage screen1Mask, screen2Mask;
+
+PImage biohazard;
+
 int screen2_cornerX, screen2_cornerY;
 enum s2s {
   GPS, RADAR
@@ -99,6 +104,7 @@ void setup() {
   mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
+  biohazard = loadImage("radioactive_8bit.png");
   mono = createFont("OCR-A.ttf", 18);
   rayLength = int((screenSize / 2 - screen2Border) *.66);
   textFont(mono);
@@ -122,7 +128,12 @@ void setup() {
   signalDisplay = new SignalDisplay();
 
   atom = new Atom();
-
+  elements[0] = new Element("Li", 1, false);
+  elements[1] = new Element("Fe", 2, false);
+  elements[2] = new Element("Au", 3, false);
+  elements[3] = new Element("T", 1, true);
+  elements[4] = new Element("Po", 2, true);
+  elements[5] = new Element("U", 3, true);
   storm = new Storm();
 
   try {
@@ -206,6 +217,18 @@ void draw() {
       translate(screen2Center.x, screen2Center.y);
       atom.display();
       pop();
+
+      push();
+      translate(screen1Center.x, screen1Center.y);
+      //rectMode(CENTER);
+      //noFill();
+      //stroke(255,0,0);
+      //rect(0, 0, 200, 20);
+
+      //rectMode(CORNER);
+      //rect(-screen1Center.x + 200/2, -10, 200, 10);
+      atomAnl.display();
+      pop();
     } else {
       push();
       translate(screen2Center.x, screen2Center.y);
@@ -241,8 +264,11 @@ void draw() {
     storm.display();
   }
 
-  signalDisplay.update();
-  signalDisplay.display();
+// maybe to verify if its ok
+  if (!sampleIdentification) {
+    signalDisplay.update();
+    signalDisplay.display();
+  }
 
   if (!sampleIdentification) { // draw only the things inside the mask
     compass.displayInside();
