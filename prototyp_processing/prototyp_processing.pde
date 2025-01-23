@@ -8,14 +8,19 @@ Compass compass;
 Info info;
 SignalDisplay signalDisplay;
 HazardMonitor hazardMonitor;
-// could cause race condition if too low but so far fine ?
-float LcdRefresh = 300;
-float lastLcdRefresh = 0;
 
 Atom atom;
 AtomAnalyzer atomAnl;
 Storm storm;
 Element [] elements = new Element[6];
+
+ArrayList<Wall> walls = new ArrayList<Wall>();
+ArrayList<Ray> rays = new ArrayList<Ray>();
+ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
+ArrayList<DCross> dcrosses = new ArrayList<DCross>();
+
+PImage mask;
+PFont mono;
 
 int rayCount = 36;
 int rayLength;
@@ -32,13 +37,12 @@ int minimapaSize = 500;
 int mapaSize = 500 * u;
 float terrainMapScale = 0.03;
 float wallNoiseScale = 0.05;
-int cellSize = 4 * u;
+int cellSize = 5 * u;
 int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
 
 final float treshold =.45;
 
-boolean radio = false;
 float noiseScale = 0.01;
 float noiseCompute = 0;
 float noise_t = 0;
@@ -46,16 +50,14 @@ int noise_s = 10;
 
 int fakeFrameRate = 59;
 
-boolean infoDisplay = false;
+boolean infoDisplay = true;
 String[] terrainTypes = {"SOFT", "DENS", "FIRM", "HARD"};
 
-PImage mask;
-PFont mono;
 
-ArrayList<Wall> walls = new ArrayList<Wall>();
-ArrayList<Ray> rays = new ArrayList<Ray>();
-ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
-ArrayList<DCross> dcrosses = new ArrayList<DCross>();
+
+// could cause race condition if too low but so far fine ?
+float LcdRefresh = 300;
+float lastLcdRefresh = 0;
 
 int screenSize = 360;
 int screenHalf = 180;
@@ -63,6 +65,8 @@ int screenGap = 36;
 PVector screen1Center, screen2Center;
 int screen2Border = u * 5;
 int screen1Border = u * 10;
+
+
 PImage screen1Mask, screen2Mask;
 
 PImage biohazard;
@@ -78,7 +82,13 @@ String midiDevice = "Arduino Micro"; // needs a change on rPI, for macos its "Ar
 
 s2s screen2State = s2s.GPS;
 
+
 void setup() {
+  // this should disable warnings from pi4j (some of them at least) =^..^= 
+  System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
+  System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
+  System.setProperty("com.pi4j.logging.level", "ERROR");
+
   //fullScreen();
   size(800, 480);
   noSmooth();
@@ -88,6 +98,7 @@ void setup() {
 
   screen2_cornerX = int(screen2Center.x - screenSize / 2);
   screen2_cornerY = int(screen2Center.y - screenSize / 2);
+
   mbInit();
 
   mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
@@ -108,7 +119,7 @@ void setup() {
 
   gameState = new GameState();
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
-  player = new Player(randomPosOutsideWalls(), 3 * u);
+  player = new Player(randomPosOutsideWalls(), 4 * u);
   sample = new Sample(randomPosOutsideWalls());
   //minimapa = new Minimapa(minimapaSize);
   //minimapaWindow = new MinimapaWindow(this, minimapa);
@@ -154,11 +165,6 @@ void setup() {
 void draw() {
 
   gameState.update();
-
-  //push();
-  //colorMode(HSB, 255);
-  //primary = color(map(frameCount%120, 0, 120, 0, 255), 255, 255);
-  //pop();
 
   //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
 
@@ -258,16 +264,19 @@ void draw() {
     storm.display();
   }
 
-
-
-
-
+// maybe to verify if its ok
   if (!sampleIdentification) {
     signalDisplay.update();
     signalDisplay.display();
   }
 
-
+  if (!sampleIdentification) { // draw only the things inside the mask
+    compass.displayInside();
+  }
+  
+  if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
+    radio(signalDisplay.interference);
+  }
 
   // draw circular masks
   image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
@@ -286,8 +295,8 @@ void draw() {
   rect(screenSize + xgap, 0, screenGap, height);
   pop();
 
-  if (!sampleIdentification) {
-    compass.display();
+  if (!sampleIdentification) { // draw the ouside compass
+    compass.displayOutside();
   }
 
   if (hazardMonitor != null && millis() - lastLcdRefresh > LcdRefresh) {
@@ -302,13 +311,12 @@ void draw() {
       hazardMonitor.displayHazard();
     }
   }
-  //this has to be called last since it is using graphics pixels, so we need to have already drawn everything
-  if (radio) {
-    radio(mouseX);
-  }
+
+
 
   if (infoDisplay) {
     info.display();
-    displayFPS();
   }
+  
+  displayFPS();
 }

@@ -34,7 +34,10 @@ Potenciometer slider1(A2, 5);
 Switch button1(A5, 10);  // pin, CC
 Switch button2(15, 11);
 
-Switch switch1(14, 20);
+Switch switch1(8, 20);
+Switch switch2(9, 21);
+Switch switch3(10, 22);
+Switch switch4(14, 23);
 
 // ----
 // OUTPUTS
@@ -77,6 +80,10 @@ void loop() {
   button2.update();
 
   switch1.update();
+  switch2.update();
+  switch3.update();
+  switch4.update();
+
 
 
   for (int i = 0; i < numLeds; i++) {
@@ -123,6 +130,9 @@ void handleIncomingMidi(midiEventPacket_t rx) {
       // slider2.sendData();
 
       switch1.sendData();
+      switch2.sendData();
+      switch3.sendData();
+      switch4.sendData();
     } else if (control == 10) {  // SEVEN SEGMENT DISPLAY DATA
       tempTens = value;
       updateDisplayValues(tempTens, tempOnes, isNegative);

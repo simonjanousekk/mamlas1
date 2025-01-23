@@ -10,7 +10,7 @@ class Player {
   float speed, rotationSpeed;
 
   int turn = 0;
-
+  boolean moving = false;
 
   PVector pos;
   float angle = random(TWO_PI);
@@ -116,6 +116,12 @@ class Player {
     if (turnRight) angle += TWO_PI/360;
     if (moveForward) pos.add(cos(tmpa) * max_speed, sin(tmpa) * max_speed);
     if (moveBackward) pos.sub(cos(tmpa) * max_speed, sin(tmpa) * max_speed);
+    
+    if (turnLeft || turnRight || moveForward || moveBackward || speed > 0) {
+      moving = true;
+    } else {
+      moving = false;
+    }
 
 
     pos.add(cos(tmpa) * speed, sin(tmpa) * speed);

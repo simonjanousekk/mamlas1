@@ -97,20 +97,6 @@ void updateDisplayValues(int tens, int ones, bool negative) {
 }
 
 
-
-
-
-
-// Function to update the shift register with the buffer
-void updateShiftRegister() {
-  digitalWrite(LATCH_PIN, LOW);
-  for (int i = 6; i >= 0; i--) {  // Send all 7 bytes
-    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, shiftRegisterBuffer[i]);
-  }
-  digitalWrite(LATCH_PIN, HIGH);
-}
-
-
 void setupTimerInterrupt(uint32_t frequency, uint32_t prescaler) {
   // Lower the target frequency to slow down multiplexing (e.g., 50 Hz)
   uint32_t timerPeriod = F_CPU / (prescaler * frequency) - 1;  // F_CPU is 16MHz
@@ -145,7 +131,14 @@ ISR(TIMER1_COMPA_vect) {
   shiftRegisterBuffer[4] = digit[currentDigit];  // Activate current digit
 
   // Update shift registers with the new buffer
-  updateShiftRegister();
+  // updateShiftRegister();
+
+
+  digitalWrite(LATCH_PIN, LOW);
+  for (int i = 6; i >= 0; i--) {  // Send all 7 bytes
+    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, shiftRegisterBuffer[i]);
+  }
+  digitalWrite(LATCH_PIN, HIGH);
 }
 
 
@@ -158,6 +151,5 @@ void SR_init() {
 
   setupTimerInterrupt(targetFrequency, timerPrescaler);
 
-  updateBuffer();
-  updateShiftRegister();
+  // updateShiftRegister();
 }
