@@ -75,7 +75,7 @@ boolean sampleIdentification = false;
 boolean gameInitialized = false;
 
 // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
-String midiDevice = "Micro [hw:2,0,0]"; 
+String midiDevice = "Micro [hw:2,0,0]";
 
 
 
@@ -163,7 +163,7 @@ void setup() {
 }
 
 void draw() {
-  
+
   screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
   screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
   screen1Center.y += screenYOffset;
@@ -285,17 +285,17 @@ void draw() {
   image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
 
   // hide empty parts of the screen, might be deleted for production
-  push();
-  fill(0);
-  noStroke();
-  float xgap = (width - screenGap - screenSize * 2) / 2;
-  float ygap = (height - screenSize) / 2;
-  rect(0, 0, width, ygap);
-  rect(width, height, -width, -ygap);
-  rect(0, 0, xgap, height);
-  rect(width, height, -xgap, -height);
-  rect(screenSize + xgap, 0, screenGap, height);
-  pop();
+  //push();
+  //fill(0);
+  //noStroke();
+  //float xgap = (width - screenGap - screenSize * 2) / 2;
+  //float ygap = (height - screenSize) / 2;
+  //rect(0, 0, width, ygap);
+  //rect(width, height, -width, -ygap);
+  //rect(0, 0, xgap, height);
+  //rect(width, height, -xgap, -height);
+  //rect(screenSize + xgap, 0, screenGap, height);
+  //pop();
 
   if (!sampleIdentification) { // draw the ouside compass
     compass.displayOutside();
