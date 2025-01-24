@@ -1,5 +1,5 @@
-float r_width = screenSize / 1.5;
-float r_height = u * 2;
+import java.util.Arrays;
+import java.util.List;
 
 
 class Atom {
@@ -120,6 +120,8 @@ PImage biohazard;
 
 class AtomAnalyzer {
   //loading bar params
+  float r_width = screenSize / 1.5;
+  float r_height = u * 2;
   float acc = 0;
   float progress = 0;
   float loading_w = 250;
@@ -150,6 +152,15 @@ class AtomAnalyzer {
   AtomAnalyzer() {
     biohazard = loadImage("radioactive_8bit.png");
     e = elements[int(random(elements.length))];
+    while (Arrays.asList(elements_mem).contains(e.name)) {
+      e = elements[int(random(elements.length))];
+    }
+
+    // Adding e to memory
+    mem_index = ((mem_index < 3) ? mem_index : 0);
+    elements_mem[mem_index] = e.name;
+    mem_index++;
+
     println("The current element is.. ", e.name);
     countDown = 0;
     ledDriver.turnOn();
