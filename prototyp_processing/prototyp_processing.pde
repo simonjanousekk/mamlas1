@@ -12,7 +12,7 @@ HazardMonitor hazardMonitor;
 Atom atom;
 AtomAnalyzer atomAnl;
 Storm storm;
-Element [] elements = new Element[6];
+Element[] elements = new Element[6];
 
 ArrayList<Wall> walls = new ArrayList<Wall>();
 ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
@@ -42,11 +42,6 @@ int quadrantSize = 3 * u;
 
 final float treshold = .45;
 
-float noiseScale = 0.01;
-float noiseCompute = 0;
-float noise_t = 0;
-int noise_s = 10;
-
 int fakeFrameRate = 59;
 
 boolean infoDisplay = true;
@@ -66,18 +61,19 @@ int screen1Border = u * 10;
 
 PImage screen1Mask, screen2Mask;
 
-PImage biohazard;
-
-int screen2_cornerX, screen2_cornerY;
+int screen2CornerX, screen2CornerY;
 enum s2s {
   GPS, RADAR
 }
+
+s2s screen2State = s2s.GPS;
+Load load;
 boolean sampleIdentification = false;
+boolean gameInitialized = false;
 
 
 String midiDevice = "Arduino Micro"; // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
 
-s2s screen2State = s2s.GPS;
 
 
 void setup() {
@@ -100,17 +96,17 @@ void setup() {
 
   screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
   screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
-  screen2_cornerX = int(screen2Center.x - screenSize / 2);
-  screen2_cornerY = int(screen2Center.y - screenSize / 2);
+  screen2CornerX = int(screen2Center.x - screenSize / 2);
+  screen2CornerY = int(screen2Center.y - screenSize / 2);
 
   if (mb == null) {
     mbInit();
   }
 
-  mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
+  load = new Load();
+  mask = loadImage("mask_debug.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
-  biohazard = loadImage("radioactive_8bit.png");
   mono = createFont("OCR-A.ttf", 18);
   rayLength = int((screenSize / 2 - screen2Border) * .66);
   textFont(mono);
@@ -124,6 +120,7 @@ void setup() {
   info = new Info(new PVector(10, 10));
   compass = new Compass(screenSize / 2 - screen2Border);
   signalDisplay = new SignalDisplay();
+
 
   atom = new Atom();
   elements[0] = new Element("Li", 1, false);
@@ -158,6 +155,8 @@ void setup() {
 
   surface.setVisible(false);
   surface.setVisible(true);
+  
+  gameInitialized = true;
 }
 
 void draw() {
@@ -218,13 +217,6 @@ void draw() {
 
       push();
       translate(screen1Center.x, screen1Center.y);
-      //rectMode(CENTER);
-      //noFill();
-      //stroke(255,0,0);
-      //rect(0, 0, 200, 20);
-
-      //rectMode(CORNER);
-      //rect(-screen1Center.x + 200/2, -10, 200, 10);
       atomAnl.display();
       pop();
     } else {
@@ -259,7 +251,7 @@ void draw() {
     storm.display();
   }
 
-// maybe to verify if its ok
+  // maybe to verify if its ok
   if (!sampleIdentification) {
     signalDisplay.update();
     signalDisplay.display();
@@ -271,6 +263,11 @@ void draw() {
 
   if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
     radio(signalDisplay.interference);
+  }
+
+  if (load.loading) {
+    load.display();
+    load.update();
   }
 
   // draw circular masks

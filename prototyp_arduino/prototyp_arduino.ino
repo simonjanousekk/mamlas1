@@ -28,7 +28,7 @@ Potenciometer pot1(A0, 3);  // pin, CC
 Potenciometer pot2(A1, 4);
 
 Potenciometer slider1(A2, 5);
-// Potenciometer slider2(A3, 6);
+Potenciometer slider2(A3, 6);
 
 // BUTTONS
 Switch button1(A5, 10);  // pin, CC
@@ -72,6 +72,7 @@ void loop() {
   pot1.update();
   pot2.update();
   slider1.update();
+  slider2.update();
 
   rotEnc1.update();
   rotEnc2.update();
@@ -88,6 +89,11 @@ void loop() {
 
   for (int i = 0; i < numLeds; i++) {
     leds[i].update();
+  }
+
+  if (updateShiftRegistersFlag) {
+    updateShiftRegister();
+    updateShiftRegistersFlag = false;
   }
 
 
@@ -127,7 +133,7 @@ void handleIncomingMidi(midiEventPacket_t rx) {
       pot1.sendData();
       pot2.sendData();
       slider1.sendData();
-      // slider2.sendData();
+      slider2.sendData();
 
       switch1.sendData();
       switch2.sendData();

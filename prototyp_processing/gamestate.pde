@@ -29,9 +29,6 @@ class GameState {
 
 
 
-
-
-
   GameState() {
     //handle arduino stuff
     turnAllLedOff();
@@ -87,13 +84,7 @@ class GameState {
 
     if (heating) temperature += heatingStrength;
     if (cooling) temperature -= coolingStrength;
-
-    //if (temperature > outTemperature) {
-    //  temperature -= temperatureChangeSpeed;
-    //} else if (temperature < outTemperature) {
-    //  temperature += temperatureChangeSpeed;
-    //}
-
+    
     sendTemperature(int(temperature));
   }
 
@@ -103,13 +94,21 @@ class GameState {
     if (heating) pu += batteryDrain*2;
     if (cooling) pu += batteryDrain*2;
     if (screen2State == s2s.GPS) pu += batteryDrain*3;
+    if (player.speed>0) { // player moving
+      float s = map(player.speed, 0, player.max_speed, 0, 2); // speed drain
+      pu += batteryDrain*s;
+      float t = abs(player.onTerrain - player.terrainSetting);
+      println(t);
+      pu += batteryDrain*t;
+    }
+    if (player.scanning) pu += batteryDrain*1;
 
     powerUsage = pu;
     sendPowerUsage(powerUsage);
   }
 
   void updateBattery() {
-    battery -= map(powerUsage, 0, 100, 0, 0.1);
+    battery -= map(powerUsage, 0, 100, 0, 0.01);
     sendBattery(battery);
   }
 }

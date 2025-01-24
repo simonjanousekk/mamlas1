@@ -180,15 +180,8 @@ void keyPressed() {
   if (key == 'r') { // restart
     restartGame();
   }
-
   if (key == ' ') {
     player.scan();
-  }
-  if (key == 'l') {
-    player.terrainSetting = (player.terrainSetting + 1) % terrainTypeCount;
-  }
-  if (key == 'k') {
-    player.terrainSetting = (player.terrainSetting - 1 + terrainTypeCount) % terrainTypeCount;
   }
   if (key == 'i') {
     infoDisplay = !infoDisplay;
@@ -211,7 +204,6 @@ void keyPressed() {
     sampleIdentification = !sampleIdentification;
   }
   if (key == 'b') {
-
     hazardMonitor.interference = (random(2) < 1) ? true : false ;
     Weather [] randomw = Weather.values();
     Weather random_weather = randomw[int(random(randomw.length))];

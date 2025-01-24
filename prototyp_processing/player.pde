@@ -47,7 +47,7 @@ class Player {
   }
 
   void scan() {
-    if (screen2State == s2s.RADAR) {
+    if (screen2State == s2s.RADAR && !scanning) {
       scanning = true;
       for (Ray r : rays) {
         r.findWallAnimation();
@@ -113,11 +113,27 @@ class Player {
     int xi = int(pos.x / cellSize);
     int yi = int(pos.y / cellSize);
     onTerrain = mapa.grid[xi][yi].terrain;
+    
+    if (scanning) { // check if all wmarkers are resolved == scanning ended
+      boolean b = true;
+      for (WMarker wm : wmarkers) {
+        if (!wm.finished) {
+          b = false;
+        }
+      }
+      if (b) {
+        scanning = false;
+      }
+    }
   }
 
   void setDesiredVelocity(int v) {
     speed = map(v, 1, 126, 0, max_speed);
     speed = constrain(speed, 0, max_speed);
+  }
+
+  void setSuspension(int v) {
+    terrainSetting = int(map(v, 0, 127, 0, 4));
   }
 
   void handleInput() {

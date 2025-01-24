@@ -1,7 +1,9 @@
 #define DATA_PIN 6   // SER = DATA PIN
 #define LATCH_PIN 5  // RCLK = LATCH PIN
 #define CLOCK_PIN 4  // SRCLK = SHIFT CLOCK PIN
+volatile bool updateShiftRegistersFlag = false;
 uint8_t shiftRegisterBuffer[7] = { 0 };
+uint8_t displayBuffer[7] = { 0 };
 // uint8_t shiftRegisterBuffer[7] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 const uint8_t number[] = {
@@ -57,22 +59,11 @@ void setMultiBit(uint8_t startIndex, uint8_t numBits, uint16_t value) {
 }
 
 void toggleSingleBit(uint8_t bitIndex) {
-  uint8_t byteIndex = bitIndex / 8;    // Determine the byte index
-  uint8_t bitPosition = bitIndex % 8;  // Determine the bit position within the byte
-  shiftRegisterBuffer[byteIndex] ^= (1 << bitPosition); // Toggle the bit
+  uint8_t byteIndex = bitIndex / 8;                      // Determine the byte index
+  uint8_t bitPosition = bitIndex % 8;                    // Determine the bit position within the byte
+  shiftRegisterBuffer[byteIndex] ^= (1 << bitPosition);  // Toggle the bit
 }
 
-
-
-// Function to update the buffer with current data
-void updateBuffer() {
-  // Update bargraph data (first two bytes)
-  // shiftRegisterBuffer[0] = 0b10100111;
-  // shiftRegisterBuffer[1] = 0b11010011;
-  // shiftRegisterBuffer[2] = 0b10110111;
-
-  // 7-Segment display data will be handled by the ISR (last two bytes)
-}
 
 
 void updateDisplayValues(int tens, int ones, bool negative) {
@@ -94,6 +85,22 @@ void updateDisplayValues(int tens, int ones, bool negative) {
     displayValues[3] = ones;
     displayValues[2] = negative ? 11 : 10;
   }
+}
+
+
+
+
+
+
+// Function to update the shift register with the buffer
+void updateShiftRegister() {
+  memcpy(displayBuffer, shiftRegisterBuffer, 7);
+
+  digitalWrite(LATCH_PIN, LOW);
+  for (int i = 6; i >= 0; i--) {  // Send all 7 bytes
+    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, displayBuffer[i]);
+  }
+  digitalWrite(LATCH_PIN, HIGH);
 }
 
 
@@ -127,18 +134,11 @@ ISR(TIMER1_COMPA_vect) {
 
   // Update the buffer for the current digit
   shiftRegisterBuffer[3] = number[displayValues[currentDigit]];  // Set segment data
-
-  shiftRegisterBuffer[4] = digit[currentDigit];  // Activate current digit
+  shiftRegisterBuffer[4] = digit[currentDigit];                  // Activate current digit
 
   // Update shift registers with the new buffer
   // updateShiftRegister();
-
-
-  digitalWrite(LATCH_PIN, LOW);
-  for (int i = 6; i >= 0; i--) {  // Send all 7 bytes
-    shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, shiftRegisterBuffer[i]);
-  }
-  digitalWrite(LATCH_PIN, HIGH);
+  updateShiftRegistersFlag = true;
 }
 
 
@@ -151,5 +151,6 @@ void SR_init() {
 
   setupTimerInterrupt(targetFrequency, timerPrescaler);
 
-  // updateShiftRegister();
+  // updateBuffer();
+  updateShiftRegister();
 }
