@@ -10,8 +10,6 @@ class Load {
   int duration = 120;
   int start = -1;
 
-
-
   Load() {
     frames = new PImage[framesCount];
     for (int i = 0; i < framesCount; i++) {

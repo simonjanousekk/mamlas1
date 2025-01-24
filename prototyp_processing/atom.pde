@@ -130,6 +130,7 @@ class AtomAnalyzer {
   float table_h = 160;
   float corps_y = 20;
 <<<<<<< HEAD
+<<<<<<< HEAD
   float padding = 10;
   float padding_s = 5;
 
@@ -137,12 +138,17 @@ class AtomAnalyzer {
 
   // picker
 =======
+=======
+>>>>>>> 0b17324f685d1e8bfef1c9db93c062fa1b428fb6
 
   float padding = u*2;
   float padding_s = u;
   Element e;
 
+<<<<<<< HEAD
 >>>>>>> 8dc23330cf6ce98e017e80b0bec60c6351534d57
+=======
+>>>>>>> 0b17324f685d1e8bfef1c9db93c062fa1b428fb6
   int cursorPlayer = 2;
   float highlight_y = 0;
   float highlight_h = 0;
