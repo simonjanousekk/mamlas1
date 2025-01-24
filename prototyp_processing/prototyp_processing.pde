@@ -57,6 +57,7 @@ int screenGap = 36;
 PVector screen1Center, screen2Center;
 int screen2Border = u * 5;
 int screen1Border = u * 10;
+int screenYOffset = 0;
 
 
 PImage screen1Mask, screen2Mask;
@@ -155,11 +156,18 @@ void setup() {
 
   surface.setVisible(false);
   surface.setVisible(true);
-  
+
   gameInitialized = true;
 }
 
 void draw() {
+  
+  screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
+  screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
+  screen1Center.y += screenYOffset;
+  screen2Center.y += screenYOffset;
+  screen2CornerX = int(screen2Center.x - screenSize / 2);
+  screen2CornerY = int(screen2Center.y - screenSize / 2);
 
   gameState.update();
 
@@ -311,4 +319,9 @@ void draw() {
   }
 
   displayFPS();
+
+  push();
+  textSize(32);
+  text(screenYOffset, screen2Center.x, screen2Center.y);
+  pop();
 }

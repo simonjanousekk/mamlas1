@@ -19,10 +19,10 @@ class Info {
     int s = player.terrainSetting;
     int p = player.onTerrain;
     text("terr: s" + s + "/p" + p + "/d" + player.terrainDifference, pos.x, pos.y + 60);
-    text("vel: " + player.speed + "mult: " + player.speedMultiplier, pos.x, pos.y + 75);
-    text("phase: " + gameState.dayPhase, pos.x, pos.y + 90);
+    text("vel: " + nf(player.speed, 0, 2) + " mult: " + nf(player.speedMultiplier, 0, 2), pos.x, pos.y + 75);
+    text("phase: " + gameState.dayPhase + " time: " + gameState.dayTime, pos.x, pos.y + 90);
     text("temp: " + int(gameState.temperature) + " outTemp: " + int(gameState.outTemperature), pos.x, pos.y + 105);
-    text("heat: " + gameState.heating + " cool: " + gameState.cooling, pos.x, pos.y + 120);
+    text("cool: " + gameState.cooling + " heat: " + gameState.heating, pos.x, pos.y + 120);
 
     pop();
   }

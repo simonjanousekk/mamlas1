@@ -177,7 +177,7 @@ void restartGame() {
 boolean moveForward, moveBackward, turnLeft, turnRight;
 
 void keyPressed() {
-  if(atomAnl != null && sampleIdentification) {
+  if (atomAnl != null && sampleIdentification) {
     atomAnl.handleKey();
   }
   if (key == 'r') { // restart
@@ -220,6 +220,19 @@ void keyPressed() {
     hazardMonitor.displayHazard();
     println("Current weather :", random_weather);
     println("Current alert :", random_alert);
+  }
+
+  if (key == 't') {
+    screenYOffset += 10;
+  }
+  if (key == 'g') {
+    screenYOffset -= 10;
+  }
+  if (key == 'z') {
+    screenYOffset++;
+  }
+  if (key == 'h') {
+    screenYOffset--;
   }
 
   if (key == 'w' || key == 'W') moveForward = true;

@@ -20,8 +20,8 @@
 // ----
 
 // ENCODERS
-RotEncoder rotEnc1(0, 1, 1);  // pin1, pin2, CC
-RotEncoder rotEnc2(2, 3, 2);
+RotEncoder rotEnc1(0, 1, 2);  // pin1, pin2, CC
+RotEncoder rotEnc2(2, 3, 1);
 
 // POTENCIOMETERS
 Potenciometer pot1(A0, 3);  // pin, CC
@@ -32,12 +32,13 @@ Potenciometer slider2(A3, 6);
 
 // BUTTONS
 Switch button1(A5, 10);  // pin, CC
-Switch button2(15, 11);
+Switch button2(A4, 11);
+Switch button3(15, 12);
 
-Switch switch1(8, 20);
+Switch switch1(8, 22);
 Switch switch2(9, 21);
-Switch switch3(10, 22);
-Switch switch4(14, 23);
+Switch switch3(10, 23);
+Switch switch4(14, 20);
 
 // ----
 // OUTPUTS
@@ -79,6 +80,7 @@ void loop() {
 
   button1.update();
   button2.update();
+  button3.update();
 
   switch1.update();
   switch2.update();

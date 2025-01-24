@@ -31,7 +31,7 @@ class Load {
 
   void display() {
     fill(0);
-    rect(screen2CornerX+screen2Border, screen2CornerY+screen2Border-10, screenSize-screen2Border*2, screenSize-screen2Border*2);
+    rect(screen2CornerX+screen2Border, screen2CornerY+screen2Border, screenSize-screen2Border*2, screenSize-screen2Border*2);
     image(frames[frameIndex], screen2CornerX+screen2Border, screen2CornerY+screen2Border, screenSize-screen2Border*2, screenSize-screen2Border*2);
     if (frameCount % 2 == 0) {
       frameIndex = (frameIndex + 1) % frames.length;
