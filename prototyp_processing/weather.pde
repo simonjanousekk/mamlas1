@@ -103,12 +103,14 @@ class HazardMonitor {
     lcd.clearDisplay();
     displayHazard();
   }
+  
   void updateHazard() {
     // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
     if (alert == Alerts.NONE) {
-      padParam("Wind speed:", windSpeed);
-      padParam("Surface temp:", temp);
-      forecast = String.join("\n", d.getMessage(), w.getMessage());
+      println("DEBUG: Calling padParam function.");
+      String windLine = padParam("Wind speed:", windSpeed);
+      String tempLine = padParam("Surface temp:", temp);
+      forecast = String.join("\n", d.getMessage(), w.getMessage(), windLine, tempLine);
     } else {
       forecast = alert.getMessage();
     }
@@ -180,20 +182,21 @@ class HazardMonitor {
   }
 
   String padParam(String param, float value) {
-
+    println("DEBUG - inside padParam function");
     // max. length total should be 20
     int total_length = param.length() + String.valueOf(value).length();
 
     if (total_length > 20) {
       // shouldnt happen. Here for debugging
       println("error for: ", param, " and value: ", value);
-      return "abc";
+      return "";
     } else {
       int spaces = 20 - total_length;
       for (int i = 0; i < spaces; i++) {
         param+=" ";
       }
       String padded_param = param + String.valueOf(value);
+      println("DEBUG - returning the following padded parameters.");
       return padded_param;
     }
   }
