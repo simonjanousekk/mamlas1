@@ -59,7 +59,7 @@ int screenGap = 36;
 PVector screen1Center, screen2Center;
 int screen2Border = u * 5;
 int screen1Border = u * 10;
-int screenYOffset = 0;
+int screenYOffset = 50;
 
 
 PImage screen1Mask, screen2Mask;
@@ -76,8 +76,6 @@ boolean gameInitialized = false;
 
 // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
 String midiDevice = "Micro [hw:2,0,0]";
-
-
 
 void setup() {
   // this should disable warnings from pi4j (some of them at least) =^..^=
@@ -107,7 +105,7 @@ void setup() {
   }
 
   load = new Load();
-  mask = loadImage("mask_debug.png"); // mask_debug.png avalible for debug duh
+  mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 18);
