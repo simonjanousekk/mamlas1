@@ -177,7 +177,7 @@ void restartGame() {
 boolean moveForward, moveBackward, turnLeft, turnRight;
 
 void keyPressed() {
-  if(atomAnl != null && sampleIdentification) {
+  if (atomAnl != null && sampleIdentification) {
     atomAnl.handleKey();
   }
   if (key == 'r') { // restart
@@ -214,7 +214,11 @@ void keyPressed() {
     Alerts [] randoma = Alerts.values();
     Alerts random_alert = randoma[int(random(randoma.length))];
 
+    DailyCycle [] randomd = DailyCycle.values();
+    DailyCycle random_day = randomd[int(random(randomd.length))];
+
     hazardMonitor.w = random_weather;
+    hazardMonitor.d = random_day;
     hazardMonitor.alert = random_alert;
 
     hazardMonitor.updateHazard();

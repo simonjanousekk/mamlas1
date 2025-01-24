@@ -8,7 +8,7 @@ import com.pi4j.io.i2c.I2C;
 // What will be displayed on line1 when there is no alert
 enum DailyCycle {
   DAWN("Day phase:      DAWN"),
-    MORNING("Day phase:      MORNING"),
+    MORNING("Day phase:   MORNING"),
     NOON("Day phase:      NOON"),
     ATERNOON("Day phase: AFTERNOON"),
     EVENING("Day phase:   EVENING"),
@@ -59,7 +59,7 @@ enum Alerts {
     STORM_SOON("WARNING:\n MAGNETIC STORM\n IMMINENT\n Comm unstable"),
     STORM_HERE("WARNING:\n MAGNETIC STORM\n IN PROGRESS\n Comm unstable"),
     WIND("WARNING:\n STRONG WIND\n Rover trajectory\n altered"),
-    SANDSTORM("WARNING: \n SANDSTORM IN PROGRESS\n Engage radar mode"),
+    SANDSTORM("WARNING: \n SANDSTORM IN\n PROGRESS\n Engage radar mode"),
     END("\n    PRESS RESET\n TO REPEAT MISSION"),
     NONE("");
 
