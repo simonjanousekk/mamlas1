@@ -10,10 +10,11 @@ class SignalDisplay {
   float interference = 0;
   boolean sineGameSet = false;
 
+  LedDriver ledDriver = new LedDriver(new int[]{3, 4});
+
 
   SignalDisplay() {
     //randomizeSineGame();
-    requestPotValues();
 
 
     sinePlayer = new SineWave(primary, primaryLight);
@@ -21,7 +22,9 @@ class SignalDisplay {
   }
 
   void update() {
-    if (!sineGameSet && sinePlayer.desAmp != 0 && sinePlayer.desBand != 0) { // this is fucking piss but i cannot solve for delay that arduino midi brings.
+    if (!sineGameSet && gameInitialized) requestPotValues();
+    // this is fucking piss but i cannot solve for delay that arduino midi brings.
+    if (!sineGameSet && gameInitialized && sinePlayer.desAmp != 0 && sinePlayer.desBand != 0) {
       sineGame.desAmp = sinePlayer.desAmp;
       sineGame.desBand = sinePlayer.desBand;
       sineGameSet = true;
@@ -42,6 +45,7 @@ class SignalDisplay {
       //sinePlayer.col = white;
       sinePlayer.isRight = true;
       interference = 0;
+      ledDriver.turnOff();
     } else {
       sinePlayer.isRight = false;
 
@@ -51,6 +55,7 @@ class SignalDisplay {
 
       // Combine differences, capped at 1
       interference = min(ampDiff + bandDiff, 1);
+      ledDriver.turnOn();
     }
   }
 

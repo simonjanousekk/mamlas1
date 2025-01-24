@@ -81,6 +81,7 @@ void controllerChange(ControlChange change) {
 
 
 void requestPotValues() {
+  println("requested values");
   mb.sendControllerChange(1, 1, 1);
 }
 

@@ -1,7 +1,9 @@
 class Player {
 
   float max_speed = u *.2;
-  float acceleration;
+  //float acceleration;
+  float speedMultiplier;
+  float desiredSpeed;
 
   float max_rotationAcceleration = TWO_PI/360;
   float rotationAcceleration;
@@ -22,6 +24,9 @@ class Player {
 
   int onTerrain;
   int terrainSetting = 0;
+  int terrainDifference = 0;
+
+  LedDriver ledDriverTerrain = new LedDriver(new int[]{11, 13});
 
   boolean scanning = false;
   ArrayList<Ray> rays = new ArrayList<Ray>();
@@ -112,8 +117,20 @@ class Player {
   void update() {
     int xi = int(pos.x / cellSize);
     int yi = int(pos.y / cellSize);
+
     onTerrain = mapa.grid[xi][yi].terrain;
-    
+    terrainDifference = abs(onTerrain - terrainSetting);
+
+    if (terrainDifference == 0) {
+      ledDriverTerrain.turnOff();
+    } else {
+      ledDriverTerrain.turnOn();
+    }
+
+    speedMultiplier = map(terrainDifference, 0, 3, 1, .5);
+    speed = desiredSpeed*speedMultiplier;
+
+
     if (scanning) { // check if all wmarkers are resolved == scanning ended
       boolean b = true;
       for (WMarker wm : wmarkers) {
@@ -128,8 +145,7 @@ class Player {
   }
 
   void setDesiredVelocity(int v) {
-    speed = map(v, 1, 126, 0, max_speed);
-    speed = constrain(speed, 0, max_speed);
+    desiredSpeed = map(v, 1, 127, 0, max_speed);
   }
 
   void setSuspension(int v) {
