@@ -13,6 +13,8 @@ Atom atom;
 AtomAnalyzer atomAnl;
 Storm storm;
 Element[] elements = new Element[6];
+String [] elements_mem = new String [3];
+int mem_index = 0;
 
 ArrayList<Wall> walls = new ArrayList<Wall>();
 ArrayList<WMarker> wmarkers = new ArrayList<WMarker>();
