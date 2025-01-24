@@ -142,7 +142,7 @@ class AtomAnalyzer {
   String matchResult = "";
   String failMessage = "Matching failed !";
   String successMessage = "Matching succeeded!";
-  int transitionOut = 1200;
+  int transitionOut = 1000;
   int countDown = 0;
 
   AtomAnalyzer() {
