@@ -217,7 +217,7 @@ void keyPressed() {
     hazardMonitor.w = random_weather;
     hazardMonitor.alert = random_alert;
 
-    hazardMonitor.displayHazard();
+    hazardMonitor.updateHazard();
     println("Current weather :", random_weather);
     println("Current alert :", random_alert);
   }
