@@ -9,13 +9,13 @@ class Sample {
   Sample(PVector p) {
     this(p.x, p.y);
   }
-  
+
   void update() {
     if (sampleCollected()) {
       collect();
     }
   }
-  
+
   void display() {
     push();
     translate(pos.x, pos.y);
@@ -23,22 +23,25 @@ class Sample {
     //noStroke();
     //strokeWeight(s_thick);
     //fill(primary);
-     
+
     noStroke();
     fill(primary);
-    circle(0, 0, diameter); 
-    
+    circle(0, 0, diameter);
+
     //rectMode(CENTER);
     //rect(0, 0, diameter, diameter);
     pop();
   }
-  
+
   boolean sampleCollected() {
     return isDistanceLess(player.pos, pos, player.diameter / 2 + diameter / 2);
   }
-  
+
   void collect() {
     player.samplesCollected++;
     pos = randomPosOutsideWalls();
+    sampleIdentification = true;
+
+    atomAnl = new AtomAnalyzer();
   }
 }

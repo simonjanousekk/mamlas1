@@ -105,10 +105,10 @@ class Electron {
 
 class Element {
   String name;
-  int density;
+  String density;
   boolean radioactive;
 
-  Element(String n, int d, boolean r) {
+  Element(String n, String d, boolean r) {
     name = n;
     density = d;
     radioactive = r;
@@ -179,28 +179,29 @@ class AtomAnalyzer {
       line(0, -table_h/2, 0, table_h/2);
       //table underneath title
       rect(0, corps_y - padding_s, table_w, table_h - corps_y*2 + (2*padding_s));
-      
+
       textSize(16);
       textAlign(CENTER, TOP);
       fill(255);
-      text("Sample analysis", -table_w/4, -table_h/2 + padding);
-      text("Identification", table_w/4, -table_h/2 + padding);
+      text("Analysis result", -table_w/4, -table_h/2 + padding);
+      text("Select sample", table_w/4, -table_h/2 + padding);
       textAlign(LEFT, TOP);
       fill(255);
       text("Density:", -table_w/2 + padding_s, -table_h/2 + corps_y * 2);
-      for (int j=-1; j < e.density -1; j++) {
-        fill(primary);
-        noStroke();
-        ellipse(-table_w/4 + padding * j, -table_h/2 + corps_y * 4, 6, 6);
-      }
+      
+      textAlign(CENTER, CENTER);
+      fill(primary);
+      text(e.density, -table_w/4, -table_h/2 + corps_y * 4);
+
+      textAlign(LEFT, TOP);
       fill(255);
       text("Radioactivity:", -table_w/2 + padding_s, -table_h/2 + corps_y * 5);
 
-      if (e.radioactive) {
+      if (!e.radioactive) {
         textAlign(CENTER, CENTER);
         fill(primary);
         text("-", -table_w/4, -table_h/2 + corps_y * 7);
-      } else {
+      } else if (e.radioactive){
         imageMode(CENTER);
         tint(primary);
         image(biohazard, -table_w/4, -table_h/2 + corps_y * 6.9, 24, 24);
@@ -230,6 +231,32 @@ class AtomAnalyzer {
       }
       rect(0, highlight_y, table_w/2, highlight_h);
       noFill();
+    }
+  }
+
+
+  void handleKey() {
+    //this will be replaced by button and potaky
+    if (keyCode == UP) {
+      cursorPlayer--;
+    } else if (keyCode == DOWN) {
+      cursorPlayer++;
+    } else if (keyCode == ENTER || keyCode == RETURN) {
+      validateResult();
+    }
+    if (cursorPlayer > 7) {
+      cursorPlayer = 2;
+    } else if (cursorPlayer < 2) {
+      cursorPlayer = 7;
+    }
+  }
+
+  void validateResult() {
+    String elementSelected =  elements[cursorPlayer-2].name;
+    if (elementSelected == e.name) {
+      println("yey !!!");
+    } else {
+      println("ney....");
     }
   }
 }

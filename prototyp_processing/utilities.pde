@@ -177,6 +177,9 @@ void restartGame() {
 boolean moveForward, moveBackward, turnLeft, turnRight;
 
 void keyPressed() {
+  if(atomAnl != null && sampleIdentification) {
+    atomAnl.handleKey();
+  }
   if (key == 'r') { // restart
     restartGame();
   }
