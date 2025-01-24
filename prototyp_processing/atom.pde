@@ -105,10 +105,10 @@ class Electron {
 
 class Element {
   String name;
-  int density;
+  String density;
   boolean radioactive;
 
-  Element(String n, int d, boolean r) {
+  Element(String n, String d, boolean r) {
     name = n;
     density = d;
     radioactive = r;
@@ -179,16 +179,17 @@ class AtomAnalyzer {
       textSize(16);
       textAlign(CENTER, TOP);
       fill(255);
-      text("Sample analysis", -table_w/4, -table_h/2 + padding);
-      text("Identification", table_w/4, -table_h/2 + padding);
+      text("Analysis result", -table_w/4, -table_h/2 + padding);
+      text("Select sample", table_w/4, -table_h/2 + padding);
       textAlign(LEFT, TOP);
       fill(255);
       text("Density:", -table_w/2 + padding_s, -table_h/2 + corps_y * 2);
-      for (int j=-1; j < e.density -1; j++) {
-        fill(primary);
-        noStroke();
-        ellipse(-table_w/4 + padding * j, -table_h/2 + corps_y * 4, 6, 6);
-      }
+      
+      textAlign(CENTER, CENTER);
+      fill(primary);
+      text(e.density, -table_w/4, -table_h/2 + corps_y * 4);
+
+      textAlign(LEFT, TOP);
       fill(255);
       text("Radioactivity:", -table_w/2 + padding_s, -table_h/2 + corps_y * 5);
 

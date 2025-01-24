@@ -126,12 +126,12 @@ void setup() {
   signalDisplay = new SignalDisplay();
 
   atom = new Atom();
-  elements[0] = new Element("Li", 1, false);
-  elements[1] = new Element("Fe", 2, false);
-  elements[2] = new Element("Au", 3, false);
-  elements[3] = new Element("T", 1, true);
-  elements[4] = new Element("Po", 2, true);
-  elements[5] = new Element("U", 3, true);
+  elements[0] = new Element("Li", "Low", false);
+  elements[1] = new Element("Fe", "Mid", false);
+  elements[2] = new Element("Au", "High", false);
+  elements[3] = new Element("T", "Low", true);
+  elements[4] = new Element("Po", "Mid", true);
+  elements[5] = new Element("U", "High", true);
   storm = new Storm();
 
   try {
