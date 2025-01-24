@@ -115,7 +115,7 @@ class Element {
   }
 }
 
- 
+
 PImage biohazard;
 
 class AtomAnalyzer {
@@ -223,7 +223,6 @@ class AtomAnalyzer {
       rectMode(CORNER);
       fill(255, 125);
 
-
       // highlight based on controller
       // we have to adjust if its 2 or 7 because these lines have extra padding otherwise it looks like trash
       if (cursorPlayer == 2) {
@@ -238,14 +237,30 @@ class AtomAnalyzer {
       }
       rect(0, highlight_y, table_w/2, highlight_h);
 
+
+      // displaying match result
       if (matchResult.equals(successMessage) && countDown == 0) {
         countDown = millis();
       }
       textAlign(CENTER, TOP);
       fill(255);
+
       text(matchResult, 0, table_h/2 + padding);
+      if (matchResult.equals(failMessage) && frameCount % 10 == 0) {
+        fill(0);
+        rectMode(CENTER);
+        rect(0, 0, screenSize, screenSize);
+        if (countDown == 0) {
+          countDown = millis();
+        }
+      }
     } else {
-      sampleIdentification = false;
+      if (matchResult.equals(failMessage)) {
+        matchResult = "";
+        countDown = 0;
+      } else {
+        sampleIdentification = false;
+      }
     }
   }
 

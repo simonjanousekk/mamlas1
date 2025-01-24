@@ -123,12 +123,12 @@ void setup() {
 
 
   atom = new Atom();
-  elements[0] = new Element("Li", "Low", false);
-  elements[1] = new Element("Fe", "Mid", false);
-  elements[2] = new Element("Au", "High", false);
-  elements[3] = new Element("T", "Low", true);
-  elements[4] = new Element("Po", "Mid", true);
-  elements[5] = new Element("U", "High", true);
+  elements[0] = new Element("Au", "High", false);
+  elements[1] = new Element("T", "Low", true);
+  elements[2] = new Element("U", "High", true);
+  elements[3] = new Element("Po", "Mid", true);
+  elements[4] = new Element("Fe", "Mid", false);
+  elements[5] = new Element("Li", "Low", false);
   storm = new Storm();
 
   try {
