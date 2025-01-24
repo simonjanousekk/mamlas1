@@ -249,6 +249,7 @@ class AtomAnalyzer {
       if (matchResult.equals(failMessage) && frameCount % 10 == 0) {
         fill(0);
         rectMode(CENTER);
+        noStroke();
         rect(0, 0, screenSize, screenSize);
         if (countDown == 0) {
           countDown = millis();

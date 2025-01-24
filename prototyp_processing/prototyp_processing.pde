@@ -104,7 +104,7 @@ void setup() {
   }
 
   load = new Load();
-  mask = loadImage("mask_debug.png"); // mask_debug.png avalible for debug duh
+  mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 18);
