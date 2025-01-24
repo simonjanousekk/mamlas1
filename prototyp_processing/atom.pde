@@ -116,31 +116,36 @@ class Element {
 }
 
 class AtomAnalyzer {
-
+  //loading bar params
   float acc = 0;
   float progress = 0;
-
-  //loading bar size
   float loading_w = 250;
   float loading_h = u * 2;
 
-  //table and title division
+  //table, title division, padding
   float table_w = 310;
   float table_h = 160;
   float corps_y = 20;
-
   float padding = 10;
   float padding_s = 5;
+
   Element e;
 
-  int cursorPlayer = 4;
+  // picker
+  int cursorPlayer = 2;
   float highlight_y = 0;
   float highlight_h = 0;
 
+  String matchResult = "";
+  String failMessage = "Matching failed !";
+  String successMessage = "Matching succeeded!";
+  int transitionOut = 1500;
+  int countDown = 0;
 
   AtomAnalyzer() {
     e = elements[int(random(elements.length))];
     println("The current element is.. ", e.name);
+    countDown = 0;
   }
 
   void display() {
@@ -163,7 +168,7 @@ class AtomAnalyzer {
       fill(primary);
       rect(-loading_w/2, -r_height/2, progress, loading_h);
       progress+=acc;
-    } else {
+    } else if (countDown == 0 || countDown > millis() - transitionOut) {
       // analysis results
       strokeWeight(1);
       rectMode(CENTER);
@@ -184,7 +189,7 @@ class AtomAnalyzer {
       textAlign(LEFT, TOP);
       fill(255);
       text("Density:", -table_w/2 + padding_s, -table_h/2 + corps_y * 2);
-      
+
       textAlign(CENTER, CENTER);
       fill(primary);
       text(e.density, -table_w/4, -table_h/2 + corps_y * 4);
@@ -192,16 +197,16 @@ class AtomAnalyzer {
       textAlign(LEFT, TOP);
       fill(255);
       text("Radioactivity:", -table_w/2 + padding_s, -table_h/2 + corps_y * 5);
-
       if (!e.radioactive) {
         textAlign(CENTER, CENTER);
         fill(primary);
         text("-", -table_w/4, -table_h/2 + corps_y * 7);
-      } else if (e.radioactive){
+      } else if (e.radioactive) {
         imageMode(CENTER);
         tint(primary);
         image(biohazard, -table_w/4, -table_h/2 + corps_y * 6.9, 24, 24);
       }
+
       for (int i=2; i < 8; i++ ) {
         stroke(255);
         // debug - lines where we draw the things
@@ -213,7 +218,9 @@ class AtomAnalyzer {
       }
       rectMode(CORNER);
       fill(255, 125);
-      // highlight based on controller , to add when its ready - cursorPlayer will need to be mapped to 2-7.
+
+
+      // highlight based on controller
       // we have to adjust if its 2 or 7 because these lines have extra padding otherwise it looks like trash
       if (cursorPlayer == 2) {
         highlight_y = -table_h/2 - padding + corps_y * cursorPlayer;
@@ -226,7 +233,15 @@ class AtomAnalyzer {
         highlight_h = corps_y;
       }
       rect(0, highlight_y, table_w/2, highlight_h);
-      noFill();
+
+      if (matchResult.equals(successMessage) && countDown == 0) {
+        countDown = millis();
+      }
+      textAlign(CENTER, TOP);
+      fill(255);
+      text(matchResult, 0, table_h/2 + padding);
+    } else {
+      sampleIdentification = false;
     }
   }
 
@@ -250,9 +265,9 @@ class AtomAnalyzer {
   void validateResult() {
     String elementSelected =  elements[cursorPlayer-2].name;
     if (elementSelected == e.name) {
-      println("yey !!!");
+      matchResult = successMessage;
     } else {
-      println("ney....");
+      matchResult = failMessage;
     }
   }
 }
