@@ -74,8 +74,8 @@ Load load;
 boolean sampleIdentification = false;
 boolean gameInitialized = false;
 
-
-String midiDevice = "Arduino Micro"; // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
+// needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
+String midiDevice = "Micro [hw:2,0,0]"; 
 
 
 
@@ -85,8 +85,8 @@ void setup() {
   System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
   System.setProperty("com.pi4j.logging.level", "ERROR");
 
-  //fullScreen();
-  size(800, 480);
+  fullScreen();
+  //size(800, 480);
 
   noSmooth();
   randomSeed(millis());
@@ -107,7 +107,7 @@ void setup() {
   }
 
   load = new Load();
-  mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
+  mask = loadImage("mask_debug.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 18);
