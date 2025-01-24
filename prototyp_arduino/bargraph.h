@@ -8,8 +8,8 @@ public:
     : index(i) {}
 
   void update(int val) {
-    setMultiBit(index, 10, (1 << val) - 1);
-  }
+    setMultiBit(index, 10, ((1 << val) - 1) << (10 - val));
+}
 };
 
 

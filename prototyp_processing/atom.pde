@@ -142,10 +142,12 @@ class AtomAnalyzer {
   float highlight_h = 0;
 
   String matchResult = "";
-  String failMessage = "Matching failed !";
+  String failMessage = "Matching failed!";
   String successMessage = "Matching succeeded!";
-  int transitionOut = 1000;
+  int transitionOut = 3000;
   int countDown = 0;
+  
+  LedDriver ledDriver = new LedDriver(12);
 
   AtomAnalyzer() {
     biohazard = loadImage("radioactive_8bit.png");
@@ -161,6 +163,7 @@ class AtomAnalyzer {
 
     println("The current element is.. ", e.name);
     countDown = 0;
+    ledDriver.turnOn();
   }
 
   void display() {
@@ -272,6 +275,7 @@ class AtomAnalyzer {
         countDown = 0;
       } else {
         sampleIdentification = false;
+        ledDriver.turnOff();
       }
     }
   }
@@ -294,7 +298,7 @@ class AtomAnalyzer {
   }
 
   void validateResult() {
-    String elementSelected =  elements[cursorPlayer-2].name;
+    String elementSelected = elements[cursorPlayer-2].name;
     if (elementSelected == e.name) {
       matchResult = successMessage;
     } else {

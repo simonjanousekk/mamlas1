@@ -227,6 +227,19 @@ void keyPressed() {
     println("Current weather :", random_weather);
   }
 
+  if (key == 't') {
+    screenYOffset += 10;
+  }
+  if (key == 'g') {
+    screenYOffset -= 10;
+  }
+  if (key == 'z') {
+    screenYOffset++;
+  }
+  if (key == 'h') {
+    screenYOffset--;
+  }
+
   if (key == 'w' || key == 'W') moveForward = true;
   if (key == 's' || key == 'S') moveBackward = true;
   if (key == 'a' || key == 'A') turnLeft = true;

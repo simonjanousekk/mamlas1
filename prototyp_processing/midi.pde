@@ -109,6 +109,54 @@ void turnAllLedOn() {
 
 
 
+class LedDriver {
+  int[] indexes;
+  boolean wasOn = false;
+  boolean on = false;
+
+  LedDriver(int[] i) {
+    indexes = i;
+  }
+  
+  LedDriver(int j) {
+    this(new int[] {j});
+  }
+
+  void update() {
+    if (!wasOn && on) {
+      for (int i : indexes) {
+        turnOnLed(i);
+      }
+      wasOn = true;
+    } else if (wasOn && !on) {
+      for (int i : indexes) {
+        turnOffLed(i);
+      }
+      wasOn = false;
+    }
+  }
+
+  void turnOn() {
+    on = true;
+    update();
+  }
+
+  void turnOff() {
+    on = false;
+    update();
+  }
+
+  void turnBased(boolean b) {
+    if (b) {
+      turnOn();
+    } else {
+      turnOff();
+    }
+  }
+}
+
+
+
 
 // not used rn, keep it in case
 void noteOn(Note note) {
