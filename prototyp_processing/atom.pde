@@ -129,26 +129,12 @@ class AtomAnalyzer {
   float table_w = 310;
   float table_h = 160;
   float corps_y = 20;
-<<<<<<< HEAD
-<<<<<<< HEAD
   float padding = 10;
   float padding_s = 5;
 
   Element e;
 
   // picker
-=======
-=======
->>>>>>> 0b17324f685d1e8bfef1c9db93c062fa1b428fb6
-
-  float padding = u*2;
-  float padding_s = u;
-  Element e;
-
-<<<<<<< HEAD
->>>>>>> 8dc23330cf6ce98e017e80b0bec60c6351534d57
-=======
->>>>>>> 0b17324f685d1e8bfef1c9db93c062fa1b428fb6
   int cursorPlayer = 2;
   float highlight_y = 0;
   float highlight_h = 0;
@@ -156,7 +142,7 @@ class AtomAnalyzer {
   String matchResult = "";
   String failMessage = "Matching failed !";
   String successMessage = "Matching succeeded!";
-  int transitionOut = 1500;
+  int transitionOut = 1200;
   int countDown = 0;
 
   AtomAnalyzer() {
