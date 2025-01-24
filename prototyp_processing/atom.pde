@@ -115,6 +115,9 @@ class Element {
   }
 }
 
+ 
+PImage biohazard;
+
 class AtomAnalyzer {
   //loading bar params
   float acc = 0;
@@ -126,12 +129,20 @@ class AtomAnalyzer {
   float table_w = 310;
   float table_h = 160;
   float corps_y = 20;
+<<<<<<< HEAD
   float padding = 10;
   float padding_s = 5;
 
   Element e;
 
   // picker
+=======
+
+  float padding = u*2;
+  float padding_s = u;
+  Element e;
+
+>>>>>>> 8dc23330cf6ce98e017e80b0bec60c6351534d57
   int cursorPlayer = 2;
   float highlight_y = 0;
   float highlight_h = 0;
@@ -143,6 +154,7 @@ class AtomAnalyzer {
   int countDown = 0;
 
   AtomAnalyzer() {
+    biohazard = loadImage("radioactive_8bit.png");
     e = elements[int(random(elements.length))];
     println("The current element is.. ", e.name);
     countDown = 0;
