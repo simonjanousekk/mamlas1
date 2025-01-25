@@ -29,8 +29,10 @@ void controllerChange(ControlChange change) {
         }
       } else if (control == 2) {
         // handle selection of sample
-        // left is 1 and right is 0 for some reason :D 
-        atomAnl.handleKey(value);
+        // left is 1 and right is 0 for some reason :D
+        if (atomAnl != null) {
+          atomAnl.handleKey(value);
+        }
 
         // --- POTENCIOMETERS ---
       } else if (control == 3) { // ROT POT for AMP
