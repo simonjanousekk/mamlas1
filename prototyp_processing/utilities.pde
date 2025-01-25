@@ -218,7 +218,7 @@ void keyPressed() {
     DailyCycle random_day = randomd[int(random(randomd.length))];
 
     hazardMonitor.w = random_weather;
-    hazardMonitor.d = random_day;
+    //hazardMonitor.d = random_day;
     hazardMonitor.windSpeed = round(random(0, 88));
     hazardMonitor.temp = round(random(-90, 88));
     //hazardMonitor.alert = random_alert;
