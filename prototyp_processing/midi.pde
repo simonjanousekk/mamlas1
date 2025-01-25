@@ -29,6 +29,7 @@ void controllerChange(ControlChange change) {
         }
       } else if (control == 2) {
         // handle selection of sample
+        println("value of analyzer: ", value);
 
         // --- POTENCIOMETERS ---
       } else if (control == 3) { // ROT POT for AMP
@@ -70,6 +71,7 @@ void controllerChange(ControlChange change) {
       } else if (control == 10 && value == 0) { // RADAR button
         player.scan();
       } else if (control == 11 && value == 0) { // SAMPLE IDENTIFICATION button
+        atomAnl.validateResult();
         // confirm sample selection
       } else if (control == 12 && value == 0) { // RESTART button
         restartGame();
@@ -117,7 +119,7 @@ class LedDriver {
   LedDriver(int[] i) {
     indexes = i;
   }
-  
+
   LedDriver(int j) {
     this(new int[] {j});
   }
