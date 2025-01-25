@@ -33,7 +33,9 @@ enum Forecast {
   CLEAR("Forecast:      CLEAR"),
     WIND("Forecast:STRONG WIND"),
     SANDSTORM("Forecast:  SANDSTORM"),
-    MAGSTORM("Forecast:  MAG STORM");
+    MAGSTORM("Forecast:  MAG STORM"),
+    COLD("Forecast: COLD FRONT"),
+    HOT("Forecast:   HEATWAVE");
 
   String message;
 

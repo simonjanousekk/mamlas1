@@ -61,6 +61,7 @@ class GameState {
     updateBattery();
     updateTimePhase();
     updateTemperature();
+    updateAlert();
 
     battery = constrain(battery, 0, 100);
     powerUsage = constrain(powerUsage, 0, 100);
@@ -72,11 +73,16 @@ class GameState {
       hazardHappening = true;
       lastHazard = millis();
       if (hazardMonitor.forecast == Forecast.SANDSTORM) {
-        hazardMonitor.alert = Alerts.SANDSTORM;
+        alertSand = true;
         storm.startStorm(int(phaseLength), .1, .1);
-      } else if (hazardMonitor.forecast == Forecast.MAGSTORM) {
-        hazardMonitor.alert = Alerts.MAGSTORM;
+      } else {
+        alertSand = false;
+      }
+      if (hazardMonitor.forecast == Forecast.MAGSTORM) {
+        alertMag = true;
         signalDisplay.randomizeSineGame();
+      } else {
+        alertMag = false;
       }
     }
 
@@ -87,10 +93,25 @@ class GameState {
     } else if (random(1) < sandStormChancePhases[(dayPhaseIndex + 1) % dayPhases.length] *hazardChanceMultiplier) {
       println("sandStorm imminent");
       hazardMonitor.forecast = Forecast.SANDSTORM;
+    } else if (dayPhases[(dayPhaseIndex+1) % dayPhases.length] == "NOON") {
+      hazardMonitor.forecast = Forecast.HOT;
+    } else if (dayPhases[(dayPhaseIndex+1) % dayPhases.length] == "MIDNIGHT") {
+      hazardMonitor.forecast = Forecast.COLD;
     } else {
       hazardMonitor.forecast = Forecast.CLEAR;
     }
+  }
 
+  void updateAlert() {
+    if (alertMag) {
+      hazardMonitor.alert = Alerts.MAGSTORM;
+    } else if (alertSand) {
+      hazardMonitor.alert = Alerts.SANDSTORM;
+    } else if (alertHot) {
+      hazardMonitor.alert = Alerts.OVERHEATING;
+    } else if (alertCold) {
+      hazardMonitor.alert = Alerts.FREEZE;
+    }
     hazardMonitor.updateHazard();
   }
 
