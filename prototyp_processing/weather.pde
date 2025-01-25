@@ -7,9 +7,13 @@ import com.pi4j.io.i2c.I2C;
 
 // What will be displayed on line1 when there is no alert
 enum DailyCycle {
-  MORNING("Good morning :3"),
-    NOON("Good afternoon :V"),
-    NIGHT("Good night zZzz");
+  DAWN("Day phase:      DAWN"),
+    MORNING("Day phase:   MORNING"),
+    NOON("Day phase:      NOON"),
+    ATERNOON("Day phase: AFTERNOON"),
+    EVENING("Day phase:   EVENING"),
+    DUSK("Day phase:      DUSK"),
+    NIGHT("Day phase:     NIGHT");
 
   String message;
 
@@ -24,10 +28,12 @@ enum DailyCycle {
 // Displayed lines 2, 3 and 4 - should display weather and maybe some info / recommendations.
 // These are NOT Critical, which are in enum class "Alerts"
 enum Weather {
-  STABLE("FORECAST:\nConditions stable"),
-    WIND("FORECAST:\nHigh wind, impact on rover course"),
-    HOT("FORECAST:\nTemperature rise imminent"),
-    COLD("FORECAST:\nTemperature drop imminent");
+  // do not remove the spaces. its on purpose
+  CLEAR("Forecast:      CLEAR"),
+    WIND("Forecast:STRONG WIND"),
+    SANDSTORM("Forecast:  SANDSTORM"),
+    MAGSTORM("Forecast:  MAG STORM"),
+    HOT("Forecast:  HIGH TEMP");
 
   String message;
 
@@ -39,12 +45,21 @@ enum Weather {
   }
 }
 
-// These are ALERTS / CRITICAL information. When they will be set, the screen will flash and display the alert until its resolved. 
+// These are ALERTS / CRITICAL information. When they will be set, the screen will flash and display the alert until its resolved.
 // IMPORTANT: So far, no handling of more than 1 alert. Maybe not necessary ?
 enum Alerts {
-  CONSUMPTION("WARNING:\n Energy consumption high - monitor systems"),
-    OVERHEATING("WARNING:\n Core temperature high - cooling required"),
-    FREEZE("WARNING:\n Core temperature low - heating required"),
+  OVERUSAGE("WARNING:\n ENERGY CONSUMPTION \n HIGH \n Monitor systems"),
+    POWER("WARNING:\n ENERGY RESERVE\n BELOW 20%\n Conserve Power"),
+    POWER_CRITICAL("CRITICAL FAILURE\n ENERGY RESERVE \n EXHAUSTED\n SHUTTING DOWN"),
+    OVERHEATING("WARNING:\n TEMPERATURE NEARING\n SAFE LIMITS\n Cooling required"),
+    OVERHEATING_CRITICAL("CRITICAL FAILURE:\n CORE OVERHEATING \n INTERNAL DAMAGE\n DETECTED"),
+    FREEZE("WARNING:\n TEMPERATURE NEARING\n SAFE LIMITS\n Heating required"),
+    FREEZE_CRITICAL("CRITICAL FAILURE:\n SYSTEM FREEZING \n INTERNAL DAMAGE\n DETECTED"),
+    STORM_SOON("WARNING:\n MAGNETIC STORM\n IMMINENT\n Comm unstable"),
+    STORM_HERE("WARNING:\n MAGNETIC STORM\n IN PROGRESS\n Comm unstable"),
+    WIND("WARNING:\n STRONG WIND\n Rover trajectory\n altered"),
+    SANDSTORM("WARNING: \n SANDSTORM IN\n PROGRESS\n Engage radar mode"),
+    END("\n    PRESS RESET\n TO REPEAT MISSION"),
     NONE("");
 
   String message;
@@ -67,7 +82,7 @@ class HazardMonitor {
   String forecast = "";
   String new_alert = "";
   DailyCycle d = DailyCycle.MORNING;
-  Weather w = Weather.STABLE;
+  Weather w = Weather.WIND;
   Alerts alert = Alerts.NONE;
 
   boolean interference = false;
@@ -78,6 +93,9 @@ class HazardMonitor {
   Thread lcdMain;
   int noiseAmount = 0;
 
+  float windSpeed = 15;
+  float temp = 90;
+
   HazardMonitor() {
     // initialize lcd display
     Context pi4j = Pi4J.newAutoContext();
@@ -85,18 +103,32 @@ class HazardMonitor {
     lcd.clearDisplay();
     displayHazard();
   }
-
-  void displayHazard() {
+  
+  void updateHazard() {
+    // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
     if (alert == Alerts.NONE) {
-      forecast = String.join("\n", d.getMessage(), w.getMessage());
+      println("DEBUG: Calling padParam function.");
+      String windLine = padParam("Wind speed:", windSpeed);
+      String tempLine = padParam("Surface temp:", temp);
+      forecast = String.join("\n", d.getMessage(), w.getMessage(), windLine, tempLine);
     } else {
       forecast = alert.getMessage();
-      if(forecast != new_alert){
+    }
+  }
+
+  void displayHazard() {
+    //if (alert == Alerts.NONE) {
+    //  forecast = String.join("\n", d.getMessage(), w.getMessage());
+    //} else {
+    //  forecast = alert.getMessage();
+    if (alert != Alerts.NONE) {
+      if (forecast != new_alert) {
         // new alert, we must flash
         flash = true;
         new_alert = forecast;
       }
     }
+    //}
     if (!interference) {
       sendLcd(forecast, false, 0);
     } else if (interference) {
@@ -147,6 +179,26 @@ class HazardMonitor {
     }
     );
     lcdMain.start();
+  }
+
+  String padParam(String param, float value) {
+    println("DEBUG - inside padParam function");
+    // max. length total should be 20
+    int total_length = param.length() + String.valueOf(value).length();
+
+    if (total_length > 20) {
+      // shouldnt happen. Here for debugging
+      println("error for: ", param, " and value: ", value);
+      return "";
+    } else {
+      int spaces = 20 - total_length;
+      for (int i = 0; i < spaces; i++) {
+        param+=" ";
+      }
+      String padded_param = param + String.valueOf(value);
+      println("DEBUG - returning the following padded parameters.");
+      return padded_param;
+    }
   }
 }
 
