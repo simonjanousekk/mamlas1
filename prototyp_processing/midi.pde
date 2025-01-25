@@ -30,7 +30,7 @@ void controllerChange(ControlChange change) {
       } else if (control == 2) {
         // handle selection of sample
         // left is 1 and right is 0 for some reason :D 
-        atomAnl.cursorPlayer+=(value == 0) ? 1 : -1;
+        atomAnl.handleKey(value);
 
         // --- POTENCIOMETERS ---
       } else if (control == 3) { // ROT POT for AMP
