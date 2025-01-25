@@ -13,7 +13,7 @@ class Load {
   Load() {
     frames = new PImage[framesCount];
     for (int i = 0; i < framesCount; i++) {
-      frames[i] = loadImage("rover_animation/"+nf(i+1, 4)+".png");
+      frames[i] = loadImage("rover_animation_310/"+nf(i+1, 4)+".png");
     }
   }
 

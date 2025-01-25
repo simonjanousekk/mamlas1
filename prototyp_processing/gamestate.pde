@@ -87,8 +87,15 @@ class GameState {
     float temperatureChange = (outTemperature - temperature) * 0.005; // Proportional to the difference
     temperature += temperatureChange;
 
-    if (heating) temperature += heatingStrength;
-    if (cooling) temperature -= coolingStrength;
+    // this is generated and i dont kow if it works
+    if (heating) {
+      float heatingEffectiveness = max(0, 1 - (temperature / max_temperature)); // Less effective when already hot
+      temperature += heatingStrength * heatingEffectiveness; // Slow, scalable adjustment
+    }
+    if (cooling) {
+      float coolingEffectiveness = max(0, (temperature - min_temperature) / max_temperature); // Less effective when already cold
+      temperature -= coolingStrength * coolingEffectiveness; // Slow, scalable adjustment
+    }
 
     sendTemperature(int(temperature));
 
