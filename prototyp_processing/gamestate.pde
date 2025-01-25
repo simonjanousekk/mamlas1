@@ -78,10 +78,10 @@ class GameState {
     }
 
     hazardChanceMultiplier = map(millis(), lastHazard, lastHazard + dayLength / 2, 0, 10);
-    if (random(1) < magStormChancePhases[dayPhaseIndex + 1 % dayPhases.length] * hazardChanceMultiplier) {
+    if (random(1) < magStormChancePhases[(dayPhaseIndex + 1) % dayPhases.length] * hazardChanceMultiplier) {
       println("magStorm imminent");
       hazardMonitor.forecast = Forecast.MAGSTORM;
-    } else if (random(1) < sandStormChancePhases[dayPhaseIndex + 1 % dayPhases.length] *hazardChanceMultiplier) {
+    } else if (random(1) < sandStormChancePhases[(dayPhaseIndex + 1) % dayPhases.length] *hazardChanceMultiplier) {
       println("sandStorm imminent");
       hazardMonitor.forecast = Forecast.SANDSTORM;
     } else {
