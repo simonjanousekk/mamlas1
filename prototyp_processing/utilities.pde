@@ -196,7 +196,6 @@ void keyPressed() {
   if (key =='o') {
     storm.startStorm(60*20, .5, .5);
   }
-
   if (key == 'q') {
     turnAllLedOff();
     System.exit(0);
@@ -227,17 +226,25 @@ void keyPressed() {
     println("Current weather :", random_weather);
   }
 
-  if (key == 't') {
-    screenYOffset += 10;
-  }
-  if (key == 'g') {
-    screenYOffset -= 10;
-  }
-  if (key == 'z') {
-    screenYOffset++;
-  }
-  if (key == 'h') {
-    screenYOffset--;
+  if (key == 't' || key == 'g' || key == 'z' || key == 'h') {
+    if (key == 't') {
+      screenYOffset += 10;
+    }
+    if (key == 'g') {
+      screenYOffset -= 10;
+    }
+    if (key == 'z') {
+      screenYOffset++;
+    }
+    if (key == 'h') {
+      screenYOffset--;
+    }
+    screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
+    screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
+    screen1Center.y += screenYOffset;
+    screen2Center.y += screenYOffset;
+    screen2CornerX = int(screen2Center.x - screenSize / 2);
+    screen2CornerY = int(screen2Center.y - screenSize / 2);
   }
 
   if (key == 'w' || key == 'W') moveForward = true;
