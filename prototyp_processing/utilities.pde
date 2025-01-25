@@ -143,11 +143,6 @@ float applyEasing(float t, String easing) {
   }
 }
 
-char getLetterFromAlphabet(int index) {
-  index = (index % 26 + 26) % 26;
-  return char('A' + index);
-}
-
 
 PVector random2DVector() {
   float angle = random(TWO_PI);
@@ -162,11 +157,19 @@ boolean isCloseEnough(float x, float y, float t) {
 }
 
 void restartGame() {
-  //if (mb != null) {
-  //  mb.stop();
-  //  //mb = null;
-  //}
   setup();
+}
+
+
+class IntVector {
+  int x, y;
+  IntVector(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+  IntVector() {
+    this(0, 0);
+  }
 }
 
 
@@ -205,6 +208,18 @@ void keyPressed() {
 
     sampleIdentification = !sampleIdentification;
   }
+
+
+  // --- TMP ---
+  if (key == 'h') {
+    gameState.heating = !gameState.heating;
+  }
+  if (key == 'c') {
+    gameState.cooling = !gameState.cooling;
+  }
+  // ---
+
+
   if (key == 'b') {
     //hazardMonitor.interference = (random(2) < 1) ? true : false ;
     Weather [] randomw = Weather.values();
@@ -226,25 +241,21 @@ void keyPressed() {
     println("Current weather :", random_weather);
   }
 
-  if (key == 't' || key == 'g' || key == 'z' || key == 'h') {
+
+  // Y centering on screen
+  if (key == 't' || key == 'g') {
     if (key == 't') {
-      screenYOffset += 10;
-    }
-    if (key == 'g') {
-      screenYOffset -= 10;
-    }
-    if (key == 'z') {
       screenYOffset++;
     }
-    if (key == 'h') {
+    if (key == 'g') {
       screenYOffset--;
     }
     screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
     screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
     screen1Center.y += screenYOffset;
     screen2Center.y += screenYOffset;
-    screen2CornerX = int(screen2Center.x - screenSize / 2);
-    screen2CornerY = int(screen2Center.y - screenSize / 2);
+    screen2Corner.x = int(screen2Center.x - screenSize / 2);
+    screen2Corner.y = int(screen2Center.y - screenSize / 2);
   }
 
   if (key == 'w' || key == 'W') moveForward = true;
@@ -252,9 +263,6 @@ void keyPressed() {
   if (key == 'a' || key == 'A') turnLeft = true;
   if (key == 'd' || key == 'D') turnRight = true;
 }
-
-
-
 
 
 // Handle key releases

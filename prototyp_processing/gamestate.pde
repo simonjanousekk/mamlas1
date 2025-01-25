@@ -12,7 +12,7 @@ class GameState {
   float currentPhaseTemp, nextPhaseTemp;
 
   // TEMPERATURE STUFF
-  int outTemperaturePhases[][] = {{30, 60}, {80, 110}, {140, 160}, {70, 100}, {0, 40}, { - 40, -80}, { - 100, -120}, { - 20, -70} };
+  int outTemperaturePhases[][] = {{-30, -60}, {20, 70}, {100, 120}, {40, 80}, {0, -40}, {-70, -100}, {-140, -160}, {-80, -110}};
   float temperature = 0;
   float outTemperature = 0;
   int max_temperature = 80;
@@ -35,7 +35,7 @@ class GameState {
   GameState() {
     //handle arduino stuff
     turnAllLedOff();
-    
+
     //turnOnLed(13);
     //turnAllLedOn();
 

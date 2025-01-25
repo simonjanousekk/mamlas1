@@ -28,6 +28,14 @@ class SignalDisplay {
       sineGame.desBand = sinePlayer.desBand;
       sineGameSet = true;
     }
+    
+    
+    //float db = map(player.pos.x, 0, mapa.size.x, bandConstrain.x, bandConstrain.y);
+    //float da = map(player.pos.y, 0, mapa.size.y, ampConstrain.x, ampConstrain.y);
+    
+    
+    
+    
 
     sinePlayer.update();
     sineGame.update();
@@ -174,21 +182,21 @@ class SineWave {
 
 
 void radio(float amount) {
-  
+
   int min = u * 10;
   int max = u * 20;
-  
+
   loadPixels();
   for (int i = 0; i < amount * 70; i++) {
     int w = floor(random(min, max));
     int h = floor(random(min, max));
-    
-    int x1 = floor(random(screen2CornerX, screen2CornerX + screenSize - w));
-    int y1 = floor(random(screen2CornerY, screen2CornerY + screenSize - h));
-    
-    int x2 = floor(random(screen2CornerX, screen2CornerX + screenSize - w));
-    int y2 = floor(random(screen2CornerY, screen2CornerY + screenSize - h));
-    
+
+    int x1 = floor(random(screen2Corner.x, screen2Corner.x + screenSize - w));
+    int y1 = floor(random(screen2Corner.y, screen2Corner.y + screenSize - h));
+
+    int x2 = floor(random(screen2Corner.x, screen2Corner.x + screenSize - w));
+    int y2 = floor(random(screen2Corner.y, screen2Corner.y + screenSize - h));
+
     // Copy pixels manually
     for (int dx = 0; dx < w; dx++) {
       for (int dy = 0; dy < h; dy++) {
@@ -199,7 +207,7 @@ void radio(float amount) {
     }
   }
   updatePixels();
-  
+
   int resolution = 4;
   noStroke();
   for (int x = int(screen2Center.x - screenSize / 2); x < screen2Center.x + screenSize / 2; x += resolution) {
@@ -209,7 +217,7 @@ void radio(float amount) {
         //fill(random(1) > .5 ? white : 0);
         //fill(random(255));
         //fill(white);
-        
+
         rect(x, y, resolution, resolution);
       }
     }

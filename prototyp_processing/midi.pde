@@ -13,11 +13,11 @@ void controllerChange(ControlChange change) {
     int control = change.number();
     int value = change.value();
 
-    print("MIDI INPUT:");
-    //print(" channel: " + channel);
-    print(" control: " + control);
-    print(" value: " + value);
-    println(" ");
+    //print("MIDI INPUT:");
+    ////print(" channel: " + channel);
+    //print(" control: " + control);
+    //print(" value: " + value);
+    //println(" ");
     if (channel == 0) {
 
       // --- ENCODERS ---

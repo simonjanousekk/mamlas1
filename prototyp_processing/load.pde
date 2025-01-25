@@ -16,13 +16,13 @@ class Load {
       frames[i] = loadImage("rover_animation/"+nf(i+1, 4)+".png");
     }
   }
-  
+
   void start() {
     loading = true;
     start = frameCount;
     println("load start");
   }
-  
+
   void update() {
     if (loading && frameCount >= start+duration) {
       loading = false;
@@ -31,8 +31,8 @@ class Load {
 
   void display() {
     fill(0);
-    rect(screen2CornerX+screen2Border, screen2CornerY+screen2Border, screenSize-screen2Border*2, screenSize-screen2Border*2);
-    image(frames[frameIndex], screen2CornerX+screen2Border, screen2CornerY+screen2Border, screenSize-screen2Border*2, screenSize-screen2Border*2);
+    rect(screen2Corner.x+screen2Border, screen2Corner.y+screen2Border, screenSize-screen2Border*2, screenSize-screen2Border*2);
+    image(frames[frameIndex], screen2Corner.x+screen2Border, screen2Corner.y+screen2Border, screenSize-screen2Border*2, screenSize-screen2Border*2);
     if (frameCount % 2 == 0) {
       frameIndex = (frameIndex + 1) % frames.length;
     }

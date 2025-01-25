@@ -47,7 +47,7 @@ final float treshold = .45;
 int fakeFrameRate = 59;
 
 boolean infoDisplay = true;
-String[] terrainTypes = {"SOFT", "DENS", "FIRM", "HARD"};
+String[] terrainTypes = {"SOFT", "DENSE", "FIRM", "HARD"};
 
 // could cause race condition if too low but so far fine ?
 float LcdRefresh = 300;
@@ -57,14 +57,15 @@ int screenSize = 360;
 int screenHalf = 180;
 int screenGap = 36;
 PVector screen1Center, screen2Center;
-int screen2Border = u * 5;
+IntVector screen2Corner = new IntVector();
+int screen2Border = u * 7;
 int screen1Border = u * 10;
 int screenYOffset = 50;
 
 
 PImage screen1Mask, screen2Mask;
 
-int screen2CornerX, screen2CornerY;
+
 enum s2s {
   GPS, RADAR
 }
@@ -83,8 +84,8 @@ void setup() {
   System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
   System.setProperty("com.pi4j.logging.level", "ERROR");
 
-  fullScreen();
-  //size(800, 480);
+  //fullScreen();
+  size(800, 480);
 
   noSmooth();
   randomSeed(millis());
@@ -99,8 +100,8 @@ void setup() {
   screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
   screen1Center.y += screenYOffset;
   screen2Center.y += screenYOffset;
-  screen2CornerX = int(screen2Center.x - screenSize / 2);
-  screen2CornerY = int(screen2Center.y - screenSize / 2);
+  screen2Corner.x = int(screen2Center.x - screenSize / 2);
+  screen2Corner.y = int(screen2Center.y - screenSize / 2);
 
   if (mb == null) {
     mbInit();
@@ -314,9 +315,4 @@ void draw() {
   }
 
   displayFPS();
-
-  push();
-  textSize(32);
-  text(screenYOffset, screen2Center.x, screen2Center.y);
-  pop();
 }
