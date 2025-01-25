@@ -281,11 +281,11 @@ class AtomAnalyzer {
   }
 
 
-  void handleKey() {
+  void handleKey(int value) {
     //this will be replaced by button and potaky
-    if (keyCode == UP) {
+    if (keyCode == UP || value == 1) {
       cursorPlayer--;
-    } else if (keyCode == DOWN) {
+    } else if (keyCode == DOWN || value == 0) {
       cursorPlayer++;
     } else if (keyCode == ENTER || keyCode == RETURN) {
       validateResult();

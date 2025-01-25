@@ -181,7 +181,7 @@ boolean moveForward, moveBackward, turnLeft, turnRight;
 
 void keyPressed() {
   if (atomAnl != null && sampleIdentification) {
-    atomAnl.handleKey();
+    atomAnl.handleKey(111111);
   }
   if (key == 'r') { // restart
     restartGame();
@@ -221,7 +221,7 @@ void keyPressed() {
 
 
   if (key == 'b') {
-    //hazardMonitor.interference = (random(2) < 1) ? true : false ;
+    hazardMonitor.interference = (random(2) < 1) ? true : false ;
     Weather [] randomw = Weather.values();
     Weather random_weather = randomw[int(random(randomw.length))];
 
@@ -231,8 +231,8 @@ void keyPressed() {
     DailyCycle [] randomd = DailyCycle.values();
     DailyCycle random_day = randomd[int(random(randomd.length))];
 
-    hazardMonitor.w = random_weather;
-    hazardMonitor.d = random_day;
+    hazardMonitor.w = Weather.CLEAR;
+    hazardMonitor.d = DailyCycle.MORNING;
     hazardMonitor.windSpeed = round(random(0, 88));
     hazardMonitor.temp = round(random(-90, 88));
     //hazardMonitor.alert = random_alert;
