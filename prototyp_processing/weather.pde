@@ -13,7 +13,8 @@ enum DailyCycle {
     AFTERNOON("Day phase: AFTERNOON"),
     EVENING("Day phase:   EVENING"),
     DUSK("Day phase:      DUSK"),
-    NIGHT("Day phase:     NIGHT");
+    NIGHT("Day phase:     NIGHT"),
+    MIDNIGHT("Day phase:  MIDNIGHT");
 
   String message;
 
