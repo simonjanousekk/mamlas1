@@ -55,7 +55,7 @@ float lastLcdRefresh = 0;
 // how fast we want the different params to be updated, based on gamestate (in ms)
 // for wind and temp.
 float bottleneckRefresh = 1000;
-float bottleneckLast = 0; 
+float bottleneckLast = 0;
 // for forecast and day phase
 float fastRefresh = 300;
 float fastLast = 0;
@@ -302,24 +302,26 @@ void draw() {
     compass.displayOutside();
   }
 
-  // UPDATING PARAMETERS ON LCD 
-  if (hazardMonitor != null && millis() - bottleneckLast > bottleneckRefresh) {
-    bottleneckLast = millis();
-    hazardMonitor.temp = gameState.outTemperature;
-  }
-  if (hazardMonitor != null && millis() - fastLast > fastRefresh) {
-    fastLast = millis();
-    hazardMonitor.d = DailyCycle.valueOf(gameState.dayPhase);
-  }
+  if (hazardMonitor != null) {
+    // UPDATING PARAMETERS ON LCD
+    if (millis() - bottleneckLast > bottleneckRefresh) {
+      bottleneckLast = millis();
+      hazardMonitor.temp = gameState.outTemperature;
+    }
+    if (millis() - fastLast > fastRefresh) {
+      fastLast = millis();
+      hazardMonitor.d = DailyCycle.valueOf(gameState.dayPhase);
+    }
 
-  if (hazardMonitor != null && millis() - lastLcdRefresh > LcdRefresh) {
-    lastLcdRefresh = millis();
-    if (hazardMonitor.interference) {
-      hazardMonitor.noiseAmount = mouseX;
-      hazardMonitor.displayHazard();
-    } else if (!hazardMonitor.forecast.equals(hazardMonitor.last_forecast) || hazardMonitor.last_interference != hazardMonitor.interference) {
-      // synchronising thread with real state
-      hazardMonitor.displayHazard();
+    if ( millis() - lastLcdRefresh > LcdRefresh) {
+      lastLcdRefresh = millis();
+      if (hazardMonitor.interference) {
+        hazardMonitor.noiseAmount = mouseX;
+        hazardMonitor.displayHazard();
+      } else if (!hazardMonitor.forecast.equals(hazardMonitor.last_forecast) || hazardMonitor.last_interference != hazardMonitor.interference) {
+        // synchronising thread with real state
+        hazardMonitor.displayHazard();
+      }
     }
   }
 
