@@ -112,20 +112,21 @@ class HazardMonitor {
     lcd.clearDisplay();
     displayHazard();
     String windLine = padParam("Wind speed:", windSpeed, "m/s");
-    String tempLine = padParam("Surface temp:", temp, "°C");
+    String tempLine = padParam("Surface temp:", temp, "C");
 
     String [] params = {d.getMessage(), w.getMessage(), windLine, tempLine};
+    lcd.displayText("˙˚˜•o");
   }
 
   void updateHazard() {
     // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
-    if (alert == Alerts.NONE) {
-      String windLine = padParam("Wind speed:", windSpeed, "m/s");
-      String tempLine = padParam("Surface temp:", temp, "ºC");
-      forecast = String.join("\n", d.getMessage(), w.getMessage(), windLine, tempLine);
-    } else {
-      forecast = alert.getMessage();
-    }
+    //if (alert == Alerts.NONE) {
+    //  String windLine = padParam("Wind speed:", windSpeed, "m/s");
+    //  String tempLine = padParam("Surface temp:", temp, "ºC");
+    //  forecast = String.join("\n", d.getMessage(), w.getMessage(), windLine, tempLine);
+    //} else {
+    //  forecast = alert.getMessage();
+    //}
   }
 
   void displayHazard() {
