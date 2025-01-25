@@ -162,13 +162,6 @@ void setup() {
 
 void draw() {
 
-  screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
-  screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
-  screen1Center.y += screenYOffset;
-  screen2Center.y += screenYOffset;
-  screen2CornerX = int(screen2Center.x - screenSize / 2);
-  screen2CornerY = int(screen2Center.y - screenSize / 2);
-
   gameState.update();
 
   //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
