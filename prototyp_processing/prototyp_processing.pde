@@ -175,7 +175,6 @@ void setup() {
 void draw() {
 
   if (!gamePaused && !sampleIdentification) {
-    println("main update running");
     gameState.update();
 
     //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));

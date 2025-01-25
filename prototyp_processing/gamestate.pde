@@ -13,32 +13,33 @@ class GameState {
 
   // TEMPERATURE STUFF
   int outTemperaturePhases[][] = {{-30, -60}, {20, 70}, {100, 120}, {40, 80}, {0, -40}, {-70, -100}, {-140, -160}, {-80, -110}};
-  
   float temperature = 0;
   float outTemperature = 0;
   int max_temperature = 80;
   int min_temperature = -125;
   LedDriver ledDriverTemperature = new LedDriver(new int[] {0, 3, 7});
 
+  // COOL AND HEAT ʕ⌐■ᴥ■ʔ
   boolean heating;
   boolean cooling;
   float coolingStrength =.2;
   float heatingStrength =.2;
-
 
   // POWER STUFF
   int powerUsage = 0;
   float batteryDrain = 100 / 10;
   float battery = 100;
 
-
+  // HAZARDS
+  boolean hazardHappening = false;
+  int lastHazard = 0;
+  float[] magStormChancePhases = {.25, .1, .02, .1, .25, .1, .02, 1}; // chances in %/100
+  float[] sandStormChancePhases = {.1, .05, .01, .05, .1, .05, .01, .05};
+  
 
   GameState() {
     //handle arduino stuff
     turnAllLedOff();
-
-    //turnOnLed(13);
-    //turnAllLedOn();
 
 
 
@@ -59,6 +60,21 @@ class GameState {
   }
 
 
+  void updateHazards() {
+    if (!hazardHappening) {
+      float hazardChanceMultiplier = map(millis(), lastHazard, lastHazard+dayLength/2, 0, 10);
+      
+      if (random(1) < magStormChancePhases[dayPhaseIndex+1%dayPhases.length]) {
+        println("magStorm imminent");
+        
+      } else if (random(1) < sandStormChancePhases[dayPhaseIndex+1%dayPhases.length]) {
+        println("sandStorm imminent");
+      }
+      println(hazardChanceMultiplier);
+    }
+  }
+
+
   int prevDayPhaseIndex = -1;
   void updateTimePhase() {
     if (millis() >= dayStart + dayLength) {
@@ -69,11 +85,14 @@ class GameState {
     dayPhase = dayPhases[dayPhaseIndex];
 
     // generates random temperature for current and next phase
-    if (prevDayPhaseIndex != dayPhaseIndex) {
+    if (prevDayPhaseIndex != dayPhaseIndex) { // called on new phase
       int cR[] = outTemperaturePhases[dayPhaseIndex];
       int nR[] = outTemperaturePhases[(dayPhaseIndex + 1) % outTemperaturePhases.length];
       currentPhaseTemp = random(cR[0], cR[1]);
       nextPhaseTemp = random(nR[0], nR[1]);
+      
+      updateHazards();
+      
       prevDayPhaseIndex = dayPhaseIndex;
     }
   }
