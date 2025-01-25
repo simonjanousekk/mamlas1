@@ -237,8 +237,8 @@ void keyPressed() {
 
     hazardMonitor.w = Weather.CLEAR;
     hazardMonitor.d = DailyCycle.MORNING;
-    hazardMonitor.windSpeed = round(random(0, 88));
-    hazardMonitor.temp = round(random(-90, 88));
+    hazardMonitor.windSpeed = int(random(0, 88));
+    hazardMonitor.temp = int(random(-90, 88));
     //hazardMonitor.alert = random_alert;
 
     hazardMonitor.updateHazard();

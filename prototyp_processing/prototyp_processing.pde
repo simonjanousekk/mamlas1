@@ -308,7 +308,7 @@ void draw() {
     // UPDATING PARAMETERS ON LCD
     if (millis() - bottleneckLast > bottleneckRefresh) {
       bottleneckLast = millis();
-      hazardMonitor.temp = round(gameState.outTemperature);
+      hazardMonitor.temp = int(gameState.outTemperature);
       hazardMonitor.updateHazard();
     }
     if (millis() - fastLast > fastRefresh) {

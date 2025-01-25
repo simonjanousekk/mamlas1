@@ -120,6 +120,11 @@ class GameState {
     sendTemperature(int(temperature));
 
     ledDriverTemperature.turnBased(temperature > max_temperature || temperature < min_temperature);
+    
+    if(temperature > max_temperature) {
+      hazardMonitor.alert = Alerts.OVERHEATING;
+      hazardMonitor.updateHazard();
+    }
   }
 
   void updatePowerUsage() {

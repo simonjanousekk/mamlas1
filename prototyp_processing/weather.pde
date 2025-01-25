@@ -100,8 +100,8 @@ class HazardMonitor {
   Thread lcdMain;
   int noiseAmount = 0;
 
-  float windSpeed = 0;
-  float temp = 0;
+  int windSpeed = 0;
+  int temp = 0;
 
   String [] params = new String[4];
 
@@ -111,8 +111,8 @@ class HazardMonitor {
     lcd = new LcdDisplay(pi4j, 4, 20);
     lcd.clearDisplay();
     displayHazard();
-    String windLine = padParam("Wind speed:", windSpeed);
-    String tempLine = padParam("Surface temp:", temp);
+    String windLine = padParam("Wind speed:", windSpeed, "m/s");
+    String tempLine = padParam("Surface temp:", temp, "ºC");
 
     String [] params = {d.getMessage(), w.getMessage(), windLine, tempLine};
   }
@@ -120,8 +120,8 @@ class HazardMonitor {
   void updateHazard() {
     // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
     if (alert == Alerts.NONE) {
-      String windLine = padParam("Wind speed:", windSpeed);
-      String tempLine = padParam("Surface temp:", temp);
+      String windLine = padParam("Wind speed:", windSpeed, "m/s");
+      String tempLine = padParam("Surface temp:", temp, "ºC");
       forecast = String.join("\n", d.getMessage(), w.getMessage(), windLine, tempLine);
     } else {
       forecast = alert.getMessage();
@@ -204,12 +204,14 @@ class HazardMonitor {
     lcdMain.start();
   }
 
-  String padParam(String param, float value) {
+  String padParam(String param, int value, String unit) {
     // max. length total should be 20
-    int total_length = param.length() + String.valueOf(value).length();
+    String value_string = String.valueOf(value).concat(unit);
+    int total_length = param.length() + value_string.length();
 
     if (total_length > 20) {
       // shouldnt happen. Here for debugging
+      println("there was a parameter too long: ", param);
       return "";
     } else {
       int spaces = 20 - total_length;
