@@ -3,7 +3,7 @@ class GameState {
 
   // TIME PHASES STUFF
   int dayPhaseIndex = 0;
-  int dayLength = 1000 * 60 * 1;
+  int dayLength = 1000 * 60 * 8;
   String[] dayPhases = {"DAWN", "MORNING", "NOON", "AFTERNOON", "DUSK", "EVENING", "MIDNIGHT", "NIGHT"};
   String dayPhase = dayPhases[dayPhaseIndex];
   int dayStart = 0;
@@ -34,6 +34,10 @@ class GameState {
   boolean hazardHappening = false;
   int lastHazard = 0;
   float hazardChanceMultiplier;
+  boolean alertCold = false;
+  boolean alertHot = false;
+  boolean alertSand = false;
+  boolean alertMag = false;
 
 
   float[] magStormChancePhases = {.25, .1, .02, .1, .25, .1, .02, 1}; // chances in %/100
@@ -70,8 +74,7 @@ class GameState {
       if (hazardMonitor.forecast == Forecast.SANDSTORM) {
         hazardMonitor.alert = Alerts.SANDSTORM;
         storm.startStorm(int(phaseLength), .1, .1);
-      }
-      if (hazardMonitor.forecast == Forecast.MAGSTORM) {
+      } else if (hazardMonitor.forecast == Forecast.MAGSTORM) {
         hazardMonitor.alert = Alerts.MAGSTORM;
         signalDisplay.randomizeSineGame();
       }
@@ -138,11 +141,10 @@ class GameState {
 
     ledDriverTemperature.turnBased(temperature > max_temperature || temperature < min_temperature);
 
-    if (temperature > max_temperature) {
-      hazardMonitor.alert = Alerts.OVERHEATING;
-      hazardMonitor.updateHazard();
-    }
+    alertHot = temperature > max_temperature;
+    alertCold = temperature < min_temperature;
   }
+
 
   void updatePowerUsage() {
     int pu = 0;
@@ -167,7 +169,6 @@ class GameState {
     sendBattery(battery);
   }
 }
-
 
 
 
