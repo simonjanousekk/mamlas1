@@ -115,18 +115,17 @@ class HazardMonitor {
     String tempLine = padParam("Surface temp:", temp, "C");
 
     String [] params = {d.getMessage(), w.getMessage(), windLine, tempLine};
-    lcd.displayText("˙˚˜•o");
   }
 
   void updateHazard() {
     // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
-    //if (alert == Alerts.NONE) {
-    //  String windLine = padParam("Wind speed:", windSpeed, "m/s");
-    //  String tempLine = padParam("Surface temp:", temp, "ºC");
-    //  forecast = String.join("\n", d.getMessage(), w.getMessage(), windLine, tempLine);
-    //} else {
-    //  forecast = alert.getMessage();
-    //}
+    if (alert == Alerts.NONE) {
+      String windLine = padParam("Wind speed:", windSpeed, "m/s");
+      String tempLine = padParam("Surface temp:", temp, "ºC");
+      forecast = String.join("\n", d.getMessage(), w.getMessage(), windLine, tempLine);
+    } else {
+      forecast = alert.getMessage();
+    }
   }
 
   void displayHazard() {
@@ -161,6 +160,7 @@ class HazardMonitor {
       while (threadActive) {
         println("new thread ", frameCount);
         if (!interference && last_interference == true) {
+          
           // Make sure cleaning random symbol after signal problems are resolvd
           lcd.clearDisplay();
           // we also have to reset all params, otherwise they wont be displayed...
@@ -185,8 +185,8 @@ class HazardMonitor {
         String [] split_forecast = forecast.split("\n");
         for (int k = 0; k < split_forecast.length; k++) {
           if (!split_forecast[k].equals(params[k]) ) {
-            lcd.displayLineOfText(split_forecast[k], k);
-            params[k] = split_forecast[k];
+            //lcd.displayLineOfText(split_forecast[k], k);
+            //params[k] = split_forecast[k];
           }
         }
         if (interference) {
@@ -199,6 +199,7 @@ class HazardMonitor {
         threadActive = false;
         last_forecast = forecast;
         last_interference = interference;
+        lcd.displayText("˙˚˜•");
       }
     }
     );
