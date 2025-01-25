@@ -103,16 +103,20 @@ class GameState {
   }
 
   void updateAlert() {
-    if (alertMag) {
-      hazardMonitor.alert = Alerts.MAGSTORM;
-    } else if (alertSand) {
-      hazardMonitor.alert = Alerts.SANDSTORM;
-    } else if (alertHot) {
-      hazardMonitor.alert = Alerts.OVERHEATING;
-    } else if (alertCold) {
-      hazardMonitor.alert = Alerts.FREEZE;
+    if (hazardMonitor != null) {
+      if (alertMag) {
+        hazardMonitor.alert = Alerts.MAGSTORM;
+      } else if (alertSand) {
+        hazardMonitor.alert = Alerts.SANDSTORM;
+      } else if (alertHot) {
+        hazardMonitor.alert = Alerts.OVERHEATING;
+      } else if (alertCold) {
+        hazardMonitor.alert = Alerts.FREEZE;
+      } else {
+        hazardMonitor.alert = Alerts.NONE;
+      }
+      hazardMonitor.updateHazard();
     }
-    hazardMonitor.updateHazard();
   }
 
 
