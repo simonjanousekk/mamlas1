@@ -48,7 +48,7 @@ enum Forecast {
 // These are ALERTS / CRITICAL information. When they will be set, the screen will flash and display the alert until its resolved.
 // IMPORTANT: So far, no handling of more than 1 alert. Maybe not necessary ?
 enum Alerts {
-  OVERUSAGE("WARNING:\n ENERGY CONSUMPTION \n HIGH \n Monitor systems"),
+  OVERUSAGE("WARNING:\nENERGY CONSUMPTION \nHIGH \nMonitor systems"),
     POWER("WARNING:\n ENERGY RESERVE\n BELOW 20%\n Conserve Power"),
     POWER_CRITICAL("CRITICAL FAILURE\n ENERGY RESERVE \n EXHAUSTED\n SHUTTING DOWN"),
     OVERHEATING("WARNING:\n TEMPERATURE NEARING\n SAFE LIMITS\n Cooling required"),
@@ -95,7 +95,7 @@ class HazardMonitor {
   boolean threadActive = false;
   boolean last_interference = false;
   boolean flash = false;
-  
+    
   Thread lcdMain;
   int noiseAmount = 0;
   
@@ -111,7 +111,7 @@ class HazardMonitor {
     lcd.clearDisplay();
     displayHazard();
     String windLine = padParam("Wind speed:", windSpeed, "m/s");
-    String tempLine = padParam("Surface temp:", temp, "ºC");
+    String tempLine = padParam("Surface temp:", temp, "°C");
     
     String[] params = {dayCycle.getMessage(), forecast.getMessage(), windLine, tempLine};
   }
@@ -120,7 +120,7 @@ class HazardMonitor {
     // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
     if (alert == Alerts.NONE) {
       String windLine = padParam("Wind speed:", windSpeed, "m/s");
-      String tempLine = padParam("Surface temp:", temp, "ºC");
+      String tempLine = padParam("Surface temp:", temp, "°C");
       displayBuffer = String.join("\n", dayCycle.getMessage(), forecast.getMessage(), windLine, tempLine);
     } else {
       displayBuffer = alert.getMessage();

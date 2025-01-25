@@ -71,7 +71,10 @@ class GameState {
         hazardMonitor.alert = Alerts.SANDSTORM;
         storm.startStorm(int(phaseLength), .1, .1);
       }
-      if (hazardMonitor.forecast == Forecast.MAGSTORM) hazardMonitor.alert = Alerts.MAGSTORM;
+      if (hazardMonitor.forecast == Forecast.MAGSTORM) {
+        hazardMonitor.alert = Alerts.MAGSTORM;
+        signalDisplay.randomizeSineGame();
+      }
     }
 
     hazardChanceMultiplier = map(millis(), lastHazard, lastHazard + dayLength / 2, 0, 10);
