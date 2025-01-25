@@ -307,11 +307,14 @@ void draw() {
 
   if (hazardMonitor != null) {
     // UPDATING PARAMETERS ON LCD
+    // for temperature and windspeed, we have to put a bottleneck , because otherwise it would refresh too often
     if (millis() - bottleneckLast > bottleneckRefresh) {
       bottleneckLast = millis();
       hazardMonitor.temp = int(gameState.outTemperature);
       hazardMonitor.updateHazard();
     }
+    
+    // Day phases should change immediately - here should go 
     if (millis() - fastLast > fastRefresh) {
       fastLast = millis();
       hazardMonitor.d = DailyCycle.valueOf(gameState.dayPhase);

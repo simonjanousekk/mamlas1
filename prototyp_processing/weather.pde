@@ -211,7 +211,7 @@ class HazardMonitor {
       for (int i = 0; i < spaces; i++) {
         param+=" ";
       }
-      String padded_param = param + String.valueOf(value);
+      String padded_param = param + value_string;
       return padded_param;
     }
   }
