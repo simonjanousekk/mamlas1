@@ -112,7 +112,7 @@ class HazardMonitor {
     lcd.clearDisplay();
     displayHazard();
     String windLine = padParam("Wind speed:", windSpeed, "m/s");
-    String tempLine = padParam("Surface temp:", temp, "ºC");
+    String tempLine = padParam("Surface temp:", temp, "°C");
 
     String [] params = {d.getMessage(), w.getMessage(), windLine, tempLine};
   }
