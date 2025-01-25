@@ -23,7 +23,9 @@ class Info {
     text("phase: " + gameState.dayPhase + " time: " + gameState.dayTime, pos.x, pos.y + 90);
     text("temp: " + int(gameState.temperature) + " outTemp: " + int(gameState.outTemperature), pos.x, pos.y + 105);
     text("cool: " + gameState.cooling + " heat: " + gameState.heating, pos.x, pos.y + 120);
-
+    if (hazardMonitor != null) {
+      text("haz: " + gameState.hazardChanceMultiplier, pos.x, pos.y+135);
+    }
     pop();
   }
 }

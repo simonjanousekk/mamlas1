@@ -22,8 +22,8 @@ class GameState {
   // COOL AND HEAT ʕ⌐■ᴥ■ʔ
   boolean heating;
   boolean cooling;
-  float coolingStrength =.2;
-  float heatingStrength =.2;
+  float coolingStrength =.05;
+  float heatingStrength =.05;
 
   // POWER STUFF
   int powerUsage = 0;
@@ -33,6 +33,7 @@ class GameState {
   // HAZARDS
   boolean hazardHappening = false;
   int lastHazard = 0;
+  float hazardChanceMultiplier;
 
 
   float[] magStormChancePhases = {.25, .1, .02, .1, .25, .1, .02, 1}; // chances in %/100
@@ -73,11 +74,11 @@ class GameState {
       if (hazardMonitor.forecast == Forecast.MAGSTORM) hazardMonitor.alert = Alerts.MAGSTORM;
     }
 
-    float hazardChanceMultiplier = map(millis(), lastHazard, lastHazard + dayLength / 2, 0, 10);
-    if (random(1) < magStormChancePhases[dayPhaseIndex + 1 % dayPhases.length]) {
+    hazardChanceMultiplier = map(millis(), lastHazard, lastHazard + dayLength / 2, 0, 10);
+    if (random(1) < magStormChancePhases[dayPhaseIndex + 1 % dayPhases.length] * hazardChanceMultiplier) {
       println("magStorm imminent");
       hazardMonitor.forecast = Forecast.MAGSTORM;
-    } else if (random(1) < sandStormChancePhases[dayPhaseIndex + 1 % dayPhases.length]) {
+    } else if (random(1) < sandStormChancePhases[dayPhaseIndex + 1 % dayPhases.length] *hazardChanceMultiplier) {
       println("sandStorm imminent");
       hazardMonitor.forecast = Forecast.SANDSTORM;
     } else {
