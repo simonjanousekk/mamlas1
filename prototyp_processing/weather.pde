@@ -184,8 +184,8 @@ class HazardMonitor {
         String [] split_forecast = forecast.split("\n");
         for (int k = 0; k < split_forecast.length; k++) {
           if (!split_forecast[k].equals(params[k]) ) {
-            //lcd.displayLineOfText(split_forecast[k], k);
-            //params[k] = split_forecast[k];
+            lcd.displayLineOfText(split_forecast[k], k);
+            params[k] = split_forecast[k];
           }
         }
         if (interference) {
