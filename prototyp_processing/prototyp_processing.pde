@@ -59,6 +59,7 @@ int screenGap = 36;
 PVector screen1Center, screen2Center;
 int screen2Border = u * 5;
 int screen1Border = u * 10;
+int screenYOffset = 50;
 
 
 PImage screen1Mask, screen2Mask;
@@ -73,10 +74,8 @@ Load load;
 boolean sampleIdentification = false;
 boolean gameInitialized = false;
 
-
-String midiDevice = "Arduino Micro"; // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
-
-
+// needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
+String midiDevice = "Micro [hw:2,0,0]";
 
 void setup() {
   // this should disable warnings from pi4j (some of them at least) =^..^=
@@ -84,8 +83,8 @@ void setup() {
   System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
   System.setProperty("com.pi4j.logging.level", "ERROR");
 
-  //fullScreen();
-  size(800, 480);
+  fullScreen();
+  //size(800, 480);
 
   noSmooth();
   randomSeed(millis());
@@ -157,11 +156,18 @@ void setup() {
 
   surface.setVisible(false);
   surface.setVisible(true);
-  
+
   gameInitialized = true;
 }
 
 void draw() {
+
+  screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
+  screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
+  screen1Center.y += screenYOffset;
+  screen2Center.y += screenYOffset;
+  screen2CornerX = int(screen2Center.x - screenSize / 2);
+  screen2CornerY = int(screen2Center.y - screenSize / 2);
 
   gameState.update();
 
@@ -277,17 +283,17 @@ void draw() {
   image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
 
   // hide empty parts of the screen, might be deleted for production
-  push();
-  fill(0);
-  noStroke();
-  float xgap = (width - screenGap - screenSize * 2) / 2;
-  float ygap = (height - screenSize) / 2;
-  rect(0, 0, width, ygap);
-  rect(width, height, -width, -ygap);
-  rect(0, 0, xgap, height);
-  rect(width, height, -xgap, -height);
-  rect(screenSize + xgap, 0, screenGap, height);
-  pop();
+  //push();
+  //fill(0);
+  //noStroke();
+  //float xgap = (width - screenGap - screenSize * 2) / 2;
+  //float ygap = (height - screenSize) / 2;
+  //rect(0, 0, width, ygap);
+  //rect(width, height, -width, -ygap);
+  //rect(0, 0, xgap, height);
+  //rect(width, height, -xgap, -height);
+  //rect(screenSize + xgap, 0, screenGap, height);
+  //pop();
 
   if (!sampleIdentification) { // draw the ouside compass
     compass.displayOutside();
@@ -313,4 +319,9 @@ void draw() {
   }
 
   displayFPS();
+
+  push();
+  textSize(32);
+  text(screenYOffset, screen2Center.x, screen2Center.y);
+  pop();
 }

@@ -145,7 +145,8 @@ class Player {
   }
 
   void setDesiredVelocity(int v) {
-    desiredSpeed = map(v, 1, 127, 0, max_speed);
+    desiredSpeed = map(v, 2, 125, 0, max_speed);
+    desiredSpeed = constrain(desiredSpeed, 0, max_speed);
   }
 
   void setSuspension(int v) {
