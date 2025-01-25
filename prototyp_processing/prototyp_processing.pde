@@ -116,7 +116,7 @@ void setup() {
   }
 
   load = new Load();
-  mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
+  mask = loadImage("mask_debug.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 18);
@@ -287,17 +287,17 @@ void draw() {
   image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
 
   // hide empty parts of the screen, might be deleted for production
-  //push();
-  //fill(0);
-  //noStroke();
-  //float xgap = (width - screenGap - screenSize * 2) / 2;
-  //float ygap = (height - screenSize) / 2;
-  //rect(0, 0, width, ygap);
-  //rect(width, height, -width, -ygap);
-  //rect(0, 0, xgap, height);
-  //rect(width, height, -xgap, -height);
-  //rect(screenSize + xgap, 0, screenGap, height);
-  //pop();
+  push();
+  fill(0);
+  noStroke();
+  float xgap = (width - screenGap - screenSize * 2) / 2;
+  float ygap = (height - screenSize) / 2;
+  rect(0, 0, width, ygap+screenYOffset);
+  rect(width, height, -width, -ygap+screenYOffset);
+  rect(0, 0, xgap, height);
+  rect(width, height, -xgap, -height);
+  rect(screenSize + xgap, 0, screenGap, height);
+  pop();
 
   if (!sampleIdentification) { // draw the ouside compass
     compass.displayOutside();
