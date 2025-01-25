@@ -66,9 +66,9 @@ int screenHalf = 180;
 int screenGap = 36;
 PVector screen1Center, screen2Center;
 IntVector screen2Corner = new IntVector();
-int screen2Border = u * 7;
+int screen2Border = u * 6;
 int screen1Border = u * 10;
-int screenYOffset = 50;
+int screenYOffset = 20;
 
 
 PImage screen1Mask, screen2Mask;
@@ -336,4 +336,9 @@ void draw() {
   }
 
   displayFPS();
+  
+  push();
+  fill(255);
+  text(screenYOffset, screen2Center.x, screen2Center.y);
+  pop();
 }
