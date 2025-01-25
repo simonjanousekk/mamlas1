@@ -127,6 +127,7 @@ class HazardMonitor {
     if (alert != Alerts.NONE) {
       if (forecast != new_alert) {
         // new alert, we must flash
+        
         flash = true;
         new_alert = forecast;
       }
@@ -150,7 +151,7 @@ class HazardMonitor {
       threadActive = true;
       while (threadActive) {
         println("new thread ", frameCount);
-        if (!interference) {
+        if (!interference && last_interference == true) {
           // Make sure cleaning random symbol after signal problems are resolvd
           lcd.clearDisplay();
           delay(100);

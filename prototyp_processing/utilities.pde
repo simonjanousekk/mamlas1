@@ -207,7 +207,7 @@ void keyPressed() {
     sampleIdentification = !sampleIdentification;
   }
   if (key == 'b') {
-    //hazardMonitor.interference = (random(2) < 1) ? true : false ;
+    hazardMonitor.interference = (random(2) < 1) ? true : false ;
     Weather [] randomw = Weather.values();
     Weather random_weather = randomw[int(random(randomw.length))];
 
