@@ -160,7 +160,6 @@ class HazardMonitor {
       while (threadActive) {
         println("new thread ", frameCount);
         if (!interference && last_interference == true) {
-          
           // Make sure cleaning random symbol after signal problems are resolvd
           lcd.clearDisplay();
           // we also have to reset all params, otherwise they wont be displayed...
@@ -199,7 +198,6 @@ class HazardMonitor {
         threadActive = false;
         last_forecast = forecast;
         last_interference = interference;
-        lcd.displayText("˙˚˜•");
       }
     }
     );
