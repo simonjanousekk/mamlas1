@@ -12,7 +12,7 @@ class GameState {
   float currentPhaseTemp, nextPhaseTemp;
 
   // TEMPERATURE STUFF
-  int outTemperaturePhases[][] = {{-30, -60}, {20, 70}, {100, 120}, {40, 80}, {0, -40}, {-70, -100}, {-140, -160}, {-80, -110}};
+  int outTemperaturePhases[][] = {{ - 30, -60}, {20, 70}, {100, 120}, {40, 80}, {0, -40}, { - 70, -100}, { - 140, -160}, { - 80, -110} };
   float temperature = 0;
   float outTemperature = 0;
   int max_temperature = 80;
@@ -33,9 +33,11 @@ class GameState {
   // HAZARDS
   boolean hazardHappening = false;
   int lastHazard = 0;
+
+
   float[] magStormChancePhases = {.25, .1, .02, .1, .25, .1, .02, 1}; // chances in %/100
   float[] sandStormChancePhases = {.1, .05, .01, .05, .1, .05, .01, .05};
-  
+
 
   GameState() {
     //handle arduino stuff
@@ -61,17 +63,28 @@ class GameState {
 
 
   void updateHazards() {
-    if (!hazardHappening) {
-      float hazardChanceMultiplier = map(millis(), lastHazard, lastHazard+dayLength/2, 0, 10);
-      
-      if (random(1) < magStormChancePhases[dayPhaseIndex+1%dayPhases.length]) {
-        println("magStorm imminent");
-        
-      } else if (random(1) < sandStormChancePhases[dayPhaseIndex+1%dayPhases.length]) {
-        println("sandStorm imminent");
+    if (!(hazardMonitor.forecast == Forecast.CLEAR)) {
+      hazardHappening = true;
+      lastHazard = millis();
+      if (hazardMonitor.forecast == Forecast.SANDSTORM) {
+        hazardMonitor.alert = Alerts.SANDSTORM;
+        storm.startStorm(int(phaseLength), .1, .1);
       }
-      println(hazardChanceMultiplier);
+      if (hazardMonitor.forecast == Forecast.MAGSTORM) hazardMonitor.alert = Alerts.MAGSTORM;
     }
+
+    float hazardChanceMultiplier = map(millis(), lastHazard, lastHazard + dayLength / 2, 0, 10);
+    if (random(1) < magStormChancePhases[dayPhaseIndex + 1 % dayPhases.length]) {
+      println("magStorm imminent");
+      hazardMonitor.forecast = Forecast.MAGSTORM;
+    } else if (random(1) < sandStormChancePhases[dayPhaseIndex + 1 % dayPhases.length]) {
+      println("sandStorm imminent");
+      hazardMonitor.forecast = Forecast.SANDSTORM;
+    } else {
+      hazardMonitor.forecast = Forecast.CLEAR;
+    }
+
+    hazardMonitor.updateHazard();
   }
 
 
@@ -84,15 +97,15 @@ class GameState {
     dayPhaseIndex = (int) map(millis(), dayStart, dayStart + dayLength, 0, dayPhases.length);
     dayPhase = dayPhases[dayPhaseIndex];
 
-    // generates random temperature for current and next phase
+    //generates random temperature for current and next phase
     if (prevDayPhaseIndex != dayPhaseIndex) { // called on new phase
       int cR[] = outTemperaturePhases[dayPhaseIndex];
       int nR[] = outTemperaturePhases[(dayPhaseIndex + 1) % outTemperaturePhases.length];
       currentPhaseTemp = random(cR[0], cR[1]);
       nextPhaseTemp = random(nR[0], nR[1]);
-      
-      updateHazards();
-      
+
+      if (hazardMonitor != null) updateHazards();
+
       prevDayPhaseIndex = dayPhaseIndex;
     }
   }
@@ -107,7 +120,7 @@ class GameState {
     float temperatureChange = (outTemperature - temperature) * 0.005; // Proportional to the difference
     temperature += temperatureChange;
 
-    // this is generated and i dont kow if it works
+    //this is generated and i dont kow if it works
     if (heating) {
       float heatingEffectiveness = max(0, 1 - (temperature / max_temperature)); // Less effective when already hot
       temperature += heatingStrength * heatingEffectiveness; // Slow, scalable adjustment
@@ -120,8 +133,8 @@ class GameState {
     sendTemperature(int(temperature));
 
     ledDriverTemperature.turnBased(temperature > max_temperature || temperature < min_temperature);
-    
-    if(temperature > max_temperature) {
+
+    if (temperature > max_temperature) {
       hazardMonitor.alert = Alerts.OVERHEATING;
       hazardMonitor.updateHazard();
     }
@@ -135,9 +148,9 @@ class GameState {
     if (screen2State == s2s.GPS) pu += batteryDrain * 3;
     if (player.speed > 0) { // player moving
       float s = map(player.speed, 0, player.max_speed, 0, 2); // speed drain
-      pu += batteryDrain * s;
+      pu+= batteryDrain * s;
       float t = player.terrainDifference;
-      pu += batteryDrain * t;
+      pu+= batteryDrain * t;
     }
     if (player.scanning) pu += batteryDrain * 1;
 

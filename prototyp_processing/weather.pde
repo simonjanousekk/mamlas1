@@ -15,9 +15,9 @@ enum DailyCycle {
     DUSK("Day phase:      DUSK"),
     NIGHT("Day phase:     NIGHT"),
     MIDNIGHT("Day phase:  MIDNIGHT");
-
+  
   String message;
-
+  
   DailyCycle(String message) {
     this.message = message;
   }
@@ -28,17 +28,16 @@ enum DailyCycle {
 
 // Displayed lines 2, 3 and 4 - should display weather and maybe some info / recommendations.
 // These are NOT Critical, which are in enum class "Alerts"
-enum Weather {
+enum Forecast {
   // do not remove the spaces. its on purpose
   CLEAR("Forecast:      CLEAR"),
     WIND("Forecast:STRONG WIND"),
     SANDSTORM("Forecast:  SANDSTORM"),
-    MAGSTORM("Forecast:  MAG STORM"),
-    HOT("Forecast:  HIGH TEMP");
-
+    MAGSTORM("Forecast:  MAG STORM");
+  
   String message;
-
-  Weather(String message) {
+  
+  Forecast(String message) {
     this.message = message;
   }
   String getMessage() {
@@ -56,15 +55,15 @@ enum Alerts {
     OVERHEATING_CRITICAL("CRITICAL FAILURE:\n CORE OVERHEATING \n INTERNAL DAMAGE\n DETECTED"),
     FREEZE("WARNING:\n TEMPERATURE NEARING\n SAFE LIMITS\n Heating required"),
     FREEZE_CRITICAL("CRITICAL FAILURE:\n SYSTEM FREEZING \n INTERNAL DAMAGE\n DETECTED"),
-    STORM_SOON("WARNING:\n MAGNETIC STORM\n IMMINENT\n Comm unstable"),
-    STORM_HERE("WARNING:\n MAGNETIC STORM\n IN PROGRESS\n Comm unstable"),
+    //MAGSTORM_SOON("WARNING:\n MAGNETIC STORM\n IMMINENT\n Comm unstable"),
+    MAGSTORM("WARNING:\n MAGNETIC STORM\n IN PROGRESS\n Comm unstable"),
     WIND("WARNING:\n STRONG WIND\n Rover trajectory\n altered"),
     SANDSTORM("WARNING: \n SANDSTORM IN\n PROGRESS\n Engage radar mode"),
     END("\n    PRESS RESET\n TO REPEAT MISSION"),
     NONE("");
-
+  
   String message;
-
+  
   Alerts(String message) {
     this.message = message;
   }
@@ -79,32 +78,32 @@ enum Alerts {
 
 
 class HazardMonitor {
-
+  
   LcdDisplay lcd;
   int i2cBus = 1;
   int lcdAddress = 0x27;
-
-  String last_forecast = "";
-  String forecast = "";
+  
+  String last_displayBuffer = "";
+  String displayBuffer = "";
   String new_alert = "";
-
-  DailyCycle d = DailyCycle.MORNING;
-  Weather w = Weather.CLEAR;
+  
+  DailyCycle dayCycle = DailyCycle.MORNING;
+  Forecast forecast = Forecast.CLEAR;
   Alerts alert = Alerts.NONE;
-
+  
   boolean interference = false;
   boolean threadActive = false;
   boolean last_interference = false;
   boolean flash = false;
-
+  
   Thread lcdMain;
   int noiseAmount = 0;
-
+  
   int windSpeed = 0;
   int temp = 0;
-
-  String [] params = new String[4];
-
+  
+  String[] params = new String[4];
+  
   HazardMonitor() {
     // initialize lcd display
     Context pi4j = Pi4J.newAutoContext();
@@ -113,51 +112,51 @@ class HazardMonitor {
     displayHazard();
     String windLine = padParam("Wind speed:", windSpeed, "m/s");
     String tempLine = padParam("Surface temp:", temp, "ºC");
-
-    String [] params = {d.getMessage(), w.getMessage(), windLine, tempLine};
+    
+    String[] params = {dayCycle.getMessage(), forecast.getMessage(), windLine, tempLine};
   }
-
+  
   void updateHazard() {
     // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
     if (alert == Alerts.NONE) {
       String windLine = padParam("Wind speed:", windSpeed, "m/s");
       String tempLine = padParam("Surface temp:", temp, "ºC");
-      forecast = String.join("\n", d.getMessage(), w.getMessage(), windLine, tempLine);
+      displayBuffer = String.join("\n", dayCycle.getMessage(), forecast.getMessage(), windLine, tempLine);
     } else {
-      forecast = alert.getMessage();
+      displayBuffer = alert.getMessage();
     }
   }
-
+  
   void displayHazard() {
-
+    
     if (alert != Alerts.NONE) {
-      if (forecast != new_alert) {
+      if (displayBuffer != new_alert) {
         // new alert, we must flash
-
+        
         flash = true;
-        new_alert = forecast;
+        new_alert = displayBuffer;
       }
     }
     
     if (!interference) {
-      sendLcd(forecast, false, 0);
+      sendLcd(displayBuffer, false, 0);
     } else if (interference) {
-      sendLcd(forecast, true, noiseAmount);
+      sendLcd(displayBuffer, true, noiseAmount);
     }
   }
-
-
-
-  void sendLcd(String forecast, boolean interference, int noiseAmount) {
+  
+  
+  
+  void sendLcd(String displayBuffer, boolean interference, int noiseAmount) {
     if (threadActive) {
       // There is no way to stop an active thread. all attempts were disasters. the best is to let the thread tell itself
       // when it is finished (by setting threadActive = false at the end of the thread) And not do ANYTHING if it is active.
       return;
     }
-
+    
     lcdMain = new Thread(() -> {
       threadActive = true;
-      while (threadActive) {
+      while(threadActive) {
         println("new thread ", frameCount);
         if (!interference && last_interference == true) {
           // Make sure cleaning random symbol after signal problems are resolvd
@@ -180,35 +179,35 @@ class HazardMonitor {
           lcd.setDisplayBacklight(true);
           flash = false;
         }
-
-        String [] split_forecast = forecast.split("\n");
-        for (int k = 0; k < split_forecast.length; k++) {
-          if (!split_forecast[k].equals(params[k]) ) {
-            lcd.displayLineOfText(split_forecast[k], k);
-            params[k] = split_forecast[k];
+        
+        String[] split_displayBuffer = displayBuffer.split("\n");
+        for (int k = 0; k < split_displayBuffer.length; k++) {
+          if (!split_displayBuffer[k].equals(params[k])) {
+            lcd.displayLineOfText(split_displayBuffer[k], k);
+            params[k] = split_displayBuffer[k];
           }
         }
         if (interference) {
           int n = int(map(noiseAmount, 0, width, 0, 40));
-          for (int i = 0; i< n; i++) {
+          for (int i = 0; i < n; i++) {
             int randomCharCode = int(random(256));
             lcd.writeCharacter((char) randomCharCode, int(random(4)), int(random(20)));
           }
         }
         threadActive = false;
-        last_forecast = forecast;
+        last_displayBuffer = displayBuffer;
         last_interference = interference;
       }
     }
-    );
+   );
     lcdMain.start();
   }
-
+  
   String padParam(String param, int value, String unit) {
     // max. length total should be 20
     String value_string = String.valueOf(value).concat(unit);
     int total_length = param.length() + value_string.length();
-
+    
     if (total_length > 20) {
       // shouldnt happen. Here for debugging
       println("there was a parameter too long: ", param);
@@ -216,7 +215,7 @@ class HazardMonitor {
     } else {
       int spaces = 20 - total_length;
       for (int i = 0; i < spaces; i++) {
-        param+=" ";
+        param += " ";
       }
       String padded_param = param + String.valueOf(value);
       return padded_param;
@@ -234,23 +233,24 @@ class Storm {
   int rectSize = 4;
   float noiseScale = 0.05;
   float timeSpeed = 0.0001;
-
+  
   float windSpeed = .000001;
   PVector windDirection = random2DVector();
   PVector windVelocity = windDirection.copy().mult(windSpeed);
   PVector wind = new PVector(0, 0);
-
-
+  
+  
   int animationStart = -1;
   int animationEnd = -1;
   boolean storm = false;
   float rise, fall;
-
+  
   Storm() {
   }
-
-
+  
+  
   void startStorm(int length, float r, float f) {
+    storm = true;
     animationStart = frameCount;
     animationEnd = animationStart + length;
     rise = r;
@@ -259,59 +259,61 @@ class Storm {
     windVelocity = windDirection.copy().mult(windSpeed);
     println(windDirection.x, windDirection.y, windVelocity.x, windVelocity.y);
   }
-
+  
   void display() {
-
     if (frameCount > animationStart && frameCount < animationEnd) {
-
+      
       float t = map(frameCount, animationStart, animationEnd, 0, 1);
       float tcurve = riseStandFall(t, rise, fall);
-
+      
       // debug animation curve
       //circle(screen2Center.x, screen2Center.y, tcurve*100);
-
+      
       for (int x = int(screen2Center.x - screenHalf); x < screen2Center.x + screenHalf; x += rectSize) {
         for (int y = int(screen2Center.y - screenHalf); y < screen2Center.y + screenHalf; y += rectSize) {
-
+          
           // Convert screen coordinates to world coordinates
           float worldX = player.pos.x + (x - screen2Center.x);
           float worldY = player.pos.y + (y - screen2Center.y);
-
+          
           // Rotate world coordinates around the player
           float dx = worldX - player.pos.x;
           float dy = worldY - player.pos.y;
-
+          
           float rotatedX = cos(player.angle) * dx - sin(player.angle) * dy + player.pos.x;
           float rotatedY = sin(player.angle) * dx + cos(player.angle) * dy + player.pos.y;
-
+          
           wind.add(windVelocity);
-
+          
           // Scale for noise
           float nx = rotatedX / rectSize * noiseScale + wind.x;
           float ny = rotatedY / rectSize * noiseScale + wind.y;
           float nz = frameCount * timeSpeed;
-
+          
           // Generate noise value
-          float noiseVal = map(noise(nx, ny, nz), .05, .95, 0, 1);
-          ;
-
+          float noiseVal = map(noise(nx, ny, nz),.05,.95, 0, 1);
+         ;
+          
           // Draw rectangles based on noise value
           if (noiseVal < tcurve) {
             noStroke();
             //fill(noiseVal * 255);
             float c = map(noiseVal, 0, tcurve, 0, 1);
-
+            
             if (c < .4) {
               fill(white);
             } else  if (c < .6) {
-              fill(primary);
-            } else {
+                fill(primary);
+              } else {
               fill(primaryLight);
             }
             rect(x, y, rectSize, rectSize);
           }
         }
       }
+    }
+    else {
+      storm = false;
     }
   }
 }
@@ -322,20 +324,20 @@ float riseStandFall(float t, float riseL, float fallL) {
   t = constrain(t, 0, 1);
   if (t < riseL) {
     return map(t, 0, riseL, 0, 1);
-  } else if (t < 1-fallL) {
+  } else if (t < 1 - fallL) {
     return 1;
   } else {
-    return map(t, 1-fallL, 1, 1, 0);
+    return map(t, 1 - fallL, 1, 1, 0);
   }
 }
 
 float mapEaseInOut(float x, float inMin, float inMax, float outMin, float outMax) {
   // Normalize x to [0, 1] range using map and constrain
   float t = constrain(map(x, inMin, inMax, 0, 1), 0, 1);
-
+  
   // Apply ease-in-out formula (smoothstep)
   t = t * t * (3 - 2 * t);
-
+  
   // Map eased t to the output range
   return map(t, 0, 1, outMin, outMax);
 }
