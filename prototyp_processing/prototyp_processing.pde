@@ -82,6 +82,7 @@ s2s screen2State = s2s.GPS;
 Load load;
 boolean sampleIdentification = false;
 boolean gameInitialized = false;
+boolean gamePaused = false;
 
 // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
 String midiDevice = "Micro [hw:2,0,0]";
@@ -116,7 +117,7 @@ void setup() {
   }
 
   load = new Load();
-  mask = loadImage("mask_debug.png"); // mask_debug.png avalible for debug duh
+  mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 18);
@@ -173,113 +174,114 @@ void setup() {
 
 void draw() {
 
-  gameState.update();
+  if (!gamePaused && !sampleIdentification) {
+    println("main update running");
+    gameState.update();
 
-  //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
+    //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
 
-  // get relevant walls
-  float relevantDistance = rayLength * 1.3;
-  ArrayList<Wall> relevantWalls = new ArrayList<Wall>(walls);
-  for (int i = relevantWalls.size() - 1; i >= 0; i--) {
-    Wall wall = relevantWalls.get(i);
-    if (isDistanceMore(wall.pos1, player.pos, relevantDistance) || isDistanceMore(wall.pos2, player.pos, relevantDistance)) {
-      relevantWalls.remove(i);
-    }
-  }
-  relevantWallsC = relevantWalls.size();
-
-  //get relewant wmarkers
-  ArrayList<WMarker> relevantWMarkers = new ArrayList<WMarker>(wmarkers);
-  for (int i = relevantWMarkers.size() - 1; i >= 0; i--) {
-    WMarker wm = relevantWMarkers.get(i);
-    if (isDistanceMore(wm.pos, player.pos, relevantDistance)) {
-      relevantWMarkers.remove(i);
-    }
-  }
-  relevantWMarkersC = relevantWMarkers.size();
-
-
-  for (Wall wall : relevantWalls) {
-    player.collide(wall);
-  }
-
-  sample.update();
-
-  for (Ray ray : player.rays) {
-    ray.update(player.pos, player.angle);
-    ray.findShortestIntersection(relevantWalls);
-  }
-  for (int i = wmarkers.size() - 1; i >= 0; i--) {
-    WMarker wm = wmarkers.get(i);
-    if (wm.destroy) {
-      wmarkers.remove(i);
-    }
-    wm.update();
-  }
-
-  // realest drawing
-
-  if (frameCount % (60 / fakeFrameRate) == 0) {
-    if (sampleIdentification) { // --- SAMPLE IDENTIFICATION ---
-      push();
-      background(0);
-      translate(screen2Center.x, screen2Center.y);
-      atom.display();
-      pop();
-
-      push();
-      translate(screen1Center.x, screen1Center.y);
-      atomAnl.display();
-      pop();
-    } else {
-      push();
-      translate(screen2Center.x, screen2Center.y);
-      rotate( -player.angle);
-      translate( -player.pos.x, -player.pos.y);
-      background(0);
-      if (screen2State == s2s.RADAR) { // --- RADAR ---
-        for (WMarker wm : relevantWMarkers) {
-          wm.display();
-        }
-      } else if (screen2State == s2s.GPS) { // --- GPS ---
-        mapa.display();
-        for (DCross dc : dcrosses) {
-          dc.display();
-        }
-        for (Wall wall : relevantWalls) {
-          wall.display();
-        }
+    // get relevant walls
+    float relevantDistance = rayLength * 1.3;
+    ArrayList<Wall> relevantWalls = new ArrayList<Wall>(walls);
+    for (int i = relevantWalls.size() - 1; i >= 0; i--) {
+      Wall wall = relevantWalls.get(i);
+      if (isDistanceMore(wall.pos1, player.pos, relevantDistance) || isDistanceMore(wall.pos2, player.pos, relevantDistance)) {
+        relevantWalls.remove(i);
       }
-      sample.display();
-      player.display();
-      pop();
     }
-  }
+    relevantWallsC = relevantWalls.size();
 
-  player.update();
-  player.handleInput();
+    //get relewant wmarkers
+    ArrayList<WMarker> relevantWMarkers = new ArrayList<WMarker>(wmarkers);
+    for (int i = relevantWMarkers.size() - 1; i >= 0; i--) {
+      WMarker wm = relevantWMarkers.get(i);
+      if (isDistanceMore(wm.pos, player.pos, relevantDistance)) {
+        relevantWMarkers.remove(i);
+      }
+    }
+    relevantWMarkersC = relevantWMarkers.size();
 
-  if (screen2State == s2s.GPS) {
-    storm.display();
-  }
 
-  // maybe to verify if its ok
-  if (!sampleIdentification) {
-    signalDisplay.update();
-    signalDisplay.display();
-  }
+    for (Wall wall : relevantWalls) {
+      player.collide(wall);
+    }
 
-  if (!sampleIdentification) { // draw only the things inside the mask
-    compass.displayInside();
-  }
+    sample.update();
 
-  if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
-    radio(signalDisplay.interference);
-  }
+    for (Ray ray : player.rays) {
+      ray.update(player.pos, player.angle);
+      ray.findShortestIntersection(relevantWalls);
+    }
+    for (int i = wmarkers.size() - 1; i >= 0; i--) {
+      WMarker wm = wmarkers.get(i);
+      if (wm.destroy) {
+        wmarkers.remove(i);
+      }
+      wm.update();
+    }
 
-  if (load.loading) {
-    load.display();
-    load.update();
+
+    //if (frameCount % (60 / fakeFrameRate) == 0) {
+    push();
+    translate(screen2Center.x, screen2Center.y);
+    rotate( -player.angle);
+    translate( -player.pos.x, -player.pos.y);
+    background(0);
+    if (screen2State == s2s.RADAR) { // --- RADAR ---
+      for (WMarker wm : relevantWMarkers) {
+        wm.display();
+      }
+    } else if (screen2State == s2s.GPS) { // --- GPS ---
+      mapa.display();
+      for (DCross dc : dcrosses) {
+        dc.display();
+      }
+      for (Wall wall : relevantWalls) {
+        wall.display();
+      }
+    }
+    sample.display();
+    player.display();
+    pop();
+
+    //}
+
+    player.update();
+    player.handleInput();
+
+    if (screen2State == s2s.GPS) {
+      storm.display();
+    }
+
+    // maybe to verify if its ok
+    if (!sampleIdentification) {
+      signalDisplay.update();
+      signalDisplay.display();
+    }
+
+    if (!sampleIdentification) { // draw only the things inside the mask
+      compass.displayInside();
+    }
+
+    if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
+      radio(signalDisplay.interference);
+    }
+
+    if (load.loading) {
+      load.display();
+      load.update();
+    }
+  } else if (sampleIdentification) {
+    push();
+    background(0);
+    translate(screen2Center.x, screen2Center.y);
+    atom.display();
+    pop();
+
+    push();
+    translate(screen1Center.x, screen1Center.y);
+    atomAnl.display();
+    pop();
   }
 
   // draw circular masks
@@ -313,9 +315,9 @@ void draw() {
     if (millis() - fastLast > fastRefresh) {
       fastLast = millis();
       hazardMonitor.d = DailyCycle.valueOf(gameState.dayPhase);
-   hazardMonitor.updateHazard();  
-  }
-    
+      hazardMonitor.updateHazard();
+    }
+
 
     if ( millis() - lastLcdRefresh > LcdRefresh) {
       lastLcdRefresh = millis();
@@ -336,9 +338,9 @@ void draw() {
   }
 
   displayFPS();
-  
-  push();
-  fill(255);
-  text(screenYOffset, screen2Center.x, screen2Center.y);
-  pop();
+
+  //push();
+  //fill(255);
+  //text(screenYOffset, screen2Center.x, screen2Center.y);
+  //pop();
 }

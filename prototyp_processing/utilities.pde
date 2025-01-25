@@ -208,6 +208,10 @@ void keyPressed() {
 
     sampleIdentification = !sampleIdentification;
   }
+  
+  if (key == 'p') {
+    gamePaused = !gamePaused;
+  }
 
 
   // --- TMP ---

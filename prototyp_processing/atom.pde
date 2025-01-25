@@ -146,7 +146,7 @@ class AtomAnalyzer {
   String successMessage = "Matching succeeded!";
   int transitionOut = 3000;
   int countDown = 0;
-  
+
   LedDriver ledDriver = new LedDriver(12);
 
   AtomAnalyzer() {
@@ -164,6 +164,8 @@ class AtomAnalyzer {
     println("The current element is.. ", e.name);
     countDown = 0;
     ledDriver.turnOn();
+
+    gamePaused = true;
   }
 
   void display() {
@@ -276,6 +278,7 @@ class AtomAnalyzer {
       } else {
         sampleIdentification = false;
         ledDriver.turnOff();
+        gamePaused = false;
       }
     }
   }
