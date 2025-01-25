@@ -81,6 +81,7 @@ class HazardMonitor {
   String last_forecast = "";
   String forecast = "";
   String new_alert = "";
+
   DailyCycle d = DailyCycle.MORNING;
   Weather w = Weather.WIND;
   Alerts alert = Alerts.NONE;
@@ -93,8 +94,10 @@ class HazardMonitor {
   Thread lcdMain;
   int noiseAmount = 0;
 
-  float windSpeed = 15;
-  float temp = 90;
+  float windSpeed = 0;
+  float temp = 0;
+
+  String [] params = new String[4];
 
   HazardMonitor() {
     // initialize lcd display
@@ -102,12 +105,15 @@ class HazardMonitor {
     lcd = new LcdDisplay(pi4j, 4, 20);
     lcd.clearDisplay();
     displayHazard();
+    String windLine = padParam("Wind speed:", windSpeed);
+    String tempLine = padParam("Surface temp:", temp);
+
+    String [] params = {d.getMessage(), w.getMessage(), windLine, tempLine};
   }
-  
+
   void updateHazard() {
     // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
     if (alert == Alerts.NONE) {
-      println("DEBUG: Calling padParam function.");
       String windLine = padParam("Wind speed:", windSpeed);
       String tempLine = padParam("Surface temp:", temp);
       forecast = String.join("\n", d.getMessage(), w.getMessage(), windLine, tempLine);
@@ -117,13 +123,11 @@ class HazardMonitor {
   }
 
   void displayHazard() {
-    //if (alert == Alerts.NONE) {
-    //  forecast = String.join("\n", d.getMessage(), w.getMessage());
-    //} else {
-    //  forecast = alert.getMessage();
+
     if (alert != Alerts.NONE) {
       if (forecast != new_alert) {
         // new alert, we must flash
+        
         flash = true;
         new_alert = forecast;
       }
@@ -147,9 +151,13 @@ class HazardMonitor {
       threadActive = true;
       while (threadActive) {
         println("new thread ", frameCount);
-        if (!interference) {
+        if (!interference && last_interference == true) {
           // Make sure cleaning random symbol after signal problems are resolvd
           lcd.clearDisplay();
+          // we also have to reset all params, otherwise they wont be displayed...
+          for(int l = 0; l < params.length; l++) {
+            params[l] = "";
+          }
           delay(100);
         }
         // Flashing when there is new Alert
@@ -164,7 +172,14 @@ class HazardMonitor {
           lcd.setDisplayBacklight(true);
           flash = false;
         }
-        lcd.displayText(forecast);
+
+        String [] split_forecast = forecast.split("\n");
+        for (int k = 0; k < split_forecast.length; k++) {
+          if (!split_forecast[k].equals(params[k]) ){
+            lcd.displayLineOfText(split_forecast[k], k);
+            params[k] = split_forecast[k];
+          }
+        }
         if (interference) {
           int n = int(map(noiseAmount, 0, width, 0, 40));
           for (int i = 0; i< n; i++) {
@@ -182,13 +197,11 @@ class HazardMonitor {
   }
 
   String padParam(String param, float value) {
-    println("DEBUG - inside padParam function");
     // max. length total should be 20
     int total_length = param.length() + String.valueOf(value).length();
 
     if (total_length > 20) {
       // shouldnt happen. Here for debugging
-      println("error for: ", param, " and value: ", value);
       return "";
     } else {
       int spaces = 20 - total_length;
@@ -196,7 +209,6 @@ class HazardMonitor {
         param+=" ";
       }
       String padded_param = param + String.valueOf(value);
-      println("DEBUG - returning the following padded parameters.");
       return padded_param;
     }
   }

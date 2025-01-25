@@ -206,7 +206,7 @@ void keyPressed() {
     sampleIdentification = !sampleIdentification;
   }
   if (key == 'b') {
-    //hazardMonitor.interference = (random(2) < 1) ? true : false ;
+    hazardMonitor.interference = (random(2) < 1) ? true : false ;
     Weather [] randomw = Weather.values();
     Weather random_weather = randomw[int(random(randomw.length))];
 
@@ -217,7 +217,7 @@ void keyPressed() {
     DailyCycle random_day = randomd[int(random(randomd.length))];
 
     hazardMonitor.w = random_weather;
-    hazardMonitor.d = random_day;
+    //hazardMonitor.d = random_day;
     hazardMonitor.windSpeed = round(random(0, 88));
     hazardMonitor.temp = round(random(-90, 88));
     //hazardMonitor.alert = random_alert;
