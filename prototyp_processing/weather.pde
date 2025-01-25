@@ -10,7 +10,7 @@ enum DailyCycle {
   DAWN("Day phase:      DAWN"),
     MORNING("Day phase:   MORNING"),
     NOON("Day phase:      NOON"),
-    ATERNOON("Day phase: AFTERNOON"),
+    AFTERNOON("Day phase: AFTERNOON"),
     EVENING("Day phase:   EVENING"),
     DUSK("Day phase:      DUSK"),
     NIGHT("Day phase:     NIGHT");
