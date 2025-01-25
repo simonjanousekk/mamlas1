@@ -26,6 +26,9 @@ class Load {
   void update() {
     if (loading && frameCount >= start+duration) {
       loading = false;
+      if (screen2State == s2s.RADAR) {
+        player.scan();
+      }
     }
   }
 

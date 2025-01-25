@@ -49,7 +49,6 @@ void controllerChange(ControlChange change) {
       } else if (control == 20) { // GPS / RADAR switch
         screen2State = value == 0 ? s2s.GPS : s2s.RADAR;
         load.start();
-        player.scan();
       } else if (control == 21) { // REVERSE
       } else if (control == 22) { // HEATING
         if (value == 0) {
