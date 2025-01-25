@@ -73,6 +73,11 @@ enum Alerts {
   }
 }
 
+
+
+
+
+
 class HazardMonitor {
 
   LcdDisplay lcd;
@@ -84,7 +89,7 @@ class HazardMonitor {
   String new_alert = "";
 
   DailyCycle d = DailyCycle.MORNING;
-  Weather w = Weather.WIND;
+  Weather w = Weather.CLEAR;
   Alerts alert = Alerts.NONE;
 
   boolean interference = false;
@@ -128,18 +133,20 @@ class HazardMonitor {
     if (alert != Alerts.NONE) {
       if (forecast != new_alert) {
         // new alert, we must flash
-        
+
         flash = true;
         new_alert = forecast;
       }
     }
-    //}
+    
     if (!interference) {
       sendLcd(forecast, false, 0);
     } else if (interference) {
       sendLcd(forecast, true, noiseAmount);
     }
   }
+
+
 
   void sendLcd(String forecast, boolean interference, int noiseAmount) {
     if (threadActive) {
@@ -156,7 +163,7 @@ class HazardMonitor {
           // Make sure cleaning random symbol after signal problems are resolvd
           lcd.clearDisplay();
           // we also have to reset all params, otherwise they wont be displayed...
-          for(int l = 0; l < params.length; l++) {
+          for (int l = 0; l < params.length; l++) {
             params[l] = "";
           }
           delay(100);
@@ -176,7 +183,7 @@ class HazardMonitor {
 
         String [] split_forecast = forecast.split("\n");
         for (int k = 0; k < split_forecast.length; k++) {
-          if (!split_forecast[k].equals(params[k]) ){
+          if (!split_forecast[k].equals(params[k]) ) {
             lcd.displayLineOfText(split_forecast[k], k);
             params[k] = split_forecast[k];
           }
@@ -216,6 +223,11 @@ class HazardMonitor {
     }
   }
 }
+
+
+
+
+
 
 
 class Storm {

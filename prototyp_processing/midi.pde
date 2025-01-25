@@ -41,7 +41,7 @@ void controllerChange(ControlChange change) {
         signalDisplay.sinePlayer.desBand = beta;
       } else if (control == 5) { // SLIDER POT for SPEED
         player.setDesiredVelocity(value);
-      } else if (control == 6) { // SLIDER POT for SPEED
+      } else if (control == 6) { // SLIDER POT for SUSPENSION
         player.setSuspension(value);
 
 
