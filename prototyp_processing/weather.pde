@@ -154,6 +154,10 @@ class HazardMonitor {
         if (!interference && last_interference == true) {
           // Make sure cleaning random symbol after signal problems are resolvd
           lcd.clearDisplay();
+          // we also have to reset all params, otherwise they wont be displayed...
+          for(int l = 0; l < params.length; l++) {
+            params[l] = "";
+          }
           delay(100);
         }
         // Flashing when there is new Alert
@@ -171,7 +175,7 @@ class HazardMonitor {
 
         String [] split_forecast = forecast.split("\n");
         for (int k = 0; k < split_forecast.length; k++) {
-          if (!split_forecast[k].equals(params[k])){
+          if (!split_forecast[k].equals(params[k]) ){
             lcd.displayLineOfText(split_forecast[k], k);
             params[k] = split_forecast[k];
           }
