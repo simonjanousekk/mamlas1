@@ -293,6 +293,7 @@ void draw() {
     //print("end screen render");
     turnAllLedOff();
     textAlign(CENTER, CENTER);
+    fill(white);
     text("END SCREEN", screen2Center.x, screen2Center.y);
     hazardMonitor.interference = false;
     hazardMonitor.alert = Alerts.END;
