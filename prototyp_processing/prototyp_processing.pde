@@ -268,11 +268,13 @@ void draw() {
       radio(signalDisplay.interference);
       if (hazardMonitor != null) {
         // signalDisplay.interference is between 0 and 1 - we have to scale it 
-        hazardMonitor.noiseAmount = int((signalDisplay.interference) * 10);  
+        hazardMonitor.noiseAmount = int((signalDisplay.interference) * 10); 
+        println("current noise amount : " , hazardMonitor.noiseAmount);
         hazardMonitor.interference = true;
-      }
-    } else {
+      } 
+    }else { if (hazardMonitor != null) {
       hazardMonitor.interference = false; 
+    }
     }
 
     if (load.loading) {
@@ -333,7 +335,7 @@ void draw() {
     if (millis() - lastLcdRefresh > LcdRefresh) {
       lastLcdRefresh = millis();
       if (hazardMonitor.interference) {
-        hazardMonitor.noiseAmount = mouseX;
+        //hazardMonitor.noiseAmount = mouseX;
         hazardMonitor.displayHazard();
       } else if (!hazardMonitor.displayBuffer.equals(hazardMonitor.last_displayBuffer) || hazardMonitor.last_interference != hazardMonitor.interference) {
         // synchronising thread with real state
