@@ -295,7 +295,7 @@ void draw() {
     textAlign(CENTER, CENTER);
     fill(white);
     text("GAME OVER", screen1Center.x, screen1Center.y);
-    float survived = int(round(millis()/gameState.dayLength));
+    String survived =String.valueOf(int((millis()/gameState.dayLength)));
     text("You survived " +survived + " days\n and collected " + player.samplesCollected + " samples",screen2Center.x, screen2Center.y);
     if(hazardMonitor != null){
     hazardMonitor.interference = false;
