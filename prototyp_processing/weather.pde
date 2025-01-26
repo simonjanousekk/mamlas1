@@ -164,14 +164,15 @@ class HazardMonitor {
       threadActive = true;
       while (threadActive) {
         //println("new thread ", frameCount);
-        if (!interference && last_interference == true ||  flash) {
+        if (!interference && last_interference == true ||  flash || alert == Alerts.END) {
+          delay(100);
+
           // Make sure cleaning random symbol after signal problems are resolvd - and also when theres alert
           lcd.clearDisplay();
           // we also have to reset all params, otherwise they wont be displayed...
           for (int l = 0; l < params.length; l++) {
             params[l] = "";
           }
-          delay(100);
         }
         // Flashing when there is new Alert
         if (flash) {
@@ -195,7 +196,7 @@ class HazardMonitor {
           }
         }
         if (interference) {
-          // 
+          //
           //int n = int(map(noiseAmount, 0, width, 0, 40));
           for (int i = 0; i < noiseAmount; i++) {
             int randomCharCode = int(random(256));
