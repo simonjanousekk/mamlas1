@@ -78,7 +78,9 @@ void controllerChange(ControlChange change) {
         atomAnl.validateResult();
         // confirm sample selection
       } else if (control == 12 && value == 0) { // RESTART button
+        hazardMonitor = null;
         restartGame();
+        
       }
     }
   }
