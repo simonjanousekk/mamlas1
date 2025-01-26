@@ -60,7 +60,7 @@ float fastLast = 0;
 
 float gameStartTime;
 int gameEndTime;
-String survived;
+int survived;
 
 int screenSize = 360;
 int screenHalf = 180;
@@ -299,14 +299,14 @@ void draw() {
     //print("end screen render");
     turnAllLedOff();
     if (gameEndTime == 0) {
-      survived =String.valueOf(int((millis() - gameStartTime/gameState.dayLength)));
+      survived = int((millis() - gameStartTime)/gameState.dayLength);
     }
     textAlign(CENTER, CENTER);
     fill(white);
     textSize(20);
     text("GAME OVER", screen1Center.x, screen1Center.y);
-    String dayz = (int((millis() - gameStartTime)/gameState.dayLength) > 1) ? "days":"day";
-    text("You survived " +survived + " " + dayz + "\n and collected " + player.samplesCollected + " samples", screen2Center.x, screen2Center.y);
+    String dayz = (survived > 1) ? "days":"day";
+    text("You survived " + String.valueOf(survived) + " " + dayz + "\n and collected " + player.samplesCollected + " samples", screen2Center.x, screen2Center.y);
     if (hazardMonitor != null) {
       hazardMonitor.interference = false;
       hazardMonitor.alert = Alerts.END;
