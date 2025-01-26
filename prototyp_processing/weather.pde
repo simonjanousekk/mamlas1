@@ -141,7 +141,7 @@ class HazardMonitor {
       }
     }
 
-    if (signalDisplay.sinePlayer.isRight) {
+    if (signalDisplay.sinePlayer.isRight || alert == Alerts.END) {
       interference = false;
       sendLcd(displayBuffer, false, 0);
     } else if (!signalDisplay.sinePlayer.isRight) {
@@ -165,7 +165,7 @@ class HazardMonitor {
       while (threadActive) {
         //println("new thread ", frameCount);
         if (!interference && last_interference == true ||  flash || alert == Alerts.END) {
-          delay(100);
+          delay(300);
 
           // Make sure cleaning random symbol after signal problems are resolvd - and also when theres alert
           lcd.clearDisplay();
