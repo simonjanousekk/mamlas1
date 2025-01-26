@@ -17,15 +17,15 @@ class SignalDisplay {
 
 
     sinePlayer = new SineWave(primary, primaryLight, .5);
-    sineGame = new SineWave(white, gray, .001);
+    sineGame = new SineWave(white, gray, .01);
   }
 
   void update() {
     if (!sineGameSet && gameInitialized) requestPotValues();
     // this is fucking piss but i cannot solve for delay that arduino midi brings.
     if (!sineGameSet && gameInitialized && sinePlayer.desAmp != 0 && sinePlayer.desBand != 0) {
-      sineGame.desAmp = sinePlayer.desAmp;
-      sineGame.desBand = sinePlayer.desBand;
+      sineGame.amp = sinePlayer.desAmp;
+      sineGame.band = sinePlayer.desBand;
       sineGameSet = true;
     }
 
