@@ -10,7 +10,7 @@ class Info {
   void display() {
     push();
     fill(255);
-    textAlign(LEFT, TOP);
+    textAlign(CENTER, BOTTOM);
     textSize(16);
     text("batt: " + int(gameState.battery) + "%" + " pow: " + gameState.powerUsage, pos.x, pos.y);
     text("walls: " + relevantWallsC + "/" + walls.size(), pos.x, pos.y + 15);
@@ -23,7 +23,9 @@ class Info {
     text("phase: " + gameState.dayPhase + " time: " + gameState.dayTime, pos.x, pos.y + 90);
     text("temp: " + int(gameState.temperature) + " outTemp: " + int(gameState.outTemperature), pos.x, pos.y + 105);
     text("cool: " + gameState.cooling + " heat: " + gameState.heating, pos.x, pos.y + 120);
-
+    if (hazardMonitor != null) {
+      text("haz: " + gameState.hazardChanceMultiplier, pos.x, pos.y+135);
+    }
     pop();
   }
 }

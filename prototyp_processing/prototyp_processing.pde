@@ -13,7 +13,7 @@ Atom atom;
 AtomAnalyzer atomAnl;
 Storm storm;
 Element[] elements = new Element[6];
-String [] elements_mem = new String [3];
+String[] elements_mem = new String[3];
 int mem_index = 0;
 
 ArrayList<Wall> walls = new ArrayList<Wall>();
@@ -42,7 +42,7 @@ int cellSize = 5 * u;
 int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
 
-final float treshold = .45;
+final float treshold =.45;
 
 int fakeFrameRate = 59;
 
@@ -121,7 +121,7 @@ void setup() {
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 18);
-  rayLength = int((screenSize / 2 - screen2Border) * .66);
+  rayLength = int((screenSize / 2 - screen2Border) *.66);
   textFont(mono);
 
   gameState = new GameState();
@@ -130,7 +130,7 @@ void setup() {
   sample = new Sample(randomPosOutsideWalls());
   //minimapa = new Minimapa(minimapaSize);
   //minimapaWindow = new MinimapaWindow(this, minimapa);
-  info = new Info(new PVector(10, 10));
+  info = new Info(screen1Center);
   compass = new Compass(screenSize / 2 - screen2Border);
   signalDisplay = new SignalDisplay();
 
@@ -145,7 +145,9 @@ void setup() {
   storm = new Storm();
 
   try {
-    hazardMonitor = new HazardMonitor();
+    if (hazardMonitor == null) {
+      hazardMonitor = new HazardMonitor();
+    }
   }
   catch(Throwable t) {
     println("LCD could not be created");
@@ -252,7 +254,7 @@ void draw() {
       storm.display();
     }
 
-    // maybe to verify if its ok
+    //maybe to verify if its ok
     if (!sampleIdentification) {
       signalDisplay.update();
       signalDisplay.display();
@@ -293,8 +295,8 @@ void draw() {
   noStroke();
   float xgap = (width - screenGap - screenSize * 2) / 2;
   float ygap = (height - screenSize) / 2;
-  rect(0, 0, width, ygap+screenYOffset);
-  rect(width, height, -width, -ygap+screenYOffset);
+  rect(0, 0, width, ygap + screenYOffset);
+  rect(width, height, -width, -ygap + screenYOffset);
   rect(0, 0, xgap, height);
   rect(width, height, -xgap, -height);
   rect(screenSize + xgap, 0, screenGap, height);
@@ -316,17 +318,17 @@ void draw() {
     // Day phases should change immediately - here should go 
     if (millis() - fastLast > fastRefresh) {
       fastLast = millis();
-      hazardMonitor.d = DailyCycle.valueOf(gameState.dayPhase);
+      hazardMonitor.dayCycle = DailyCycle.valueOf(gameState.dayPhase);
       hazardMonitor.updateHazard();
     }
 
 
-    if ( millis() - lastLcdRefresh > LcdRefresh) {
+    if (millis() - lastLcdRefresh > LcdRefresh) {
       lastLcdRefresh = millis();
       if (hazardMonitor.interference) {
         hazardMonitor.noiseAmount = mouseX;
         hazardMonitor.displayHazard();
-      } else if (!hazardMonitor.forecast.equals(hazardMonitor.last_forecast) || hazardMonitor.last_interference != hazardMonitor.interference) {
+      } else if (!hazardMonitor.displayBuffer.equals(hazardMonitor.last_displayBuffer) || hazardMonitor.last_interference != hazardMonitor.interference) {
         // synchronising thread with real state
         hazardMonitor.displayHazard();
       }
