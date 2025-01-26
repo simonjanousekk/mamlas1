@@ -3,7 +3,7 @@ class GameState {
 
   // TIME PHASES STUFF
   int dayPhaseIndex = 0;
-  int dayLength = 1000 * 60 * 1;
+  int dayLength = 1000 * 60 * 2;
   String[] dayPhases = {"DAWN", "MORNING", "NOON", "AFTERNOON", "DUSK", "EVENING", "MIDNIGHT", "NIGHT"};
   String dayPhase = dayPhases[dayPhaseIndex];
   int dayStart = 0;
@@ -23,8 +23,9 @@ class GameState {
   // COOL AND HEAT ʕ⌐■ᴥ■ʔ
   boolean heating;
   boolean cooling;
-  float coolingStrength =.05;
-  float heatingStrength =.05;
+  float coolingStrength =.1;
+  float heatingStrength =.1;
+
 
   // WIND
   float windDirectionAngle = random(TWO_PI);
@@ -45,6 +46,8 @@ class GameState {
   boolean alertHot = false;
   boolean alertSand = false;
   boolean alertMag = false;
+  int temperatureAlertStart = 999999999;
+  float temperatureSurvivabilityLength = phaseLength / 2;
 
 
   float[] magStormChancePhases = {.25, .1, .02, .1, .25, .1, .02, .1}; // chances in %/100
@@ -70,9 +73,6 @@ class GameState {
     updateTemperature();
     updateWind();
     updateAlert();
-
-    battery = constrain(battery, 0, 100);
-    powerUsage = constrain(powerUsage, 0, 100);
   }
 
 
@@ -165,7 +165,6 @@ class GameState {
 
     outTemperature = lerp(currentPhaseTemp, nextPhaseTemp, progressInPhase);
 
-
     float temperatureChange = (outTemperature - temperature) * 0.005; // Proportional to the difference
     temperature += temperatureChange;
 
@@ -183,8 +182,18 @@ class GameState {
 
     ledDriverTemperature.turnBased(temperature > max_temperature || temperature < min_temperature);
 
-    alertHot = temperature > max_temperature;
-    alertCold = temperature < min_temperature;
+    if (temperature > max_temperature || temperature < min_temperature) {
+      if (!alertHot && !alertCold) {
+        temperatureAlertStart = millis();
+        println("rmpAlertStart set");
+      }
+      if (temperatureAlertStart + temperatureSurvivabilityLength < millis()) {
+        println("time exxeeded");
+        gameEnded = true;
+      }
+      alertHot = temperature > max_temperature;
+      alertCold = temperature < min_temperature;
+    }
   }
 
 
@@ -203,11 +212,14 @@ class GameState {
     if (player.scanning) pu += batteryDrain * 1;
 
     powerUsage = pu;
+    powerUsage = constrain(powerUsage, 0, 100);
+
     sendPowerUsage(powerUsage);
   }
 
   void updateBattery() {
-    battery -= map(powerUsage, 0, 100, 0, 0.01);
+    battery -= powerUsage / 100;
+    if (battery <= 0) gameEnded = true;
     sendBattery(battery);
   }
 }
