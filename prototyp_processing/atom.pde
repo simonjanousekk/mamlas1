@@ -152,9 +152,7 @@ class AtomAnalyzer {
   LedDriver ledDriver = new LedDriver(12);
 
   AtomAnalyzer() {
-    Collections.shuffle(elements);
-    printArray(elements); 
-    
+    Collections.shuffle(elements);    
     biohazard = loadImage("radioactive_8bit.png");
     e = elements.get(int(random(elements.size())));
 
