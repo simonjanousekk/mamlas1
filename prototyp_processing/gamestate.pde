@@ -90,7 +90,7 @@ class GameState {
     if (random(1) < magStormChancePhases[(dayPhaseIndex + 1) % dayPhases.length] * hazardChanceMultiplier) {
       println("magStorm imminent");
       hazardMonitor.forecast = Forecast.MAGSTORM;
-    } else if (random(1) < sandStormChancePhases[(dayPhaseIndex + 1) % dayPhases.length] *hazardChanceMultiplier) {
+    } else if (random(1) < sandStormChancePhases[(dayPhaseIndex + 1) % dayPhases.length] * hazardChanceMultiplier) {
       println("sandStorm imminent");
       hazardMonitor.forecast = Forecast.SANDSTORM;
     } else if (dayPhases[(dayPhaseIndex+1) % dayPhases.length] == "NOON") {
