@@ -218,7 +218,7 @@ class GameState {
   }
 
   void updateBattery() {
-    battery -= powerUsage / 100;
+    battery -= powerUsage / 100.0;
     if (battery <= 0) gameEnded = true;
     sendBattery(battery);
   }
