@@ -146,7 +146,7 @@ class HazardMonitor {
       sendLcd(displayBuffer, false, 0);
     } else if (!signalDisplay.sinePlayer.isRight) {
       interference = true;
-      noiseAmount = int((signalDisplay.interference) * 8);
+      noiseAmount = int((signalDisplay.interference) * 10);
       sendLcd(displayBuffer, true, noiseAmount);
     }
   }
@@ -164,7 +164,7 @@ class HazardMonitor {
       threadActive = true;
       while (threadActive) {
         //println("new thread ", frameCount);
-        if (!interference && last_interference == true ||  flash || alert == Alerts.END) {
+        if (!interference && last_interference == true ||  flash || alert == Alerts.END || interference && random(4) < 1) {
           delay(300);
 
           // Make sure cleaning random symbol after signal problems are resolvd - and also when theres alert
@@ -173,7 +173,7 @@ class HazardMonitor {
           for (int l = 0; l < params.length; l++) {
             params[l] = "";
           }
-        }
+        } 
         // Flashing when there is new Alert
         if (flash) {
           boolean lightstate = true;

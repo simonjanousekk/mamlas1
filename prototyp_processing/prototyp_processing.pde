@@ -105,6 +105,7 @@ void setup() {
   //player.rays.clear();
   wmarkers.clear();
   dcrosses.clear();
+  elements.clear();
 
   screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
   screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
