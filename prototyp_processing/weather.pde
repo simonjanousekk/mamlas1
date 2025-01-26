@@ -122,7 +122,8 @@ class HazardMonitor {
     // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
     if (alert == Alerts.NONE) {
       String windLine = padParam("Wind speed:", windSpeed, "m/s");
-      String tempLine = padParam("Surface temp:", temp, "°C");
+      String degreeCode = Character.toString((char) 223)+"C"; 
+      String tempLine = padParam("Surface temp:", temp, degreeCode);
       displayBuffer = String.join("\n", dayCycle.getMessage(), forecast.getMessage(), windLine, tempLine);
     } else {
       displayBuffer = alert.getMessage();
