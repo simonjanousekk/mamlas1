@@ -43,7 +43,6 @@ int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
 
 final float treshold =.45;
-
 int fakeFrameRate = 59;
 
 String[] terrainTypes = {"SOFT", "DENSE", "FIRM", "HARD"};
@@ -59,6 +58,7 @@ float bottleneckLast = 0;
 float fastRefresh = 300;
 float fastLast = 0;
 
+float gameStart;
 
 int screenSize = 360;
 int screenHalf = 180;
@@ -176,6 +176,9 @@ void setup() {
   surface.setVisible(true);
 
   gameInitialized = true;
+  
+
+  gameStart = millis();
 }
 
 void draw() {
@@ -297,7 +300,7 @@ void draw() {
     textSize(20);
     text("GAME OVER", screen1Center.x, screen1Center.y);
     String survived =String.valueOf(int((millis()/gameState.dayLength)));
-    String dayz = (int(millis()/gameState.dayLength) > 1) ? "days":"day";
+    String dayz = (int((millis() - gameStart)/gameState.dayLength) > 1) ? "days":"day";
     text("You survived " +survived + " " + dayz + "\n and collected " + player.samplesCollected + " samples",screen2Center.x, screen2Center.y);
     if(hazardMonitor != null){
     hazardMonitor.interference = false;
