@@ -289,6 +289,7 @@ void draw() {
     turnAllLedOff();
     textAlign(CENTER, CENTER);
     text("END SCREEN", screen2Center.x, screen2Center.y);
+    hazardMonitor.alert = Alerts.END;
   }
 
   // draw circular masks
