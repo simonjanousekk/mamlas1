@@ -96,7 +96,7 @@ class GameState {
       }
     }
 
-    hazardChanceMultiplier = min(map(millis(), lastHazard, lastHazard + dayLength / 2, 0, 10), 10);
+    hazardChanceMultiplier = map(millis(), lastHazard, lastHazard + dayLength / 2, 0, 10);
 
     println("hazard chance multiplier... :", hazardChanceMultiplier);
     if (random(1) < magStormChancePhases[(dayPhaseIndex + 1) % dayPhases.length] * hazardChanceMultiplier) {
