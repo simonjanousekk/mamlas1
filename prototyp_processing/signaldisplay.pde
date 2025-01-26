@@ -26,6 +26,8 @@ class SignalDisplay {
     if (!sineGameSet && gameInitialized && sinePlayer.desAmp != 0 && sinePlayer.desBand != 0) {
       sineGame.amp = sinePlayer.desAmp;
       sineGame.band = sinePlayer.desBand;
+      sineGame.desAmp = sinePlayer.desAmp;
+      sineGame.desBand = sinePlayer.desBand;
       sineGameSet = true;
     }
 
