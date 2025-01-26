@@ -294,6 +294,7 @@ void draw() {
     turnAllLedOff();
     textAlign(CENTER, CENTER);
     fill(white);
+    textSize(18);
     text("GAME OVER", screen1Center.x, screen1Center.y);
     String survived =String.valueOf(int((millis()/gameState.dayLength)));
     text("You survived " +survived + " days\n and collected " + player.samplesCollected + " samples",screen2Center.x, screen2Center.y);
