@@ -9,20 +9,22 @@ class SignalDisplay {
 
   float interference = 0;
   boolean sineGameSet = false;
+  boolean valuesRequested;
 
   LedDriver ledDriver = new LedDriver(new int[]{2, 4});
 
   SignalDisplay() {
     //randomizeSineGame();
 
-
+    valuesRequested = false;
     sinePlayer = new SineWave(primary, primaryLight, .5);
     sineGame = new SineWave(white, gray, .01);
   }
 
   void update() {
-    if (!sineGameSet && gameInitialized) {
+    if (!sineGameSet && gameInitialized && !valuesRequested) {
       requestPotValues();
+      valuesRequested = true;
       println("requested pot values");
     }
     // this is fucking piss but i cannot solve for delay that arduino midi brings.
