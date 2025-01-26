@@ -39,7 +39,7 @@ class GameState {
 
   // HAZARDS
   boolean hazardHappening = false;
-  int lastHazard = 0;
+  int lastHazard = millis();
   float hazardChanceMultiplier;
   boolean alertCold = false;
   boolean alertHot = false;
