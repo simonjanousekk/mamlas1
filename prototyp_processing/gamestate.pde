@@ -56,7 +56,10 @@ class GameState {
   GameState() {
     //handle arduino stuff
     turnAllLedOff();
-
+    println("Temp start: ", temperatureAlertStart);
+    println("Out temp:: ", outTemperature);
+    println("Temp ::" , temperature);
+    println("Day phase :: ", dayPhase);
 
 
     sendTemperature(int(temperature));

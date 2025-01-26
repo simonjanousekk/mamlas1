@@ -180,7 +180,7 @@ void setup() {
 
 void draw() {
 
-  if (!gamePaused && !gameEnded && !sampleIdentification) {
+  if (!gamePaused && !gameEnded && !sampleIdentification && gameInitialized) {
     gameState.update();
     hazardMonitorSync();
     //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
@@ -290,7 +290,7 @@ void draw() {
   } else if (gameEnded) {
     // draw game end screen
     background(0);
-    print("end screen render");
+    //print("end screen render");
     turnAllLedOff();
     textAlign(CENTER, CENTER);
     text("END SCREEN", screen2Center.x, screen2Center.y);
