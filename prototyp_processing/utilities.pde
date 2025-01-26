@@ -159,6 +159,8 @@ boolean isCloseEnough(float x, float y, float t) {
 void restartGame() {
   println("restart game");
   noLoop();
+  background(0);
+  text("Loading...", screen2Center.x, screen2Center.y);
   gamePaused = false;
   gameEnded = false;
   gameInitialized = false;
