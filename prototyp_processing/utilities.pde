@@ -180,9 +180,9 @@ class IntVector {
 boolean moveForward, moveBackward, turnLeft, turnRight;
 
 void keyPressed() {
-  if (atomAnl != null && sampleIdentification) {
-    atomAnl.handleKey(111111);
-  }
+  //if (atomAnl != null && sampleIdentification) {
+  //  atomAnl.handleKey(111111);
+  //}
   if (key == 'r') { // restart
     restartGame();
   }
