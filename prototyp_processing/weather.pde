@@ -141,9 +141,10 @@ class HazardMonitor {
       }
     }
 
-    if (!interference) {
+    if (signalDisplay.sinePlayer.isRight) {
       sendLcd(displayBuffer, false, 0);
-    } else if (interference) {
+    } else if (!signalDisplay.sinePlayer.isRight) {
+      noiseAmount = int((signalDisplay.interference) * 10);
       sendLcd(displayBuffer, true, noiseAmount);
     }
   }
