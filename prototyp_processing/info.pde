@@ -10,7 +10,7 @@ class Info {
   void display() {
     push();
     fill(255);
-    textAlign(LEFT, TOP);
+    textAlign(CENTER, BOTTOM);
     textSize(16);
     text("batt: " + int(gameState.battery) + "%" + " pow: " + gameState.powerUsage, pos.x, pos.y);
     text("walls: " + relevantWallsC + "/" + walls.size(), pos.x, pos.y + 15);

@@ -74,7 +74,7 @@ class GameState {
       lastHazard = millis();
       if (hazardMonitor.forecast == Forecast.SANDSTORM) {
         alertSand = true;
-        storm.startStorm(int(phaseLength), .1, .1);
+        storm.startStorm(int(phaseLength*60/1000), .1, .1); // convert time to frames cos why would i select one
       } else {
         alertSand = false;
       }

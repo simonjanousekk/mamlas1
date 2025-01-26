@@ -130,7 +130,7 @@ void setup() {
   sample = new Sample(randomPosOutsideWalls());
   //minimapa = new Minimapa(minimapaSize);
   //minimapaWindow = new MinimapaWindow(this, minimapa);
-  info = new Info(new PVector(10, 10));
+  info = new Info(screen1Center);
   compass = new Compass(screenSize / 2 - screen2Border);
   signalDisplay = new SignalDisplay();
 
