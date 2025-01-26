@@ -191,9 +191,9 @@ class GameState {
         println("time exxeeded");
         gameEnded = true;
       }
-      alertHot = temperature > max_temperature;
-      alertCold = temperature < min_temperature;
     }
+    alertHot = temperature > max_temperature;
+    alertCold = temperature < min_temperature;
   }
 
 
