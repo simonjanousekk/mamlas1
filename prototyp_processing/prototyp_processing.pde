@@ -58,7 +58,9 @@ float bottleneckLast = 0;
 float fastRefresh = 300;
 float fastLast = 0;
 
-float gameStart;
+float gameStartTime;
+int gameEndTime;
+String survived;
 
 int screenSize = 360;
 int screenHalf = 180;
@@ -176,9 +178,10 @@ void setup() {
   surface.setVisible(true);
 
   gameInitialized = true;
-  
 
-  gameStart = millis();
+
+  gameStartTime = millis();
+  gameEndTime = 0;
 }
 
 void draw() {
@@ -295,21 +298,23 @@ void draw() {
     background(0);
     //print("end screen render");
     turnAllLedOff();
+    if (gameEndTime == 0) {
+      survived =String.valueOf(int((millis() - gameStartTime/gameState.dayLength)));
+    }
     textAlign(CENTER, CENTER);
     fill(white);
     textSize(20);
     text("GAME OVER", screen1Center.x, screen1Center.y);
-    String survived =String.valueOf(int((millis()/gameState.dayLength)));
-    String dayz = (int((millis() - gameStart)/gameState.dayLength) > 1) ? "days":"day";
-    text("You survived " +survived + " " + dayz + "\n and collected " + player.samplesCollected + " samples",screen2Center.x, screen2Center.y);
-    if(hazardMonitor != null){
-    hazardMonitor.interference = false;
-    hazardMonitor.alert = Alerts.END;
-    hazardMonitor.updateHazard();
-    //main update is off, i have to redo it here.. 
-    if(hazardMonitor.displayBuffer != hazardMonitor.last_displayBuffer) {
-      hazardMonitor.displayHazard();
-    }
+    String dayz = (int((millis() - gameStartTime)/gameState.dayLength) > 1) ? "days":"day";
+    text("You survived " +survived + " " + dayz + "\n and collected " + player.samplesCollected + " samples", screen2Center.x, screen2Center.y);
+    if (hazardMonitor != null) {
+      hazardMonitor.interference = false;
+      hazardMonitor.alert = Alerts.END;
+      hazardMonitor.updateHazard();
+      //main update is off, i have to redo it here..
+      if (hazardMonitor.displayBuffer != hazardMonitor.last_displayBuffer) {
+        hazardMonitor.displayHazard();
+      }
     }
   }
 
