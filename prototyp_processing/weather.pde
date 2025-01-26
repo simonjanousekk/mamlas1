@@ -93,7 +93,7 @@ class HazardMonitor {
   Forecast forecast = Forecast.CLEAR;
   Alerts alert = Alerts.NONE;
 
-  boolean interference = true;
+  boolean interference = false;
   boolean threadActive = false;
   boolean last_interference = false;
   boolean flash = false;
@@ -122,7 +122,7 @@ class HazardMonitor {
     // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
     if (alert == Alerts.NONE) {
       String windLine = padParam("Wind speed:", windSpeed, "m/s");
-      String degreeCode = Character.toString((char) 223)+"C"; 
+      String degreeCode = Character.toString((char) 223)+"C";
       String tempLine = padParam("Surface temp:", temp, degreeCode);
       displayBuffer = String.join("\n", dayCycle.getMessage(), forecast.getMessage(), windLine, tempLine);
     } else {
@@ -141,9 +141,10 @@ class HazardMonitor {
       }
     }
 
-    if (!interference) {
+    if (signalDisplay.sinePlayer.isRight) {
       sendLcd(displayBuffer, false, 0);
-    } else if (interference){
+    } else if (!signalDisplay.sinePlayer.isRight) {
+      noiseAmount = int((signalDisplay.interference) * 10);
       sendLcd(displayBuffer, true, noiseAmount);
     }
   }
@@ -191,8 +192,9 @@ class HazardMonitor {
           }
         }
         if (interference) {
-          int n = int(map(noiseAmount, 0, width, 0, 40));
-          for (int i = 0; i < n; i++) {
+          // 
+          //int n = int(map(noiseAmount, 0, width, 0, 40));
+          for (int i = 0; i < noiseAmount; i++) {
             int randomCharCode = int(random(256));
             lcd.writeCharacter((char) randomCharCode, int(random(4)), int(random(20)));
           }

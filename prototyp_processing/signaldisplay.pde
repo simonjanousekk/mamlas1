@@ -52,6 +52,7 @@ class SignalDisplay {
       //sinePlayer.col = white;
       sinePlayer.isRight = true;
       interference = 0;
+      
       ledDriver.turnOff();
     } else {
       sinePlayer.isRight = false;
@@ -62,6 +63,7 @@ class SignalDisplay {
 
       // Combine differences, capped at 1
       interference = min(ampDiff + bandDiff, 1);
+      
       ledDriver.turnOn();
     }
   }
