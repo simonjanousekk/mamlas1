@@ -187,6 +187,7 @@ class GameState {
         println("rmpAlertStart set");
       }
       if (temperatureAlertStart + temperatureSurvivabilityLength < millis()) {
+        println(temperature, temperatureAlertStart);
         println("time exeded");
         gameEnded = true;
       }
