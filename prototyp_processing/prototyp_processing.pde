@@ -291,6 +291,7 @@ void draw() {
     text("END SCREEN", screen2Center.x, screen2Center.y);
     hazardMonitor.interference = false;
     hazardMonitor.alert = Alerts.END;
+    hazardMonitor.
     hazardMonitor.updateHazard();
   }
 

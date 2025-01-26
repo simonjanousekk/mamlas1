@@ -162,8 +162,8 @@ class HazardMonitor {
       threadActive = true;
       while (threadActive) {
         println("new thread ", frameCount);
-        if (!interference && last_interference == true) {
-          // Make sure cleaning random symbol after signal problems are resolvd
+        if (!interference && last_interference == true ||  flash) {
+          // Make sure cleaning random symbol after signal problems are resolvd - and also when theres alert
           lcd.clearDisplay();
           // we also have to reset all params, otherwise they wont be displayed...
           for (int l = 0; l < params.length; l++) {
@@ -186,6 +186,7 @@ class HazardMonitor {
 
         String[] split_displayBuffer = displayBuffer.split("\n");
         for (int k = 0; k < split_displayBuffer.length; k++) {
+          // this is made so that only params that change are displayed- otherwise it refresh whole screen
           if (!split_displayBuffer[k].equals(params[k])) {
             lcd.displayLineOfText(split_displayBuffer[k], k);
             params[k] = split_displayBuffer[k];
