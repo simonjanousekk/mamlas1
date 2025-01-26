@@ -13,14 +13,15 @@ void setup() {
   Context pi4j = Pi4J.newAutoContext();
   lcd = new LcdDisplay(pi4j, 4, 20);
   lcd.clearDisplay();
+  delay(1000);
 
-  for (int i = 0; i < 256; i++) {
-    int charCode = i;
-    lcd.writeCharacter((char) charCode, 1, 20);
-    delay(1000);
-    println("Charcode: ", charCode);
-  }
+  int charCode = 223;
+  String temp = "Temp :" + Character.toString((char) charCode);
+
+  lcd.displayText(temp);
+  println("Charcode: ", charCode);
 }
+
 
 void draw() {
 }
