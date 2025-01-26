@@ -153,6 +153,8 @@ class AtomAnalyzer {
 
   AtomAnalyzer() {
     Collections.shuffle(elements);
+    printArray(elements); 
+    
     biohazard = loadImage("radioactive_8bit.png");
     e = elements.get(int(random(elements.size())));
 

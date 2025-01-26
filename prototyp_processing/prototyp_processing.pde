@@ -139,7 +139,6 @@ void setup() {
   elements.add(new Element("Au", "Gold", "High", false));
   elements.add(new Element("T", "Tritium", "Low", true));
   elements.add(new Element("U", "Uranium", "High", true));
-  elements.add(new Element("U", "Uranium", "High", true));
   elements.add(new Element("Po", "Polonium", "Mid", true));
   elements.add(new Element("Fe", "Iron", "Mid", false));
   elements.add(new Element("Li", "Lithium", "Low", false));
