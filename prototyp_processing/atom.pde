@@ -148,6 +148,8 @@ class AtomAnalyzer {
   String successMessage = "Matching succeeded!";
   int transitionOut = 3000;
   int countDown = 0;
+  
+  int atomAnlTime = 0;
 
   LedDriver ledDriver = new LedDriver(12);
 
@@ -172,7 +174,8 @@ class AtomAnalyzer {
     println("The current element is.. ", e.name);
     countDown = 0;
     ledDriver.turnOn();
-
+    // when the anl started and game was paused
+    atomAnlTime = millis();
     gamePaused = true;
   }
 
@@ -291,6 +294,9 @@ class AtomAnalyzer {
         sampleIdentification = false;
         ledDriver.turnOff();
         gamePaused = false;
+        if (gameState.alertHot || gameState.alertCold) {
+          gameState.temperatureAlertStart+= millis() - atomAnlTime;
+        }
       }
     }
   }
