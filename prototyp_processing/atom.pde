@@ -1,6 +1,6 @@
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Collections;
 
 class Atom {
 
@@ -104,11 +104,13 @@ class Electron {
 
 
 class Element {
+  String kratky;
   String name;
   String density;
   boolean radioactive;
 
-  Element(String n, String d, boolean r) {
+  Element(String k, String n, String d, boolean r) {
+    kratky = k;
     name = n;
     density = d;
     radioactive = r;
@@ -150,10 +152,12 @@ class AtomAnalyzer {
   LedDriver ledDriver = new LedDriver(12);
 
   AtomAnalyzer() {
+    Collections.shuffle(elements);    
     biohazard = loadImage("radioactive_8bit.png");
-    e = elements[int(random(elements.length))];
+    e = elements.get(int(random(elements.size())));
+
     while (Arrays.asList(elements_mem).contains(e.name)) {
-      e = elements[int(random(elements.length))];
+      e = elements.get(int(random(elements.size())));
     }
 
     // Adding e to memory
@@ -177,10 +181,11 @@ class AtomAnalyzer {
       }
 
       textAlign(CENTER);
+      fill(white);
       text("Analysis in progress", 0, -loading_h * 1.5);
       rectMode(CORNER);
       strokeWeight(2);
-      stroke(255);
+      stroke(white);
       noFill();
       rect(-loading_w/2, -r_height/2, loading_w, loading_h);
 
@@ -193,7 +198,7 @@ class AtomAnalyzer {
       strokeWeight(1);
       rectMode(CENTER);
       noFill();
-      stroke(255);
+      stroke(white);
 
       // Outer rectangle
       rect(0, 0, table_w, table_h);
@@ -203,11 +208,11 @@ class AtomAnalyzer {
 
       textSize(16);
       textAlign(CENTER, TOP);
-      fill(255);
+      fill(white);
       text("Analysis result", -table_w/4, -table_h/2 + padding);
       text("Select sample", table_w/4, -table_h/2 + padding);
       textAlign(LEFT, TOP);
-      fill(255);
+      fill(white);
       text("Density:", -table_w/2 + padding_s, -table_h/2 + corps_y * 2);
 
       textAlign(CENTER, CENTER);
@@ -215,7 +220,7 @@ class AtomAnalyzer {
       text(e.density, -table_w/4, -table_h/2 + corps_y * 4);
 
       textAlign(LEFT, TOP);
-      fill(255);
+      fill(white);
       text("Radioactivity:", -table_w/2 + padding_s, -table_h/2 + corps_y * 5);
       if (!e.radioactive) {
         textAlign(CENTER, CENTER);
@@ -228,16 +233,19 @@ class AtomAnalyzer {
       }
 
       for (int i=2; i < 8; i++ ) {
-        stroke(255);
+        stroke(white);
         // debug - lines where we draw the things
         //line(-table_w/2, -table_h/2 + (i * corps_y), table_w/2, -table_h/2 + (i * corps_y) );
+        fill(white);
+        String zebi = elements.get(i-2).name;
+        String zebi_kratky = elements.get(i-2).kratky;
         textAlign(RIGHT, TOP);
-        fill(255);
-        String zebi = elements[i-2].name;
-        text(zebi, table_w/2 - padding_s, -table_h/2 + (i * corps_y));
+        text(zebi_kratky, table_w/2 - padding_s, -table_h/2 + (i * corps_y));
+        textAlign(LEFT, TOP);
+        text(zebi, 0 + padding_s, -table_h/2 + (i * corps_y));
       }
       rectMode(CORNER);
-      fill(255, 125);
+      fill(white, 125);
 
       // highlight based on controller
       // we have to adjust if its 2 or 7 because these lines have extra padding otherwise it looks like trash
@@ -259,7 +267,7 @@ class AtomAnalyzer {
         countDown = millis();
       }
       textAlign(CENTER, TOP);
-      fill(255);
+      fill(white);
 
       text(matchResult, 0, table_h/2 + padding);
       if (matchResult.equals(failMessage) && frameCount % 10 == 0) {
@@ -268,7 +276,7 @@ class AtomAnalyzer {
         noStroke();
         rect(0, 0, screenSize, screenSize);
         if (countDown == 0) {
-          countDown = millis();
+          countDown = millis() - 1500;
         }
       }
     } else {
@@ -301,8 +309,8 @@ class AtomAnalyzer {
   }
 
   void validateResult() {
-    String elementSelected = elements[cursorPlayer-2].name;
-    if (elementSelected == e.name) {
+    String elementSelected = elements.get(cursorPlayer-2).name;
+    if (elementSelected.equals(e.name)) {
       matchResult = successMessage;
     } else {
       matchResult = failMessage;

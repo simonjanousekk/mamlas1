@@ -61,7 +61,7 @@ enum Alerts {
     MAGSTORM("   MAGNETIC STORM\n     IN PROGRESS\n Communication link\n      unstable"),
     //WIND("WARNING:\n STRONG WIND\n Rover trajectory\n altered"),
     SANDSTORM("     SANDSTORM\n    IN PROGRESS\n    GPS off-line\n Engage radar mode"),
-    //END("\n    PRESS RESET\n TO REPEAT MISSION"),
+    END("\n    PRESS RESET\n TO REPEAT MISSION"),
     NONE("");
 
   String message;
