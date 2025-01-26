@@ -141,10 +141,12 @@ class HazardMonitor {
       }
     }
 
-    if (signalDisplay.sinePlayer.isRight) {
+    if (signalDisplay.sinePlayer.isRight || alert == Alerts.END) {
+      interference = false;
       sendLcd(displayBuffer, false, 0);
     } else if (!signalDisplay.sinePlayer.isRight) {
-      noiseAmount = int((signalDisplay.interference) * 10);
+      interference = true;
+      noiseAmount = int((signalDisplay.interference) * 8);
       sendLcd(displayBuffer, true, noiseAmount);
     }
   }
@@ -161,16 +163,17 @@ class HazardMonitor {
     lcdMain = new Thread(() -> {
       threadActive = true;
       while (threadActive) {
-        println("new thread ", frameCount);
-        if (!interference && last_interference == true) {
-          // Make sure cleaning random symbol after signal problems are resolvd
+        //println("new thread ", frameCount);
+        if (!interference && last_interference == true ||  flash || alert == Alerts.END) {
+          delay(300);
+
+          // Make sure cleaning random symbol after signal problems are resolvd - and also when theres alert
           lcd.clearDisplay();
           // we also have to reset all params, otherwise they wont be displayed...
           for (int l = 0; l < params.length; l++) {
             params[l] = "";
           }
-          delay(100);
-        }
+        } 
         // Flashing when there is new Alert
         if (flash) {
           boolean lightstate = true;
@@ -186,13 +189,14 @@ class HazardMonitor {
 
         String[] split_displayBuffer = displayBuffer.split("\n");
         for (int k = 0; k < split_displayBuffer.length; k++) {
+          // this is made so that only params that change are displayed- otherwise it refresh whole screen
           if (!split_displayBuffer[k].equals(params[k])) {
             lcd.displayLineOfText(split_displayBuffer[k], k);
             params[k] = split_displayBuffer[k];
           }
         }
         if (interference) {
-          // 
+          //
           //int n = int(map(noiseAmount, 0, width, 0, 40));
           for (int i = 0; i < noiseAmount; i++) {
             int randomCharCode = int(random(256));
@@ -229,7 +233,36 @@ class HazardMonitor {
 }
 
 
+void hazardMonitorSync() {
+  if (hazardMonitor != null) {
+    // UPDATING PARAMETERS ON LCD
+    // for temperature and windspeed, we have to put a bottleneck , because otherwise it would refresh too often
+    if (millis() - bottleneckLast > bottleneckRefresh) {
+      bottleneckLast = millis();
+      hazardMonitor.temp = int(gameState.outTemperature);
+      hazardMonitor.windSpeed = int(gameState.windSpeed);
+      hazardMonitor.updateHazard();
+    }
 
+    // Day phases should change immediately - here should go
+    if (millis() - fastLast > fastRefresh) {
+      fastLast = millis();
+      hazardMonitor.dayCycle = DailyCycle.valueOf(gameState.dayPhase);
+      hazardMonitor.updateHazard();
+    }
+
+
+    if (millis() - lastLcdRefresh > LcdRefresh) {
+      lastLcdRefresh = millis();
+      if (hazardMonitor.interference) {
+        hazardMonitor.displayHazard();
+      } else if (!hazardMonitor.displayBuffer.equals(hazardMonitor.last_displayBuffer) || hazardMonitor.last_interference != hazardMonitor.interference) {
+        // synchronising thread with real state
+        hazardMonitor.displayHazard();
+      }
+    }
+  }
+}
 
 
 

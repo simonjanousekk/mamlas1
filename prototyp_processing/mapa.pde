@@ -1,4 +1,4 @@
-class Mapa {  //<>// //<>// //<>// //<>// //<>//
+class Mapa {  //<>// //<>// //<>// //<>// //<>// //<>//
   final PVector size;
   final int cellSize, cols, rows;
   float noiseScale, wallNoiseScale;

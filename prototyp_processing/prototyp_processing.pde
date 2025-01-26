@@ -50,7 +50,7 @@ boolean infoDisplay = true;
 String[] terrainTypes = {"SOFT", "DENSE", "FIRM", "HARD"};
 
 // could cause race condition if too low but so far fine ?
-float LcdRefresh = 300;
+float LcdRefresh = 400;
 float lastLcdRefresh = 0;
 // how fast we want the different params to be updated, based on gamestate (in ms)
 // for wind and temp.
@@ -105,6 +105,7 @@ void setup() {
   //player.rays.clear();
   wmarkers.clear();
   dcrosses.clear();
+  elements.clear();
 
   screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
   screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
@@ -178,7 +179,7 @@ void draw() {
 
   if (!gamePaused && !gameEnded && !sampleIdentification) {
     gameState.update();
-
+    hazardMonitorSync();
     //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
 
     // get relevant walls
@@ -292,6 +293,10 @@ void draw() {
     hazardMonitor.interference = false;
     hazardMonitor.alert = Alerts.END;
     hazardMonitor.updateHazard();
+    //main update is off, i have to redo it here.. 
+    if(hazardMonitor.displayBuffer != hazardMonitor.last_displayBuffer) {
+      hazardMonitor.displayHazard();
+    }
   }
 
   // draw circular masks
@@ -314,37 +319,6 @@ void draw() {
   if (!sampleIdentification && !gameEnded) { // draw the ouside compass
     compass.displayOutside();
   }
-
-  if (hazardMonitor != null) {
-    // UPDATING PARAMETERS ON LCD
-    // for temperature and windspeed, we have to put a bottleneck , because otherwise it would refresh too often
-    if (millis() - bottleneckLast > bottleneckRefresh) {
-      bottleneckLast = millis();
-      hazardMonitor.temp = int(gameState.outTemperature);
-      hazardMonitor.windSpeed = int(gameState.windSpeed);
-      hazardMonitor.updateHazard();
-    }
-
-    // Day phases should change immediately - here should go
-    if (millis() - fastLast > fastRefresh) {
-      fastLast = millis();
-      hazardMonitor.dayCycle = DailyCycle.valueOf(gameState.dayPhase);
-      hazardMonitor.updateHazard();
-    }
-
-
-    if (millis() - lastLcdRefresh > LcdRefresh) {
-      lastLcdRefresh = millis();
-      if (hazardMonitor.interference) {
-        //hazardMonitor.noiseAmount = mouseX;
-        hazardMonitor.displayHazard();
-      } else if (!hazardMonitor.displayBuffer.equals(hazardMonitor.last_displayBuffer) || hazardMonitor.last_interference != hazardMonitor.interference) {
-        // synchronising thread with real state
-        hazardMonitor.displayHazard();
-      }
-    }
-  }
-
 
 
   if (infoDisplay) {

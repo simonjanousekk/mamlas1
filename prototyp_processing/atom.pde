@@ -152,13 +152,17 @@ class AtomAnalyzer {
   LedDriver ledDriver = new LedDriver(12);
 
   AtomAnalyzer() {
-    Collections.shuffle(elements);    
+    Collections.shuffle(elements);
     biohazard = loadImage("radioactive_8bit.png");
     e = elements.get(int(random(elements.size())));
+    println("element mem:");
+    printArray(elements_mem);
 
     while (Arrays.asList(elements_mem).contains(e.name)) {
+      printArray(elements_mem);
       e = elements.get(int(random(elements.size())));
     }
+      println("element pick: ", e.name);
 
     // Adding e to memory
     mem_index = ((mem_index < 3) ? mem_index : 0);
