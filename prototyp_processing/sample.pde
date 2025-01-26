@@ -41,7 +41,7 @@ class Sample {
     player.samplesCollected++;
     pos = randomPosOutsideWalls();
     sampleIdentification = true;
-
+    turnAllLedOff();
     atomAnl = new AtomAnalyzer();
   }
 }

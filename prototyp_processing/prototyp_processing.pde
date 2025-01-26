@@ -83,6 +83,7 @@ Load load;
 boolean sampleIdentification = false;
 boolean gameInitialized = false;
 boolean gamePaused = false;
+boolean gameEnded = false;
 
 // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
 String midiDevice = "Micro [hw:2,0,0]";
@@ -176,7 +177,7 @@ void setup() {
 
 void draw() {
 
-  if (!gamePaused && !sampleIdentification) {
+  if (!gamePaused && !gameEnded && !sampleIdentification) {
     gameState.update();
 
     //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
@@ -283,6 +284,12 @@ void draw() {
     translate(screen1Center.x, screen1Center.y);
     atomAnl.display();
     pop();
+  } else if (gameEnded) {
+    // draw game end screen
+    background(0);
+    turnAllLedOff();
+    textAlign(CENTER, CENTER);
+    text("END SCREEN", screen2Center.x, screen2Center.y);
   }
 
   // draw circular masks
@@ -302,7 +309,7 @@ void draw() {
   rect(screenSize + xgap, 0, screenGap, height);
   pop();
 
-  if (!sampleIdentification) { // draw the ouside compass
+  if (!sampleIdentification && !gameEnded) { // draw the ouside compass
     compass.displayOutside();
   }
 
@@ -340,24 +347,23 @@ void draw() {
 
   if (infoDisplay) {
     info.display();
+    displayFPS();
   }
 
-  displayFPS();
-
+  // DEBUG YOFFSET
   //push();
   //fill(255);
   //text(screenYOffset, screen2Center.x, screen2Center.y);
   //pop();
 
-  push();
 
-  translate(screen2Center.x, screen2Center.y);
-  rotate(gameState.windDirectionAngle + PI/2);
-  fill(255, 0, 0);
-  stroke(255, 0, 0);
-  line(-50, 0, 50, 0);
-  circle(-50, 0, 20);
-
-
-  pop();
+  // DEBUG WIND DIRECTION
+  //push();
+  //translate(screen2Center.x, screen2Center.y);
+  //rotate(gameState.windDirectionAngle + PI/2);
+  //fill(255, 0, 0);
+  //stroke(255, 0, 0);
+  //line(-50, 0, 50, 0);
+  //circle(-50, 0, 20);
+  //pop();
 }
