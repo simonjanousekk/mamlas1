@@ -79,6 +79,7 @@ void controllerChange(ControlChange change) {
         // confirm sample selection
       } else if (control == 12 && value == 0) { // RESTART button
         hazardMonitor = null;
+        delay(500);
         restartGame();
         
       }
