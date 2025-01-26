@@ -178,7 +178,7 @@ void draw() {
 
   if (!gamePaused && !gameEnded && !sampleIdentification) {
     gameState.update();
-
+  
     //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
 
     // get relevant walls
@@ -291,7 +291,6 @@ void draw() {
     text("END SCREEN", screen2Center.x, screen2Center.y);
     hazardMonitor.interference = false;
     hazardMonitor.alert = Alerts.END;
-    hazardMonitor.
     hazardMonitor.updateHazard();
   }
 
@@ -337,7 +336,6 @@ void draw() {
     if (millis() - lastLcdRefresh > LcdRefresh) {
       lastLcdRefresh = millis();
       if (hazardMonitor.interference) {
-        //hazardMonitor.noiseAmount = mouseX;
         hazardMonitor.displayHazard();
       } else if (!hazardMonitor.displayBuffer.equals(hazardMonitor.last_displayBuffer) || hazardMonitor.last_interference != hazardMonitor.interference) {
         // synchronising thread with real state
