@@ -312,10 +312,11 @@ void draw() {
     if (millis() - bottleneckLast > bottleneckRefresh) {
       bottleneckLast = millis();
       hazardMonitor.temp = int(gameState.outTemperature);
+      hazardMonitor.windSpeed = int(gameState.windSpeed);
       hazardMonitor.updateHazard();
     }
-    
-    // Day phases should change immediately - here should go 
+
+    // Day phases should change immediately - here should go
     if (millis() - fastLast > fastRefresh) {
       fastLast = millis();
       hazardMonitor.dayCycle = DailyCycle.valueOf(gameState.dayPhase);
@@ -347,4 +348,16 @@ void draw() {
   //fill(255);
   //text(screenYOffset, screen2Center.x, screen2Center.y);
   //pop();
+
+  push();
+
+  translate(screen2Center.x, screen2Center.y);
+  rotate(gameState.windDirectionAngle + PI/2);
+  fill(255, 0, 0);
+  stroke(255, 0, 0);
+  line(-50, 0, 50, 0);
+  circle(-50, 0, 20);
+
+
+  pop();
 }

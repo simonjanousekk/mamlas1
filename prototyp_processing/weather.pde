@@ -122,7 +122,7 @@ class HazardMonitor {
     // important : whenever an alert is cleared, HazardMonitor.alert should be set to Alerts.NONE
     if (alert == Alerts.NONE) {
       String windLine = padParam("Wind speed:", windSpeed, "m/s");
-      String degreeCode = Character.toString((char) 223)+"C"; 
+      String degreeCode = Character.toString((char) 223)+"C";
       String tempLine = padParam("Surface temp:", temp, degreeCode);
       displayBuffer = String.join("\n", dayCycle.getMessage(), forecast.getMessage(), windLine, tempLine);
     } else {
@@ -237,9 +237,6 @@ class Storm {
   float noiseScale = 0.05;
   float timeSpeed = 0.0001;
 
-  float windSpeed = .000001;
-  PVector windDirection = random2DVector();
-  PVector windVelocity = windDirection.copy().mult(windSpeed);
   PVector wind = new PVector(0, 0);
 
 
@@ -258,9 +255,6 @@ class Storm {
     animationEnd = animationStart + length;
     rise = r;
     fall = f;
-    windDirection = random2DVector();
-    windVelocity = windDirection.copy().mult(windSpeed);
-    println(windDirection.x, windDirection.y, windVelocity.x, windVelocity.y);
   }
 
   void display() {
@@ -286,7 +280,7 @@ class Storm {
           float rotatedX = cos(player.angle) * dx - sin(player.angle) * dy + player.pos.x;
           float rotatedY = sin(player.angle) * dx + cos(player.angle) * dy + player.pos.y;
 
-          wind.add(windVelocity);
+          wind.add(gameState.windVelocity.copy().mult(.0000001));
 
           // Scale for noise
           float nx = rotatedX / rectSize * noiseScale + wind.x;

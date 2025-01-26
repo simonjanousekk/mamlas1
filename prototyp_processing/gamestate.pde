@@ -12,18 +12,25 @@ class GameState {
   float currentPhaseTemp, nextPhaseTemp;
 
   // TEMPERATURE STUFF
-  int outTemperaturePhases[][] = {{ - 30, -60}, {20, 70}, {100, 120}, {40, 80}, {0, -40}, { - 70, -100}, { - 140, -160}, { - 80, -110} };
+  int[][] outTemperaturePhases = {{ - 30, -60}, {20, 70}, {100, 120}, {40, 80}, {0, -40}, { - 70, -100}, { - 140, -160}, { - 80, -110} };
   float temperature = 0;
   float outTemperature = 0;
   int max_temperature = 80;
   int min_temperature = -125;
   LedDriver ledDriverTemperature = new LedDriver(new int[] {0, 3, 7});
 
+
   // COOL AND HEAT ʕ⌐■ᴥ■ʔ
   boolean heating;
   boolean cooling;
   float coolingStrength =.05;
   float heatingStrength =.05;
+
+  // WIND
+  float windDirectionAngle = random(TWO_PI);
+  PVector[] windSpeedConstrain = {new PVector(5, 40), new PVector(40, 100)};
+  float windSpeed = random(windSpeedConstrain[0].x, windSpeedConstrain[0].y);
+  PVector windVelocity;
 
   // POWER STUFF
   int powerUsage = 0;
@@ -40,7 +47,7 @@ class GameState {
   boolean alertMag = false;
 
 
-  float[] magStormChancePhases = {.25, .1, .02, .1, .25, .1, .02, 1}; // chances in %/100
+  float[] magStormChancePhases = {.25, .1, .02, .1, .25, .1, .02, .1}; // chances in %/100
   float[] sandStormChancePhases = {.1, .05, .01, .05, .1, .05, .01, .05};
 
 
@@ -61,6 +68,7 @@ class GameState {
     updateBattery();
     updateTimePhase();
     updateTemperature();
+    updateWind();
     updateAlert();
 
     battery = constrain(battery, 0, 100);
@@ -140,6 +148,15 @@ class GameState {
 
       prevDayPhaseIndex = dayPhaseIndex;
     }
+  }
+
+  void updateWind() {
+    windDirectionAngle = map(noise(millis()/10000.0), .1, .9, 0, TWO_PI);
+    windSpeed = map(noise(millis()/10000.0+9999), .1, .9, windSpeedConstrain[0].x, windSpeedConstrain[0].y);
+    //if (windDirectionAngle>TWO_PI) windDirectionAngle = 0;
+    //if (windDirectionAngle<0) windDirectionAngle = TWO_PI;
+    PVector windDirectionVector = PVector.fromAngle(windDirectionAngle);
+    windVelocity = windDirectionVector.copy().mult(windSpeed);
   }
 
   void updateTemperature() {
