@@ -327,7 +327,7 @@ void draw() {
     if (millis() - lastLcdRefresh > LcdRefresh) {
       lastLcdRefresh = millis();
       if (hazardMonitor.interference) {
-        hazardMonitor.noiseAmount = mouseX;
+        //hazardMonitor.noiseAmount = mouseX;
         hazardMonitor.displayHazard();
       } else if (!hazardMonitor.displayBuffer.equals(hazardMonitor.last_displayBuffer) || hazardMonitor.last_interference != hazardMonitor.interference) {
         // synchronising thread with real state

@@ -143,7 +143,8 @@ class HazardMonitor {
 
     if (signalDisplay.sinePlayer.isRight) {
       sendLcd(displayBuffer, false, 0);
-    } else {
+    } else if (!signalDisplay.sinePlayer.isRight) {
+      noiseAmount = int((signalDisplay.interference) * 10);
       sendLcd(displayBuffer, true, noiseAmount);
     }
   }
@@ -191,8 +192,9 @@ class HazardMonitor {
           }
         }
         if (interference) {
-          int n = int(map(noiseAmount, 0, width, 0, 40));
-          for (int i = 0; i < n; i++) {
+          // 
+          //int n = int(map(noiseAmount, 0, width, 0, 40));
+          for (int i = 0; i < noiseAmount; i++) {
             int randomCharCode = int(random(256));
             lcd.writeCharacter((char) randomCharCode, int(random(4)), int(random(20)));
           }
