@@ -267,7 +267,7 @@ void draw() {
     if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
       radio(signalDisplay.interference);
       if (hazardMonitor != null) {
-        // signalDisplay.interference is between 0 and 1
+        // signalDisplay.interference is between 0 and 1 - we have to scale it 
         hazardMonitor.noiseAmount = int((signalDisplay.interference) * 10);  
         hazardMonitor.interference = true;
       }
