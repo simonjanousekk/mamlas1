@@ -93,7 +93,7 @@ class HazardMonitor {
   Forecast forecast = Forecast.CLEAR;
   Alerts alert = Alerts.NONE;
 
-  boolean interference = true;
+  boolean interference = false;
   boolean threadActive = false;
   boolean last_interference = false;
   boolean flash = false;

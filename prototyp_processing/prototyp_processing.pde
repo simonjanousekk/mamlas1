@@ -267,8 +267,12 @@ void draw() {
     if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
       radio(signalDisplay.interference);
       if (hazardMonitor != null) {
+        // signalDisplay.interference is between 0 and 1
+        hazardMonitor.noiseAmount = int((signalDisplay.interference) * 10);  
         hazardMonitor.interference = true;
       }
+    } else {
+      hazardMonitor.interference = false; 
     }
 
     if (load.loading) {
