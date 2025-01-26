@@ -294,7 +294,7 @@ void draw() {
     turnAllLedOff();
     textAlign(CENTER, CENTER);
     fill(white);
-    textSize(18);
+    textSize(20);
     text("GAME OVER", screen1Center.x, screen1Center.y);
     String survived =String.valueOf(int((millis()/gameState.dayLength)));
     String dayz = (int(millis()/gameState.dayLength) > 1) ? "days":"day";
