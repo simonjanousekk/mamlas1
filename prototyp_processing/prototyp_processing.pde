@@ -290,6 +290,7 @@ void draw() {
   } else if (gameEnded) {
     // draw game end screen
     background(0);
+    print("end screen render");
     turnAllLedOff();
     textAlign(CENTER, CENTER);
     text("END SCREEN", screen2Center.x, screen2Center.y);

@@ -21,7 +21,10 @@ class SignalDisplay {
   }
 
   void update() {
-    if (!sineGameSet && gameInitialized) requestPotValues();
+    if (!sineGameSet && gameInitialized) {
+      requestPotValues();
+      println("requested pot values");
+    }
     // this is fucking piss but i cannot solve for delay that arduino midi brings.
     if (!sineGameSet && gameInitialized && sinePlayer.desAmp != 0 && sinePlayer.desBand != 0) {
       sineGame.amp = sinePlayer.desAmp;

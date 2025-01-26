@@ -20,7 +20,6 @@ class Load {
   void start() {
     loading = true;
     start = frameCount;
-    println("load start");
   }
 
   void update() {
