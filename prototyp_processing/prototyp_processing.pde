@@ -91,9 +91,6 @@ boolean infoDisplay = false;
 String midiDevice = "Micro [hw:2,0,0]";
 
 void setup() {
-  if (gameState != null) {
-    gameState = null;
-  }
   println("setup");
   // this should disable warnings from pi4j (some of them at least) =^..^=
   System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
