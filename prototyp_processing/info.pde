@@ -25,8 +25,9 @@ class Info {
     text("cool: " + gameState.cooling + " heat: " + gameState.heating, pos.x, pos.y + 120);
     text("wind dir: " + nf(gameState.windDirectionAngle, 0, 3) + " spe: " + floor(gameState.windSpeed), pos.x, pos.y+135);
     text("tempSur: " + gameState.temperatureAlertStart + " left: " + (gameState.temperatureAlertStart + gameState.temperatureSurvivabilityLength - millis()), pos.x, pos.y+150);
-      if (hazardMonitor != null) {
-      text("haz: " + gameState.hazardChanceMultiplier, pos.x, pos.y+165);
+    text("alertBools: C: " + gameState.alertCold + " H: " + gameState.alertHot, pos.x, pos.y + 165);
+    if (hazardMonitor != null) {
+      text("haz: " + gameState.hazardChanceMultiplier, pos.x, pos.y+180);
     }
     pop();
   }
