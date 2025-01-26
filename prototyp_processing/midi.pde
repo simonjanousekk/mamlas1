@@ -23,9 +23,9 @@ void controllerChange(ControlChange change) {
       // --- ENCODERS ---
       if (control == 1) { // rotation encoder - player rotation
         if (value == 0) {
-          player.turn++;
-        } else if (value == 1) {
           player.turn--;
+        } else if (value == 1) {
+          player.turn++;
         }
       } else if (control == 2) {
         // handle selection of sample

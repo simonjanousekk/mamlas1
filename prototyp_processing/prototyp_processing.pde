@@ -46,7 +46,6 @@ final float treshold =.45;
 
 int fakeFrameRate = 59;
 
-boolean infoDisplay = true;
 String[] terrainTypes = {"SOFT", "DENSE", "FIRM", "HARD"};
 
 // could cause race condition if too low but so far fine ?
@@ -84,6 +83,9 @@ boolean sampleIdentification = false;
 boolean gameInitialized = false;
 boolean gamePaused = false;
 boolean gameEnded = false;
+
+boolean infoDisplay = false;
+
 
 // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
 String midiDevice = "Micro [hw:2,0,0]";
