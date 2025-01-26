@@ -43,7 +43,6 @@ int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
 
 final float treshold =.45;
-
 int fakeFrameRate = 59;
 
 String[] terrainTypes = {"SOFT", "DENSE", "FIRM", "HARD"};
@@ -59,6 +58,9 @@ float bottleneckLast = 0;
 float fastRefresh = 300;
 float fastLast = 0;
 
+float gameStartTime;
+int gameEndTime;
+int survived;
 
 int screenSize = 360;
 int screenHalf = 180;
@@ -176,6 +178,10 @@ void setup() {
   surface.setVisible(true);
 
   gameInitialized = true;
+
+
+  gameStartTime = millis();
+  gameEndTime = 0;
 }
 
 void draw() {
@@ -292,15 +298,23 @@ void draw() {
     background(0);
     //print("end screen render");
     turnAllLedOff();
+    if (gameEndTime == 0) {
+      survived = int((millis() - gameStartTime)/gameState.dayLength);
+    }
     textAlign(CENTER, CENTER);
     fill(white);
-    text("END SCREEN", screen2Center.x, screen2Center.y);
-    hazardMonitor.interference = false;
-    hazardMonitor.alert = Alerts.END;
-    hazardMonitor.updateHazard();
-    //main update is off, i have to redo it here.. 
-    if(hazardMonitor.displayBuffer != hazardMonitor.last_displayBuffer) {
-      hazardMonitor.displayHazard();
+    textSize(20);
+    text("GAME OVER", screen1Center.x, screen1Center.y);
+    String dayz = (survived > 1) ? "days":"day";
+    text("You survived " + String.valueOf(survived) + " " + dayz + "\n and collected " + player.samplesCollected + " samples", screen2Center.x, screen2Center.y);
+    if (hazardMonitor != null) {
+      hazardMonitor.interference = false;
+      hazardMonitor.alert = Alerts.END;
+      hazardMonitor.updateHazard();
+      //main update is off, i have to redo it here..
+      if (hazardMonitor.displayBuffer != hazardMonitor.last_displayBuffer) {
+        hazardMonitor.displayHazard();
+      }
     }
   }
 
