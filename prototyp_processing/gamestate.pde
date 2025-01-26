@@ -89,7 +89,6 @@ class GameState {
       if (hazardMonitor.forecast == Forecast.MAGSTORM) {
         alertMag = true;
         signalDisplay.randomizeSineGame();
-        
       } else {
         alertMag = false;
       }
@@ -152,8 +151,8 @@ class GameState {
   }
 
   void updateWind() {
-    windDirectionAngle = map(noise(millis()/10000.0), .1, .9, 0, TWO_PI);
-    windSpeed = map(noise(millis()/10000.0+9999), .1, .9, windSpeedConstrain[0].x, windSpeedConstrain[0].y);
+    windDirectionAngle = map(noise(millis()/50000.0), .1, .9, 0, TWO_PI);
+    windSpeed = map(noise(millis()/40000.0+9999), .1, .9, windSpeedConstrain[0].x, windSpeedConstrain[0].y);
     //if (windDirectionAngle>TWO_PI) windDirectionAngle = 0;
     //if (windDirectionAngle<0) windDirectionAngle = TWO_PI;
     PVector windDirectionVector = PVector.fromAngle(windDirectionAngle);
