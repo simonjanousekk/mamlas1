@@ -52,6 +52,8 @@ void controllerChange(ControlChange change) {
         screen2State = value == 0 ? s2s.GPS : s2s.RADAR;
         load.start();
       } else if (control == 21) { // REVERSE
+        if (value == 0) player.reverse = true;
+        if (value == 1) player.reverse = false;
       } else if (control == 22) { // HEATING
         if (value == 0) {
           gameState.heating = true;

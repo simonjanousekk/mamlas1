@@ -9,6 +9,8 @@ class Player {
   float rotationAcceleration;
   float friction = 0.2;
 
+  boolean reverse = false;
+
   float speed, rotationSpeed;
 
   int turn = 0;
@@ -129,6 +131,7 @@ class Player {
 
     speedMultiplier = map(terrainDifference, 0, 3, 1, .5);
     speed = desiredSpeed*speedMultiplier;
+    if (reverse) speed *= -1;
 
 
     if (scanning) { // check if all wmarkers are resolved == scanning ended
@@ -169,6 +172,8 @@ class Player {
     } else {
       moving = false;
     }
+
+
 
 
     pos.add(cos(tmpa) * speed, sin(tmpa) * speed);
