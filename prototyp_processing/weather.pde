@@ -89,7 +89,7 @@ class HazardMonitor {
   String displayBuffer = "";
   String new_alert = "";
 
-  DailyCycle dayCycle = DailyCycle.MORNING;
+  DailyCycle dayCycle = DailyCycle.DAWN;
   Forecast forecast = Forecast.CLEAR;
   Alerts alert = Alerts.NONE;
 
