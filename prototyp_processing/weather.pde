@@ -231,6 +231,7 @@ class HazardMonitor {
   }
 }
 
+
 void hazardMonitorSync() {
   if (hazardMonitor != null) {
     // UPDATING PARAMETERS ON LCD

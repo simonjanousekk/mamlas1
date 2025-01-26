@@ -292,6 +292,10 @@ void draw() {
     hazardMonitor.interference = false;
     hazardMonitor.alert = Alerts.END;
     hazardMonitor.updateHazard();
+    //main update is off, i have to redo it here.. 
+    if(hazardMonitor.displayBuffer != hazardMonitor.last_displayBuffer) {
+      hazardMonitor.displayHazard();
+    }
   }
 
   // draw circular masks
