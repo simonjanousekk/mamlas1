@@ -16,8 +16,8 @@ class SignalDisplay {
     //randomizeSineGame();
 
 
-    sinePlayer = new SineWave(primary, primaryLight);
-    sineGame = new SineWave(white, gray);
+    sinePlayer = new SineWave(primary, primaryLight, .5);
+    sineGame = new SineWave(white, gray, .001);
   }
 
   void update() {
@@ -28,14 +28,14 @@ class SignalDisplay {
       sineGame.desBand = sinePlayer.desBand;
       sineGameSet = true;
     }
-    
-    
+
+
     //float db = map(player.pos.x, 0, mapa.size.x, bandConstrain.x, bandConstrain.y);
     //float da = map(player.pos.y, 0, mapa.size.y, ampConstrain.x, ampConstrain.y);
-    
-    
-    
-    
+
+
+
+
 
     sinePlayer.update();
     sineGame.update();
@@ -52,7 +52,7 @@ class SignalDisplay {
       //sinePlayer.col = white;
       sinePlayer.isRight = true;
       interference = 0;
-      
+
       ledDriver.turnOff();
     } else {
       sinePlayer.isRight = false;
@@ -63,7 +63,7 @@ class SignalDisplay {
 
       // Combine differences, capped at 1
       interference = min(ampDiff + bandDiff, 1);
-      
+
       ledDriver.turnOn();
     }
   }
@@ -119,24 +119,26 @@ class SineWave {
   float desBand, desAmp;
   int strokeWeight = 2;
   boolean isRight = false;
+  float adjustSpeed;
 
-  SineWave(int c, int c2) {
-    this(c, c2, 0, 0);
+  SineWave(int c, int c2, float s) {
+    this(c, c2, 0, 0, s);
   }
 
-  SineWave(int c, int c2, float a, float b) {
+  SineWave(int c, int c2, float a, float b, float s) {
     col = c;
     col2 = c2;
     band = b;
     amp = a;
+    adjustSpeed = s;
   }
 
   void update() {
     ang += signalDisplay.baseIncrement;
     pos = new PVector(0, map(sin(ang), -1, 1, -amp, amp));
 
-    band += (desBand - band) *.1;
-    amp += (desAmp - amp) *.1;
+    band += (desBand - band) * adjustSpeed;
+    amp += (desAmp - amp) * adjustSpeed;
   }
 
 
