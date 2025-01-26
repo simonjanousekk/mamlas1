@@ -297,7 +297,8 @@ void draw() {
     textSize(18);
     text("GAME OVER", screen1Center.x, screen1Center.y);
     String survived =String.valueOf(int((millis()/gameState.dayLength)));
-    text("You survived " +survived + " days\n and collected " + player.samplesCollected + " samples",screen2Center.x, screen2Center.y);
+    String dayz = (int(millis()/gameState.dayLength) > 1) ? "days":"day";
+    text("You survived " +survived + " " + dayz + "\n and collected " + player.samplesCollected + " samples",screen2Center.x, screen2Center.y);
     if(hazardMonitor != null){
     hazardMonitor.interference = false;
     hazardMonitor.alert = Alerts.END;
