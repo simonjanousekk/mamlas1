@@ -266,6 +266,9 @@ void draw() {
 
     if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
       radio(signalDisplay.interference);
+      if (hazardMonitor != null) {
+        hazardMonitor.interference = true;
+      }
     }
 
     if (load.loading) {
@@ -314,8 +317,8 @@ void draw() {
       hazardMonitor.temp = int(gameState.outTemperature);
       hazardMonitor.updateHazard();
     }
-    
-    // Day phases should change immediately - here should go 
+
+    // Day phases should change immediately - here should go
     if (millis() - fastLast > fastRefresh) {
       fastLast = millis();
       hazardMonitor.dayCycle = DailyCycle.valueOf(gameState.dayPhase);

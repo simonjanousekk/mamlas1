@@ -81,6 +81,7 @@ class GameState {
       if (hazardMonitor.forecast == Forecast.MAGSTORM) {
         alertMag = true;
         signalDisplay.randomizeSineGame();
+        
       } else {
         alertMag = false;
       }

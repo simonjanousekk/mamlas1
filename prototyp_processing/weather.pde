@@ -93,7 +93,7 @@ class HazardMonitor {
   Forecast forecast = Forecast.CLEAR;
   Alerts alert = Alerts.NONE;
 
-  boolean interference = false;
+  boolean interference = true;
   boolean threadActive = false;
   boolean last_interference = false;
   boolean flash = false;
@@ -141,9 +141,9 @@ class HazardMonitor {
       }
     }
 
-    if (signalDisplay.sinePlayer.isRight) {
+    if (!interference) {
       sendLcd(displayBuffer, false, 0);
-    } else {
+    } else if (interference){
       sendLcd(displayBuffer, true, noiseAmount);
     }
   }
