@@ -294,13 +294,17 @@ void draw() {
     turnAllLedOff();
     textAlign(CENTER, CENTER);
     fill(white);
-    text("END SCREEN", screen2Center.x, screen2Center.y);
+    text("GAME OVER", screen1Center.x, screen1Center.y);
+    float survived = int(round(millis()/gameState.dayLength));
+    text("You survived " +survived + " days\n and collected " + player.samplesCollected + " samples",screen2Center.x, screen2Center.y);
+    if(hazardMonitor != null){
     hazardMonitor.interference = false;
     hazardMonitor.alert = Alerts.END;
     hazardMonitor.updateHazard();
     //main update is off, i have to redo it here.. 
     if(hazardMonitor.displayBuffer != hazardMonitor.last_displayBuffer) {
       hazardMonitor.displayHazard();
+    }
     }
   }
 
