@@ -50,18 +50,18 @@ enum Forecast {
 // These are ALERTS / CRITICAL information. When they will be set, the screen will flash and display the alert until its resolved.
 // IMPORTANT: So far, no handling of more than 1 alert. Maybe not necessary ?
 enum Alerts {
-  OVERUSAGE("WARNING:\nENERGY CONSUMPTION \nHIGH \nMonitor systems"),
-    POWER("WARNING:\n ENERGY RESERVE\n BELOW 20%\n Conserve Power"),
-    POWER_CRITICAL("CRITICAL FAILURE\n ENERGY RESERVE \n EXHAUSTED\n SHUTTING DOWN"),
-    OVERHEATING("WARNING:\n TEMPERATURE NEARING\n SAFE LIMITS\n Cooling required"),
-    OVERHEATING_CRITICAL("CRITICAL FAILURE:\n CORE OVERHEATING \n INTERNAL DAMAGE\n DETECTED"),
-    FREEZE("WARNING:\n TEMPERATURE NEARING\n SAFE LIMITS\n Heating required"),
-    FREEZE_CRITICAL("CRITICAL FAILURE:\n SYSTEM FREEZING \n INTERNAL DAMAGE\n DETECTED"),
+  //OVERUSAGE("WARNING:\nENERGY CONSUMPTION \nHIGH \nMonitor systems"),
+  //POWER("WARNING:\n ENERGY RESERVE\n BELOW 20%\n Conserve Power"),
+  //POWER_CRITICAL("CRITICAL FAILURE\n ENERGY RESERVE \n EXHAUSTED\n SHUTTING DOWN"),
+  OVERHEATING("    EXTREME HEAT\n  Cooling systems\n    recommended"),
+    //OVERHEATING_CRITICAL("CRITICAL FAILURE:\n CORE OVERHEATING \n INTERNAL DAMAGE\n DETECTED"),
+    FREEZE("    EXTREME COLD\n  Heating systems \n    required"),
+    //FREEZE_CRITICAL("CRITICAL FAILURE:\n SYSTEM FREEZING \n INTERNAL DAMAGE\n DETECTED"),
     //MAGSTORM_SOON("WARNING:\n MAGNETIC STORM\n IMMINENT\n Comm unstable"),
-    MAGSTORM("WARNING:\n MAGNETIC STORM\n IN PROGRESS\n Comm unstable"),
-    WIND("WARNING:\n STRONG WIND\n Rover trajectory\n altered"),
-    SANDSTORM("WARNING: \n SANDSTORM IN\n PROGRESS\n Engage radar mode"),
-    END("\n    PRESS RESET\n TO REPEAT MISSION"),
+    MAGSTORM("   MAGNETIC STORM\n     IN PROGRESS\n Communication link\n      unstable"),
+    //WIND("WARNING:\n STRONG WIND\n Rover trajectory\n altered"),
+    SANDSTORM("     SANDSTORM\n    IN PROGRESS\n    GPS off-line\n Engage radar mode"),
+    //END("\n    PRESS RESET\n TO REPEAT MISSION"),
     NONE("");
 
   String message;
