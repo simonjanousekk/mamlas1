@@ -26,7 +26,6 @@ class GameState {
   float coolingStrength =.1;
   float heatingStrength =.1;
 
-
   // WIND
   float windDirectionAngle = random(TWO_PI);
   PVector[] windSpeedConstrain = {new PVector(5, 40), new PVector(40, 100)};
@@ -188,7 +187,7 @@ class GameState {
         println("rmpAlertStart set");
       }
       if (temperatureAlertStart + temperatureSurvivabilityLength < millis()) {
-        println("time exxeeded");
+        println("time exeded");
         gameEnded = true;
       }
     }
