@@ -1,6 +1,6 @@
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Collections;
 
 class Atom {
 
@@ -104,11 +104,13 @@ class Electron {
 
 
 class Element {
+  String kratky;
   String name;
   String density;
   boolean radioactive;
 
-  Element(String n, String d, boolean r) {
+  Element(String k, String n, String d, boolean r) {
+    kratky = k;
     name = n;
     density = d;
     radioactive = r;
@@ -150,10 +152,12 @@ class AtomAnalyzer {
   LedDriver ledDriver = new LedDriver(12);
 
   AtomAnalyzer() {
+    Collections.shuffle(elements);
     biohazard = loadImage("radioactive_8bit.png");
-    e = elements[int(random(elements.length))];
+    e = elements.get(int(random(elements.size())));
+
     while (Arrays.asList(elements_mem).contains(e.name)) {
-      e = elements[int(random(elements.length))];
+      e = elements.get(int(random(elements.size())));
     }
 
     // Adding e to memory
@@ -177,6 +181,7 @@ class AtomAnalyzer {
       }
 
       textAlign(CENTER);
+      fill(white);
       text("Analysis in progress", 0, -loading_h * 1.5);
       rectMode(CORNER);
       strokeWeight(2);
@@ -231,10 +236,13 @@ class AtomAnalyzer {
         stroke(255);
         // debug - lines where we draw the things
         //line(-table_w/2, -table_h/2 + (i * corps_y), table_w/2, -table_h/2 + (i * corps_y) );
-        textAlign(RIGHT, TOP);
         fill(255);
-        String zebi = elements[i-2].name;
-        text(zebi, table_w/2 - padding_s, -table_h/2 + (i * corps_y));
+        String zebi = elements.get(i-2).name;
+        String zebi_kratky = elements.get(i-2).kratky;
+        textAlign(RIGHT, TOP);
+        text(zebi_kratky, table_w/2 - padding_s, -table_h/2 + (i * corps_y));
+        textAlign(LEFT, TOP);
+        text(zebi, 0 + padding_s, -table_h/2 + (i * corps_y));
       }
       rectMode(CORNER);
       fill(255, 125);
@@ -268,7 +276,7 @@ class AtomAnalyzer {
         noStroke();
         rect(0, 0, screenSize, screenSize);
         if (countDown == 0) {
-          countDown = millis();
+          countDown = millis() - 1500;
         }
       }
     } else {
@@ -301,8 +309,8 @@ class AtomAnalyzer {
   }
 
   void validateResult() {
-    String elementSelected = elements[cursorPlayer-2].name;
-    if (elementSelected == e.name) {
+    String elementSelected = elements.get(cursorPlayer-2).name;
+    if (elementSelected.equals(e.name)) {
       matchResult = successMessage;
     } else {
       matchResult = failMessage;

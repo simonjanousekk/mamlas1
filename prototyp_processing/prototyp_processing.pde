@@ -12,7 +12,7 @@ HazardMonitor hazardMonitor;
 Atom atom;
 AtomAnalyzer atomAnl;
 Storm storm;
-Element[] elements = new Element[6];
+ArrayList <Element> elements = new ArrayList<Element>();
 String[] elements_mem = new String[3];
 int mem_index = 0;
 
@@ -134,14 +134,14 @@ void setup() {
   compass = new Compass(screenSize / 2 - screen2Border);
   signalDisplay = new SignalDisplay();
 
-
   atom = new Atom();
-  elements[0] = new Element("Au", "High", false);
-  elements[1] = new Element("T", "Low", true);
-  elements[2] = new Element("U", "High", true);
-  elements[3] = new Element("Po", "Mid", true);
-  elements[4] = new Element("Fe", "Mid", false);
-  elements[5] = new Element("Li", "Low", false);
+  elements.add(new Element("Au", "Gold", "High", false));
+  elements.add(new Element("T", "Tritium", "Low", true));
+  elements.add(new Element("U", "Uranium", "High", true));
+  elements.add(new Element("U", "Uranium", "High", true));
+  elements.add(new Element("Po", "Polonium", "Mid", true));
+  elements.add(new Element("Fe", "Iron", "Mid", false));
+  elements.add(new Element("Li", "Lithium", "Low", false));
   storm = new Storm();
 
   try {
