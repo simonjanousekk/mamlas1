@@ -159,6 +159,8 @@ boolean isCloseEnough(float x, float y, float t) {
 void restartGame() {
   gamePaused = false;
   gameEnded = false;
+  gameInitialized = false;
+  sampleIdentification = false;
   setup();
 }
 
