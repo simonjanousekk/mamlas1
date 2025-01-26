@@ -178,7 +178,7 @@ void draw() {
 
   if (!gamePaused && !gameEnded && !sampleIdentification) {
     gameState.update();
-  
+    hazardMonitorSync();
     //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
 
     // get relevant walls
@@ -315,34 +315,34 @@ void draw() {
     compass.displayOutside();
   }
 
-  if (hazardMonitor != null) {
-    // UPDATING PARAMETERS ON LCD
-    // for temperature and windspeed, we have to put a bottleneck , because otherwise it would refresh too often
-    if (millis() - bottleneckLast > bottleneckRefresh) {
-      bottleneckLast = millis();
-      hazardMonitor.temp = int(gameState.outTemperature);
-      hazardMonitor.windSpeed = int(gameState.windSpeed);
-      hazardMonitor.updateHazard();
-    }
+  //if (hazardMonitor != null) {
+  //  // UPDATING PARAMETERS ON LCD
+  //  // for temperature and windspeed, we have to put a bottleneck , because otherwise it would refresh too often
+  //  if (millis() - bottleneckLast > bottleneckRefresh) {
+  //    bottleneckLast = millis();
+  //    hazardMonitor.temp = int(gameState.outTemperature);
+  //    hazardMonitor.windSpeed = int(gameState.windSpeed);
+  //    hazardMonitor.updateHazard();
+  //  }
 
-    // Day phases should change immediately - here should go
-    if (millis() - fastLast > fastRefresh) {
-      fastLast = millis();
-      hazardMonitor.dayCycle = DailyCycle.valueOf(gameState.dayPhase);
-      hazardMonitor.updateHazard();
-    }
+  //  // Day phases should change immediately - here should go
+  //  if (millis() - fastLast > fastRefresh) {
+  //    fastLast = millis();
+  //    hazardMonitor.dayCycle = DailyCycle.valueOf(gameState.dayPhase);
+  //    hazardMonitor.updateHazard();
+  //  }
 
 
-    if (millis() - lastLcdRefresh > LcdRefresh) {
-      lastLcdRefresh = millis();
-      if (hazardMonitor.interference) {
-        hazardMonitor.displayHazard();
-      } else if (!hazardMonitor.displayBuffer.equals(hazardMonitor.last_displayBuffer) || hazardMonitor.last_interference != hazardMonitor.interference) {
-        // synchronising thread with real state
-        hazardMonitor.displayHazard();
-      }
-    }
-  }
+  //  if (millis() - lastLcdRefresh > LcdRefresh) {
+  //    lastLcdRefresh = millis();
+  //    if (hazardMonitor.interference) {
+  //      hazardMonitor.displayHazard();
+  //    } else if (!hazardMonitor.displayBuffer.equals(hazardMonitor.last_displayBuffer) || hazardMonitor.last_interference != hazardMonitor.interference) {
+  //      // synchronising thread with real state
+  //      hazardMonitor.displayHazard();
+  //    }
+  //  }
+  //}
 
 
 
