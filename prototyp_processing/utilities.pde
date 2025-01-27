@@ -170,7 +170,7 @@ void restartGame() {
 
 void endGame() {
   println("game ended");
-  survived = int((millis() - gameStartTime)/gameState.dayLength);
+  survived = (millis() - gameStartTime)/gameState.dayLength;
   gameEnded = true;
 }
 
@@ -211,7 +211,7 @@ void keyPressed() {
   }
 
   if (key ==  'o') {
-    storm.startStorm(60 * 20, .5, .5);
+    storm.startStorm(int(gameState.phaseLength*60/1000), .2, .2);
   }
   if (key == 'q') {
     turnAllLedOff();

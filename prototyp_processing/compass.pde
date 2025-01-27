@@ -22,7 +22,7 @@ class Compass {
     angleToSample = atan2(sample.pos.x - player.pos.x, sample.pos.y - player.pos.y);
     angleToSample += player.angle + PI;
 
-    distanceToSample = int(player.pos.dist(sample.pos) / 10);
+    distanceToSample = int(player.pos.dist(sample.pos) * distUnitScale);
 
 
 

@@ -61,6 +61,8 @@ enum Alerts {
     MAGSTORM("   MAGNETIC STORM\n     IN PROGRESS\n Communication link\n      unstable"),
     //WIND("WARNING:\n STRONG WIND\n Rover trajectory\n altered"),
     SANDSTORM("     SANDSTORM\n    IN PROGRESS\n    GPS off-line\n Engage radar mode"),
+    END_BATTERY("   ENERGY RESERVE\n     EXHAUSTED\n    All systems\n   shutting down"),
+    END_DMG("\n SYSTEM DAMAGE FATAL:\n Mission Terminated"),
     END("\n    PRESS RESET\n TO REPEAT MISSION"),
     NONE("");
 
@@ -315,7 +317,7 @@ class Storm {
           float rotatedX = cos(player.angle) * dx - sin(player.angle) * dy + player.pos.x;
           float rotatedY = sin(player.angle) * dx + cos(player.angle) * dy + player.pos.y;
 
-          wind.add(gameState.windVelocity.copy().mult(.0000001));
+          wind.add(gameState.windVelocity.copy().mult(.00000005));
 
           // Scale for noise
           float nx = rotatedX / rectSize * noiseScale + wind.x;
@@ -324,7 +326,7 @@ class Storm {
 
           // Generate noise value
           float noiseVal = map(noise(nx, ny, nz), .05, .95, 0, 1);
-          ;
+          
 
           // Draw rectangles based on noise value
           if (noiseVal < tcurve) {

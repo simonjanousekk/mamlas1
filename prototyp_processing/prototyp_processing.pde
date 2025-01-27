@@ -60,7 +60,7 @@ float fastLast = 0;
 
 float gameStartTime;
 int gameEndTime;
-int survived;
+float survived;
 
 int screenSize = 360;
 int screenHalf = 180;
@@ -87,6 +87,7 @@ boolean gamePaused = false;
 boolean gameEnded = false;
 
 boolean infoDisplay = false;
+float distUnitScale = .1;
 
 
 // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
@@ -301,9 +302,10 @@ void draw() {
     textAlign(CENTER, CENTER);
     fill(white);
     textSize(20);
-    text("GAME OVER", screen1Center.x, screen1Center.y);
-    String dayz = (survived > 1) ? "days":"day";
-    text("You survived " + String.valueOf(survived) + " " + dayz + "\n and collected " + player.samplesCollected + " samples", screen2Center.x, screen2Center.y);
+    text("PRESS RESET \nTO REPEAT MISSION", screen1Center.x, screen1Center.y);
+    String dayz = (survived == 1) ? "day":"days";
+    //text("You survived " + nf(survived, 0, 1) + " " + dayz + "\n and collected " + player.samplesCollected + " samples", screen2Center.x, screen2Center.y);
+    text("Days survived: " + nf(survived, 0, 1) + "\n Samples collected: " + player.samplesCollected + "\nDistance Traveled: " + nf(player.distanceTraveled, 0, 1), screen2Center.x, screen2Center.y);
     if (hazardMonitor != null) {
       hazardMonitor.interference = false;
       hazardMonitor.alert = Alerts.END;
