@@ -194,6 +194,7 @@ class GameState {
       if (temperatureAlertStart + temperatureSurvivabilityLength < millis()) {
         println(temperature, temperatureAlertStart);
         println("time exeded");
+        alertEnd = Alerts.END_DMG;
         endGame();
       }
     }
@@ -224,7 +225,10 @@ class GameState {
 
   void updateBattery() {
     battery -= powerUsage / 5000.0;
-    if (battery <= 0) endGame();
+    if (battery <= 0) {
+      endGame();
+      alertEnd = Alerts.END_BATTERY;
+    }
     sendBattery(battery);
   }
 }

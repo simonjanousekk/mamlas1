@@ -88,6 +88,7 @@ boolean gameEnded = false;
 
 boolean infoDisplay = false;
 float distUnitScale = .1;
+Alerts alertEnd = Alerts.NONE;
 
 
 // needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
@@ -308,7 +309,11 @@ void draw() {
     text("Days survived: " + nf(survived, 0, 1) + "\n Samples collected: " + player.samplesCollected + "\nDistance Traveled: " + nf(player.distanceTraveled, 0, 1), screen2Center.x, screen2Center.y);
     if (hazardMonitor != null) {
       hazardMonitor.interference = false;
-      hazardMonitor.alert = Alerts.END;
+      if (alertEnd == Alerts.NONE) {
+        hazardMonitor.alert = Alerts.END;
+      } else {
+        hazardMonitor.alert = alertEnd;
+      }
       hazardMonitor.updateHazard();
       //main update is off, i have to redo it here..
       if (hazardMonitor.displayBuffer != hazardMonitor.last_displayBuffer) {

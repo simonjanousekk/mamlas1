@@ -222,6 +222,14 @@ void keyPressed() {
 
     sampleIdentification = !sampleIdentification;
   }
+  if (key == 'n') {
+    if (screen2State == s2s.GPS) {
+      screen2State = s2s.RADAR;
+    } else {
+      screen2State = s2s.GPS;
+    }
+    load.start();
+  }
 
   if (key == 'p') {
     gamePaused = !gamePaused;

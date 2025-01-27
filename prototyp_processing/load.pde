@@ -37,10 +37,18 @@ class Load {
     rect(screen2Corner.x+screen2Border, screen2Corner.y+screen2Border, screenSize-screen2Border*2, screenSize-screen2Border*2);
     imageMode(CENTER);
     image(frames[frameIndex], screen2Center.x, screen2Center.y);
+    //String loadText;
+    //if (screen2State == s2s.RADAR) {
+    //  loadText = "Radar systems loading...";
+    //} else {
+    //  loadText = "Satelite imagery loading...";
+    //}
     if (frameCount % 2 == 0) {
-      frameIndex = (frameIndex + 1) % frames.length;
+    frameIndex = (frameIndex + 1) % frames.length;
     }
-    fill(255);
+    //fill(white);
+    //text(loadText, screen2Center.x, screen2Center.y+u*20);
+
     pop();
   }
 }
