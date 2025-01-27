@@ -298,9 +298,6 @@ void draw() {
     background(0);
     //print("end screen render");
     turnAllLedOff();
-    if (gameEndTime == 0) {
-      survived = int((millis() - gameStartTime)/gameState.dayLength);
-    }
     textAlign(CENTER, CENTER);
     fill(white);
     textSize(20);

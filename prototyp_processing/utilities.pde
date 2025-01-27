@@ -168,6 +168,12 @@ void restartGame() {
   loop();
 }
 
+void endGame() {
+  println("game ended");
+  survived = int((millis() - gameStartTime)/gameState.dayLength);
+  gameEnded = true;
+}
+
 
 class IntVector {
   int x, y;
@@ -221,7 +227,7 @@ void keyPressed() {
     gamePaused = !gamePaused;
   }
   if (key == 'e') {
-    gameEnded = !gameEnded;
+    endGame();
   }
 
 

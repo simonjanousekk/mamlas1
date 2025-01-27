@@ -194,7 +194,7 @@ class GameState {
       if (temperatureAlertStart + temperatureSurvivabilityLength < millis()) {
         println(temperature, temperatureAlertStart);
         println("time exeded");
-        gameEnded = true;
+        endGame();
       }
     }
     alertHot = temperature > max_temperature;
@@ -224,7 +224,7 @@ class GameState {
 
   void updateBattery() {
     battery -= powerUsage / 5000.0;
-    if (battery <= 0) gameEnded = true;
+    if (battery <= 0) endGame();
     sendBattery(battery);
   }
 }
