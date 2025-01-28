@@ -69,7 +69,7 @@ PVector screen1Center, screen2Center;
 IntVector screen2Corner = new IntVector();
 int screen2Border = u * 6;
 int screen1Border = u * 10;
-int screenYOffset = 20;
+int screenYOffset = 50;
 
 
 PImage screen1Mask, screen2Mask;
@@ -101,8 +101,8 @@ void setup() {
   System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
   System.setProperty("com.pi4j.logging.level", "ERROR");
 
-  //fullScreen();
-  size(800, 480);
+  fullScreen();
+  //size(800, 480);
 
   noSmooth();
   randomSeed(millis());
