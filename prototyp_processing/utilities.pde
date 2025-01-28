@@ -158,14 +158,14 @@ boolean isCloseEnough(float x, float y, float t) {
 
 void restartGame() {
   println("restart game");
-  noLoop();
+  //noLoop();
   background(0);
   gamePaused = false;
   gameEnded = false;
   gameInitialized = false;
   sampleIdentification = false;
   setup();
-  loop();
+  //loop();
 }
 
 void endGame() {
