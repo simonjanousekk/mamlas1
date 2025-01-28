@@ -122,6 +122,7 @@ void setup() {
   screen2Corner.y = int(screen2Center.y - screenSize / 2);
 
   if (mb == null) {
+    print("creating new midi bus object");
     mbInit();
   }
 
