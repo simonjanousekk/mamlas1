@@ -234,7 +234,7 @@ void draw() {
     }
 
     
-    fakeFrameRate = int(map(signalDisplay.interference, 0, 1, 60, 1));
+    fakeFrameRate = int(map(signalDisplay.interference, 0, .5, 60, 1));
     if (frameCount % (60 / fakeFrameRate) == 0) {
       push();
       translate(screen2Center.x, screen2Center.y);
