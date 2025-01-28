@@ -160,7 +160,7 @@ class Player {
   void handleInput() {
     //float terrainMult = map(abs(onTerrain - terrainSetting), 0, terrainTypeCount, 1, .05);
     //turn = floor(turn*1.4);
-    
+
     PVector prevPos = pos.copy();
 
     // KEYBOARD CONTROLLS
@@ -170,14 +170,20 @@ class Player {
     if (moveForward) pos.add(cos(tmpa) * max_speed, sin(tmpa) * max_speed);
     if (moveBackward) pos.sub(cos(tmpa) * max_speed, sin(tmpa) * max_speed);
 
-    if (turnLeft || turnRight || moveForward || moveBackward || speed > 0) {
+    if (turnLeft ||
+      turnRight ||
+      moveForward ||
+      moveBackward ||
+      speed > .01 ||
+      speed < -.01 ||
+      turn > 0) {
       moving = true;
     } else {
       moving = false;
     }
 
 
-    
+
 
     pos.add(cos(tmpa) * speed, sin(tmpa) * speed);
 
@@ -195,7 +201,7 @@ class Player {
 
     angle = (angle + TWO_PI) % TWO_PI;
     turn = 0;
-    
+
     distanceTraveled += prevPos.dist(pos)*distUnitScale;
   }
 }

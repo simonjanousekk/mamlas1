@@ -49,8 +49,13 @@ void controllerChange(ControlChange change) {
 
         // --- SWITCHES ---
       } else if (control == 20) { // GPS / RADAR switch
-        screen2State = value == 0 ? s2s.GPS : s2s.RADAR;
-        load.start();
+        if (value == 0 && screen2State == s2s.RADAR) {
+          screen2State = s2s.GPS;
+          load.start();
+        } else  if (value == 1 && screen2State == s2s.GPS) {
+          screen2State = s2s.RADAR;
+          load.start();
+        }
       } else if (control == 21) { // REVERSE
         if (value == 0) player.reverse = false;
         if (value == 1) player.reverse = true;
@@ -80,7 +85,6 @@ void controllerChange(ControlChange change) {
       } else if (control == 12 && value == 0) { // RESTART button
         hazardMonitor = null;
         restartGame();
-        
       }
     }
   }
