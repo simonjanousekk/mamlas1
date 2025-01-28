@@ -211,7 +211,7 @@ void keyPressed() {
   }
 
   if (key ==  'o') {
-    storm.startStorm(int(gameState.phaseLength*60/1000), .2, .2);
+    storm.startStorm(int(gameState.phaseLength*2*60/1000), .2, .2);
   }
   if (key == 'q') {
     turnAllLedOff();

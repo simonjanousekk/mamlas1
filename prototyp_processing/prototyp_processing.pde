@@ -233,57 +233,59 @@ void draw() {
       wm.update();
     }
 
+    
+    fakeFrameRate = int(map(signalDisplay.interference, 0, 1, 60, 1));
+    if (frameCount % (60 / fakeFrameRate) == 0) {
+      push();
+      translate(screen2Center.x, screen2Center.y);
+      rotate( -player.angle);
+      translate( -player.pos.x, -player.pos.y);
+      background(0);
+      if (screen2State == s2s.RADAR) { // --- RADAR ---
+        for (WMarker wm : relevantWMarkers) {
+          wm.display();
+        }
+      } else if (screen2State == s2s.GPS) { // --- GPS ---
+        mapa.display();
+        for (DCross dc : dcrosses) {
+          dc.display();
+        }
+        for (Wall wall : relevantWalls) {
+          wall.display();
+        }
+      }
+      sample.display();
+      player.display();
+      pop();
 
-    //if (frameCount % (60 / fakeFrameRate) == 0) {
-    push();
-    translate(screen2Center.x, screen2Center.y);
-    rotate( -player.angle);
-    translate( -player.pos.x, -player.pos.y);
-    background(0);
-    if (screen2State == s2s.RADAR) { // --- RADAR ---
-      for (WMarker wm : relevantWMarkers) {
-        wm.display();
+
+
+      if (screen2State == s2s.GPS) {
+        storm.display();
       }
-    } else if (screen2State == s2s.GPS) { // --- GPS ---
-      mapa.display();
-      for (DCross dc : dcrosses) {
-        dc.display();
+
+      //maybe to verify if its ok
+      if (!sampleIdentification) {
+        signalDisplay.update();
+        signalDisplay.display();
       }
-      for (Wall wall : relevantWalls) {
-        wall.display();
+
+      if (!sampleIdentification) { // draw only the things inside the mask
+        compass.displayInside();
+      }
+
+      if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
+        radio(signalDisplay.interference);
+      }
+
+      if (load.loading) {
+        load.display();
+        load.update();
       }
     }
-    sample.display();
-    player.display();
-    pop();
-
-    //}
 
     player.update();
     player.handleInput();
-
-    if (screen2State == s2s.GPS) {
-      storm.display();
-    }
-
-    //maybe to verify if its ok
-    if (!sampleIdentification) {
-      signalDisplay.update();
-      signalDisplay.display();
-    }
-
-    if (!sampleIdentification) { // draw only the things inside the mask
-      compass.displayInside();
-    }
-
-    if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
-      radio(signalDisplay.interference);
-    }
-
-    if (load.loading) {
-      load.display();
-      load.update();
-    }
   } else if (sampleIdentification) {
     push();
     background(0);
