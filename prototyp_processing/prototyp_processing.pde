@@ -179,11 +179,10 @@ void setup() {
   surface.setVisible(false);
   surface.setVisible(true);
 
-  gameInitialized = true;
-
-
   gameStartTime = millis();
   gameEndTime = 0;
+
+  gameInitialized = true;
 }
 
 void draw() {
