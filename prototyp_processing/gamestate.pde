@@ -3,7 +3,7 @@ class GameState {
 
   // TIME PHASES STUFF
   int dayPhaseIndex = 0;
-  int dayLength = 1000 * 60 * 8;
+  int dayLength = 1000 * 60 * 4;
   String[] dayPhases = {"DAWN", "MORNING", "NOON", "AFTERNOON", "DUSK", "EVENING", "MIDNIGHT", "NIGHT"};
   String dayPhase = dayPhases[dayPhaseIndex];
   int dayStart = 0;
