@@ -160,6 +160,7 @@ void handleIncomingMidi(midiEventPacket_t rx) {
       leds[control].off();
     } else if (value == 1) {
       leds[control].on();
-    } else if (value == 2)
+    } else if (value == 2) {
+    }
   }
 }

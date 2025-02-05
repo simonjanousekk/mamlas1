@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAMLAS-1</title>
+
+  <style>
+    @font-face {
+      font-family: Ronda;
+      src: url(Ronda.otf);
+    }
+
+    body {
+      max-width: 500px;
+      background-color: black;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 2em;
+      justify-content: center;
+      align-items: center;
+      margin: 2em auto;
+      padding: 0 2em;
+    }
+
+    img,
+    svg {
+      width: 100%;
+    }
+
+    * {
+      font-family: Ronda, Helvetica, sans-serif;
+      padding: 0;
+      margin: 0;
+      font-weight: normal;
+      box-sizing: border-box;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 3em;
+    }
+
+    h3 {
+      border: solid white 1px;
+      border-radius: 1em;
+      padding: 1em;
+      width: max-content;
+      font-size: 2em;
+    }
+
+    .section>* {
+      width: 100%;
+    }
+
+    .section {
+      border-top: 1px solid white;
+      display: flex;
+      gap: 1em;
+      padding-top: 2em;
+      flex-direction: column;
+    }
+
+    .authors {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* font-size: 1.5em; */
+    }
+
+    .dev_log img,
+    .rounded {
+      border-radius: 1em;
+    }
+  </style>
+</head>
+
+<body>
+  <img src="images/logo.svg" alt="logo">
+  <div class="section">
+    <img src="images/mamlas_render_top.png" alt="mamlas render top">
+    <img src="images/mamlas_render_iso.png" alt="mamlas render iso">
+    <img src="images/mamlas_photo.png" alt="mamlas photo" class="rounded">
+  </div>
+  <div class="section">
+    <div class="authors">
+      <a href="https://www.instagram.com/simon.janousek/">Šimon Janoušek</a>
+      <a href="https://www.instagram.com/jakubminion/">Jakub Vránek</a>
+      <a href="https://www.instagram.com/alzbeta_kazisveta/">Alžběta Volhejnová</a>
+      <a href="https://www.instagram.com/i_aint_no_bot/">Alexandra Verzier</a>
+    </div>
+
+
+    <p>Experimental game console MAMLAS-1 (Maneuverable Module for Land Assessment) puts the player in the role of a
+      space
+      rover exploring distant planets. With a limited battery, their task is to collect as many mineral samples as
+      possible, while keeping the system stable.
+      The exhibited console is tailor-made for the game, with which it is fully integrated in both graphical and game
+      design. It uses unconventional but intuitive controls more akin to music synthesizers or analogue industrial
+      control
+      panels than a regular game console. This is the first prototype of the console, the concept of which was developed
+      during the semester.
+    </p>
+  </div>
+
+  <h2>HOW TO PLAY</h2>
+  <div class="section">
+    <h3>1 – collect as many samples as you can</h3>
+    <img src="images/compass.png" alt="compass" />
+    <img src="images/sample_indentification.png" alt="sample indentification" />
+    <!-- <img src="images/sample_select.png" alt="sample select" />
+    <img src="images/analyzer.png" alt="analyzer" /> -->
+    <p>to select correct sample, refer to the sample identification guide</p>
+  </div>
+  <div class="section">
+    <h3>2 – comm link must always be stabilized</h3>
+    <img src="images/signal.png" alt="signal" />
+    <img src="images/comm_link.png" alt="comm link" />
+  </div>
+  <div class="section">
+    <h3>3 – keep system temperature within limits</h3>
+    <img src="images/system_temp.png" alt="system temperature" />
+    <img src="images/cooling_heating.png" alt="cooling heating" />
+  </div>
+  <div class="section">
+    <h3>4 – adjust suspension based on terrain</h3>
+    <img src="images/soil.png" alt="soil">
+    <img src="images/suspension.png" alt="suspension">
+    <p>driving with incorrect suspension slows you down and consumes more power</p>
+  </div>
+  <div class="section">
+    <h3>5 – using radar consumes less power</h3>
+    <img src="images/gps_radar.png" alt="gps radar">
+  </div>
+  <div class="section">
+    <h3>6 – if you run out of battery, the game ends</h3>
+    <img src="images/central_power.png" alt="central power battery">
+  </div>
+
+
+  <div class="dev_log">
+    <h2>DEV LOG</h2>
+    <div class="section">
+      <img src="images/development/figma.png" alt="figma board dev log">
+      <img src="images/development/figma_detail.png" alt="figma board dev log detail">
+      <img src="images/development/breadboard.png" alt="bread board prototyping detail">
+      <img src="images/development/map_generation.png" alt="map generation dev log">
+      <img src="images/development/radar.png" alt="radar development">
+      <img src="images/development/pcb.png" alt="pcb design">
+      <img src="images/development/simon_jakub.png" alt="simon jakub dev log">
+      <img src="images/development/jakub.png" alt="jakub dev log">
+      <img src="images/development/alex.png" alt="alex dev log">
+      <img src="images/development/beta.png" alt="beta dev log">
+    </div>
+  </div>
+
+  <p style="text-align: center;">studio of design and digital technology<br />
+    UMPRUM 2025</p>
+</body>
+
+
+</html>
