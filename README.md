@@ -28,3 +28,10 @@
 - [ ] driving into wall causes power usage to flicker (not a bug a feature ?)
 - [ ] sample spawn distance
 - [ ] load screen text ?
+- [ ] cool + head - led should not blink
+- [ ] radio glitch return copying to x / 2
+- [ ] sample fail / sample succes -> battery add / sub
+- [ ] try export
+- [ ] global game time
+- [ ] restart -> fix setup
+- [ ] lcd bugging (why?)
