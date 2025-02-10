@@ -3,7 +3,7 @@ int relevantWMarkersC;
 
 class Info {
   PVector pos;
-  Info(PVector p) {
+  Info(PVector p, int space) {
     pos = p;
   }
 
