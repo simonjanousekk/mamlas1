@@ -1,5 +1,12 @@
 # MAMLAS 1
 
+### operation of mamlas-1
+
+- mamlas (opens dir of git repo)
+- mamlas dev (compiles game and runs)
+- mamlas build (exports game)
+- mamlas run (runs exported game (faster!))
+
 ### reinstall tutorial
 
 - disable touch
@@ -9,17 +16,18 @@
 - enable i2c (raspi config)
 - download and install processing raspberry version
 - clone github repo to ~/Documents "https://github.com/simonjanousekk/prototyp_demo.git"
-- .bashrc
-  ```
-  alias proto="cd ~/Documents/prototyp_demo"
-  alias protorun="~/Downloads/processing-4.3.2/processing ~/Documents/prototyp_demo/prototyp_processing/prototyp_processing.pde"
-  bash ~startup.sh &
-  ```
-- startup.sh
-  ```
-  #!/bin/bash
-  unclutter -idle 1 -root &
-  ```
+- add autostart
+  - crontab works but needs for the display to be "ready", otherwise processing screams
+    - `crontab -e`
+    - `@reboot sleep 10 && DISPLAY=:0 /bin/bash /home/ddt/startup.sh >> /home/ddt/cronlog.txt 2>&1`
+    - startup.sh:
+      - ```#!/bin/bash
+        export DISPLAY=:0  # Set display for GUI applications
+        echo "[$(date)] Setting up display for Processing..." >> /home/ddt/startup.log 2>&1
+        source /home/ddt/Documents/mamlas1/mamlas.sh
+        mamlas run >> /home/ddt/startup.log 2>&1
+        ```
+  - add sourcing to .bashrc (or source at startup manually)
 
 ### todo
 
@@ -31,7 +39,8 @@
 - [ ] cool + head - led should not blink
 - [ ] radio glitch return copying to x / 2
 - [ ] sample fail / sample succes -> battery add / sub
-- [ ] try export
 - [ ] global game time
 - [ ] restart -> fix setup
-- [ ] lcd bugging (why?)
+- [ ] lcd bugging (why?, might be fixed by exporting)
+- [x] try export
+- [x] hide cursor
