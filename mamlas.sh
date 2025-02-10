@@ -1,4 +1,5 @@
-processing="/home/ddt/Downloads/processing-4.3.2/processing-java"
+processingJava="/home/ddt/Downloads/processing-4.3.2/processing-java"
+processing="/home/ddt/Downloads/processing-4.3.2/processing"
 mamlaspath="/home/ddt/Documents/mamlas1"
 
 function mamlas ()
@@ -7,14 +8,17 @@ function mamlas ()
     local currentpath=$(pwd)
 
     case "$cmd" in
+	"open")
+	    $processing $mamlaspath/processing/processing.pde
+	    ;;
         "dev")
-            $processing --sketch=$mamlaspath/processing --run
+            $processingJava --sketch=$mamlaspath/processing --run
             ;;
 	"run")
-	    "$mamlaspath/build/processing"
+	    "$mamlaspath/build/processingJava"
 	    ;;
         "build")
-            $processing --sketch=$mamlaspath/processing --output=$mamlaspath/build --variant=linux-aarch64 --force --export
+            $processingJava --sketch=$mamlaspath/processing --output=$mamlaspath/build --variant=linux-aarch64 --force --export
             ;;
 	"pull")
 	    cd $mamlaspath && git pull
