@@ -15,7 +15,7 @@ function mamlas ()
             $processingJava --sketch=$mamlaspath/processing --run
             ;;
 	"run")
-	    "$mamlaspath/build/processingJava"
+	    "$mamlaspath/build/processing"
 	    ;;
         "build")
             $processingJava --sketch=$mamlaspath/processing --output=$mamlaspath/build --variant=linux-aarch64 --force --export
