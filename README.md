@@ -21,8 +21,7 @@
     - `crontab -e`
     - `@reboot sleep 10 && DISPLAY=:0 /bin/bash /home/ddt/startup.sh >> /home/ddt/cronlog.txt 2>&1`
     - startup.sh:
-      - ```
-        #!/bin/bash
+      - ```#!/bin/bash
         export DISPLAY=:0  # Set display for GUI applications
         echo "[$(date)] Setting up display for Processing..." >> /home/ddt/startup.log 2>&1
         source /home/ddt/Documents/mamlas1/mamlas.sh
@@ -42,6 +41,6 @@
 - [ ] sample fail / sample succes -> battery add / sub
 - [ ] global game time
 - [ ] restart -> fix setup
-- [ ] lcd bugging (why?)
+- [ ] lcd bugging (why?, might be fixed by exporting)
 - [x] try export
 - [x] hide cursor
