@@ -105,6 +105,7 @@ void setup() {
   //size(800, 480);
 
   noSmooth();
+  noCursor();
   randomSeed(millis());
   noiseSeed(millis());
 
