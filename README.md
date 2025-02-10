@@ -1,5 +1,12 @@
 # MAMLAS 1
 
+### operation of mamlas-1
+
+- mamlas (opens dir of git repo)
+- mamlas dev (compiles game and runs)
+- mamlas build (exports game)
+- mamlas run (runs exported game (faster!))
+
 ### reinstall tutorial
 
 - disable touch
