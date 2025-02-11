@@ -6,6 +6,8 @@ function mamlas ()
 {
     local cmd="$1"
     local currentpath=$(pwd)
+    
+    export DISPLAY=:0
 
     case "$cmd" in
 	"open")
