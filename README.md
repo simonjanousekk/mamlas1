@@ -1,16 +1,19 @@
-# MAMLAS 1
+# MAMLAS-1
 
-### operation of mamlas-1
+Maneuverable Module for Land Assessement
+
+## operation of mamlas-1
 
 - mamlas (opens dir of git repo)
+- mamlas open (opens processing sketch in processing IDE)
 - mamlas dev (compiles game and runs)
 - mamlas build (exports game)
 - mamlas run (runs exported game (faster!))
 
-### reinstall tutorial
+## reinstall tutorial
 
 - disable touch
-  - (https://www.waveshare.com/wiki/5inch_DSI_LCD)
+  - https://www.waveshare.com/wiki/5inch_DSI_LCD
   - /boot/config.txt
     - disable_touchscreen=1
 - enable i2c (raspi config)
@@ -29,7 +32,16 @@
         ```
   - add sourcing to .bashrc (or source at startup manually)
 
-### todo
+## known bugs and how to fix them
+
+##### Arduino Micro naming issue
+
+- raspberry sometimes changes card number `"Micro [hw:n,0,0]"` and for whatever reason processing doesnt like that and crashes even if the name is changed in processing.pde.
+- fix:
+  - `sudo nano /etc/modprobe.d/alsa-base.conf`
+  - `options snd-usb-audio index=2`
+
+## todo
 
 - [ ] signal change on position
 - [ ] endscreen graphics
