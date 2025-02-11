@@ -2,7 +2,7 @@
 
 Maneuverable Module for Land Assessement
 
-### operation of mamlas-1
+## operation of mamlas-1
 
 - mamlas (opens dir of git repo)
 - mamlas open (opens processing sketch in processing IDE)
@@ -10,7 +10,7 @@ Maneuverable Module for Land Assessement
 - mamlas build (exports game)
 - mamlas run (runs exported game (faster!))
 
-### reinstall tutorial
+## reinstall tutorial
 
 - disable touch
   - https://www.waveshare.com/wiki/5inch_DSI_LCD
@@ -32,7 +32,7 @@ Maneuverable Module for Land Assessement
         ```
   - add sourcing to .bashrc (or source at startup manually)
 
-### known bugs and how to fix them
+## known bugs and how to fix them
 
 ##### Arduino Micro naming issue
 
@@ -41,7 +41,7 @@ Maneuverable Module for Land Assessement
   - `sudo nano /etc/modprobe.d/alsa-base.conf`
   - `options snd-usb-audio index=2`
 
-### todo
+## todo
 
 - [ ] signal change on position
 - [ ] endscreen graphics

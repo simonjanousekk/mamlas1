@@ -18,7 +18,8 @@ function mamlas ()
 	    "$mamlaspath/build/processing"
 	    ;;
         "build")
-            $processingJava --sketch=$mamlaspath/processing --output=$mamlaspath/build --variant=linux-aarch64 --force --export
+            $processingJava --sketch=$mamlaspath/processing --output=$mamlaspath/build \
+                --variant=linux-aarch64 --force --export
             ;;
 	"pull")
 	    cd $mamlaspath && git pull
