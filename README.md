@@ -30,7 +30,7 @@ Maneuverable Module for Land Assessement
         source /home/ddt/Documents/mamlas1/mamlas.sh
         mamlas run >> /home/ddt/startup.log 2>&1
         ```
-  - add sourcing to .bashrc (or source at startup manually)
+  - add sourcing of mamlas.sh to .bashrc to enable mamlas commands
 
 ## known bugs and how to fix them
 
