@@ -2,7 +2,7 @@
 
 Maneuverable Module for Land Assessement
 
-[mamlas1 render](website/images/mamlas_render_iso.png?raw=true)
+![mamlas1 render](website/images/mamlas_render_iso.png?raw=true)
 
 
 ## operation of mamlas-1
