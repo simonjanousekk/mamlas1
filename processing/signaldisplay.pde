@@ -34,7 +34,7 @@ class SignalDisplay {
       sineGame.desAmp = sinePlayer.desAmp;
       sineGame.desBand = sinePlayer.desBand;
       sineGameSet = true;
-      println("recived static midi values");
+      println("received static midi values");
     }
 
 
