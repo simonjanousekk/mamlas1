@@ -45,7 +45,7 @@ Maneuverable Module for Land Assessement
   - `options snd-usb-audio index=2`
 
 ## todo
-
+##### software
 - [ ] signal change on position
 - [ ] endscreen graphics
 - [ ] driving into wall causes power usage to flicker (not a bug a feature ?)
@@ -59,3 +59,9 @@ Maneuverable Module for Land Assessement
 - [ ] lcd bugging (why?, might be fixed by exporting)
 - [x] try export
 - [x] hide cursor
+- [ ] highscore screen ..?
+##### hardware
+- [ ] resistors on bargraphs
+- [ ] new knob heads..?
+- [ ] top screws
+
