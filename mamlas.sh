@@ -1,3 +1,4 @@
+. config.sh
 function mamlas ()
 {
     local cmd="$1"
@@ -7,29 +8,24 @@ function mamlas ()
 
     case "$cmd" in
         "open")
-            echo "Opens the Processing sketch located at $mamlaspath/processing/processing.pde"
             $processing $mamlaspath/processing/processing.pde
             ;;
         "dev")
-            echo "Runs the Processing sketch in development mode using Java."
             $processingJava --sketch=$mamlaspath/processing --run
             ;;
         "run")
-            echo "Runs the Processing build located at $mamlaspath/build/processing"
             "$mamlaspath/build/processing"
             ;;
         "build")
-            echo "Builds the Processing sketch for the Linux AArch64 platform."
             $processingJava --sketch=$mamlaspath/processing --output=$mamlaspath/build \
                 --variant=linux-aarch64 --force --export
             ;;
         "pull")
-            echo "Pulls the latest changes from the Git repository in $mamlaspath."
             cd $mamlaspath && git pull
             cd $currentpath
             ;;
         "help")
-            echo "Available commands and their explanations:"
+            echo "Mamlas-1"
             echo "  open    - Opens the Processing sketch located at $mamlaspath/processing/processing.pde"
             echo "  dev     - Runs the Processing sketch in development mode using Java."
             echo "  run     - Runs the Processing build located at $mamlaspath/build/processing"
