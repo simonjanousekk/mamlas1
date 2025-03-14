@@ -1,4 +1,5 @@
-. config.sh
+script_path=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
+. $script_path/config.sh
 function mamlas ()
 {
     local cmd="$1"

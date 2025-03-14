@@ -23,6 +23,7 @@ Maneuverable Module for Land Assessement
 - download and install processing raspberry version
 - clone github repo to ~/Documents "https://github.com/simonjanousekk/prototyp_demo.git"
 - change paths on config.sh if necessary
+- add ignoring of changing config.sh file `git update-index --assume-unchanged config.sh`
 - add autostart
   - crontab works but needs for the display to be "ready", otherwise processing screams
     - `crontab -e`
