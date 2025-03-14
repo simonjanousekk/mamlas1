@@ -25,6 +25,7 @@ class Player {
   float rotationVelocity = 0;
 
   int onTerrain;
+  int lastTerrain = -1;
   int terrainSetting = 0;
   int terrainDifference = 0;
 
@@ -121,9 +122,17 @@ class Player {
     int xi = int(pos.x / cellSize);
     int yi = int(pos.y / cellSize);
 
+    lastTerrain = onTerrain;
     onTerrain = mapa.grid[xi][yi].terrain;
-    terrainDifference = abs(onTerrain - terrainSetting);
+    
 
+    // terrain sounds
+    if (lastTerrain != onTerrain) {
+      soundManager.allTerrainOff();
+      soundManager.tracks.get("terrain" + onTerrain).on();
+    }
+    
+    terrainDifference = abs(onTerrain - terrainSetting);
     if (terrainDifference == 0) {
       ledDriverTerrain.turnOff();
     } else {

@@ -12,6 +12,7 @@ HazardMonitor hazardMonitor;
 Atom atom;
 AtomAnalyzer atomAnl;
 Storm storm;
+SoundManager soundManager;
 ArrayList <Element> elements = new ArrayList<Element>();
 String[] elements_mem = new String[3];
 int mem_index = 0;
@@ -74,6 +75,8 @@ int screenYOffset = 50;
 
 PImage screen1Mask, screen2Mask;
 
+PApplet globalProcessing;
+
 
 enum s2s {
   GPS, RADAR
@@ -96,13 +99,14 @@ String midiDevice = "Micro [hw:2,0,0]";
 
 void setup() {
   println("setup");
+  globalProcessing = this;
   // this should disable warnings from pi4j (some of them at least) =^..^=
   System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
   System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
   System.setProperty("com.pi4j.logging.level", "ERROR");
 
-  fullScreen();
-  //size(800, 480);
+  //fullScreen();
+  size(800, 480);
 
   noSmooth();
   noCursor();
@@ -128,6 +132,7 @@ void setup() {
   }
 
   load = new Load();
+  soundManager = new SoundManager();
   mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
@@ -144,6 +149,7 @@ void setup() {
   info = new Info(screen1Center.copy().sub(new PVector(0, screenSize/2)).add(new PVector(0, screen1Border)), 15);
   compass = new Compass(screenSize / 2 - screen2Border);
   signalDisplay = new SignalDisplay();
+
 
   atom = new Atom();
   elements.add(new Element("Au", "Gold", "High", false));
