@@ -1,5 +1,15 @@
+
 script_path=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
-. $script_path/config.sh
+
+
+. $script_path/config-default.sh
+
+# source local config only if exists
+if [ -f "$script_path/config-local.sh" ]; then
+    echo "Sourcing local config."
+    . "$script_path/config-local.sh"
+fi
+
 function mamlas ()
 {
     local cmd="$1"
