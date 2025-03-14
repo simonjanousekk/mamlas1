@@ -35,7 +35,7 @@ function mamlas ()
             echo "  (no command) - Changes the working directory to $mamlaspath."
             ;;
         "")
-            echo "No command provided. Changing directory to $mamlaspath."
+            echo "Changing directory to $mamlaspath."
             cd $mamlaspath
             ;;
         *)
