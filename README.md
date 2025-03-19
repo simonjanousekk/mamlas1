@@ -29,7 +29,8 @@ Maneuverable Module for Land Assessement
     - `crontab -e`
     - `@reboot sleep 10 && DISPLAY=:0 /bin/bash /home/ddt/startup.sh >> /home/ddt/cronlog.txt 2>&1`
     - startup.sh:
-      - ```#!/bin/bash
+      - ```
+        #!/bin/bash
         export DISPLAY=:0  # Set display for GUI applications
         echo "[$(date)] Setting up display for Processing..." >> /home/ddt/startup.log 2>&1
         source /home/ddt/Documents/mamlas1/mamlas.sh
@@ -44,7 +45,8 @@ Maneuverable Module for Land Assessement
 - raspberry sometimes changes card number `"Micro [hw:n,0,0]"` and for whatever reason processing doesnt like that and crashes even if the name is changed in processing.pde.
 - fix:
   - `sudo nano /etc/modprobe.d/alsa-base.conf`
-  - ```options snd-usb-audio index=1 vid=0x0d8c pid=0x0014
+  - ```
+    options snd-usb-audio index=1 vid=0x0d8c pid=0x0014
     options snd-usb-audio index=2 vid=0x2341 pid=0x8037
     ```
     - the id's can change and can be found with : `lsusb -v | grep -E "idVendor|idProduct"`
