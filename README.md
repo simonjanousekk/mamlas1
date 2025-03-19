@@ -44,7 +44,10 @@ Maneuverable Module for Land Assessement
 - raspberry sometimes changes card number `"Micro [hw:n,0,0]"` and for whatever reason processing doesnt like that and crashes even if the name is changed in processing.pde.
 - fix:
   - `sudo nano /etc/modprobe.d/alsa-base.conf`
-  - `options snd-usb-audio index=2`
+  - ```options snd-usb-audio index=1 vid=0x0d8c pid=0x0014
+    options snd-usb-audio index=2 vid=0x2341 pid=0x8037```
+    - the id's can change and can be found with : `lsusb -v | grep -E "idVendor|idProduct"`
+      - soundcard should be index 1 and arduino MIDI index 2
 
 ## todo
 ##### software
