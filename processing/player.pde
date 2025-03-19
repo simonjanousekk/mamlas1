@@ -141,7 +141,7 @@ class Player {
 
 
     // terrain sounds
-    if (lastTerrain != onTerrain) {
+    //if (lastTerrain != onTerrain) {
       if (abs(speed) > 0) {
         float vol = map(abs(speed), 0, max_speed, 0, 1);
         println(onTerrain, vol);
@@ -149,7 +149,7 @@ class Player {
       }
       //soundManager.allTerrainOff();
       //soundManager.tracks.get("terrain" + onTerrain).on();
-    }
+    //}
 
 
     if (scanning) { // check if all wmarkers are resolved == scanning ended
