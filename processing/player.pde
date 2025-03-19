@@ -124,14 +124,10 @@ class Player {
 
     lastTerrain = onTerrain;
     onTerrain = mapa.grid[xi][yi].terrain;
-    
 
-    // terrain sounds
-    if (lastTerrain != onTerrain) {
-      soundManager.allTerrainOff();
-      soundManager.tracks.get("terrain" + onTerrain).on();
-    }
-    
+
+
+
     terrainDifference = abs(onTerrain - terrainSetting);
     if (terrainDifference == 0) {
       ledDriverTerrain.turnOff();
@@ -142,6 +138,18 @@ class Player {
     speedMultiplier = map(terrainDifference, 0, 3, 1, .5);
     speed = desiredSpeed*speedMultiplier;
     if (reverse) speed *= -1;
+
+
+    // terrain sounds
+    if (lastTerrain != onTerrain) {
+      if (abs(speed) > 0) {
+        float vol = map(abs(speed), 0, max_speed, 0, 1);
+        println(onTerrain, vol);
+        soundManager.tracks.get("terrain" + onTerrain).vol(vol);
+      }
+      //soundManager.allTerrainOff();
+      //soundManager.tracks.get("terrain" + onTerrain).on();
+    }
 
 
     if (scanning) { // check if all wmarkers are resolved == scanning ended

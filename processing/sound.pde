@@ -13,7 +13,7 @@ class SoundManager {
     addTrack("terrain1");
     addTrack("terrain2");
     addTrack("terrain3");
-    
+
     addSound("switch");
 
     for (String key : tracks.keySet()) {
@@ -77,13 +77,13 @@ class Track {
     soundFile.amp(0);
     isOn = false;
   }
-  
+
   void vol(float v) {
-     v = min(v, 1);
-     if (v <= 0) off();
-     else {
-     soundFile.amp(v); 
-     }
+    v = min(v, 1);
+    if (v <= 0) off();
+    else {
+      soundFile.amp(v);
+    }
   }
 }
 
@@ -92,8 +92,8 @@ class Sound {
   Sound(String path) {
     soundFile = new SoundFile(globalProcessing, path);
   }
-  
+
   void play() {
-  soundFile.play();
+    soundFile.play();
   }
 }
