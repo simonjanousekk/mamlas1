@@ -3,24 +3,38 @@ import java.util.HashMap;
 
 class SoundManager {
   HashMap<String, Track> tracks;
+  HashMap<String, Sound> sounds;
 
   SoundManager() {
     tracks = new HashMap<String, Track>();
+    sounds = new HashMap<String, Sound>();
 
-    addSound("terrain0", "sound/terrain1.wav");
-    addSound("terrain1", "sound/terrain2.wav");
-    addSound("terrain2", "sound/terrain3.wav");
-    addSound("terrain3", "sound/terrain4.wav");
-    addSound("glitchDrum", "sound/glitch drum.wav");
-    addSound("bass", "sound/bass.wav");
+    addTrack("terrain0");
+    addTrack("terrain1");
+    addTrack("terrain2");
+    addTrack("terrain3");
+    
+    addSound("switch");
 
     for (String key : tracks.keySet()) {
       init(key);
     }
   }
 
-  void addSound(String name, String filePath) {
+  void addTrack(String name, String filePath) {
     tracks.put(name, new Track(filePath));
+  }
+
+  void addTrack(String name) {
+    tracks.put(name, new Track("sound/"+name+".wav"));
+  }
+
+  void addSound(String name, String filePath) {
+    sounds.put(name, new Sound(filePath));
+  }
+
+  void addSound(String name) {
+    sounds.put(name, new Sound("sound/"+name+".wav"));
   }
 
   void init(String name) {
@@ -28,13 +42,13 @@ class SoundManager {
       tracks.get(name).start();
     }
   }
-  
+
   void allTerrainOff() {
     for (int i = 0; i < 4; i++) {
       tracks.get("terrain"+i).off();
     }
   }
-  
+
   void end() {
     for (Track track : tracks.values()) {
       track.soundFile.stop();
@@ -62,5 +76,16 @@ class Track {
   void off() {
     soundFile.amp(0);
     isOn = false;
+  }
+}
+
+class Sound {
+  SoundFile soundFile;
+  Sound(String path) {
+    soundFile = new SoundFile(globalProcessing, path);
+  }
+  
+  void play() {
+  soundFile.play();
   }
 }
