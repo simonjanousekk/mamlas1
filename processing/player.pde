@@ -51,13 +51,13 @@ class Player {
     wall.collided = isCircleLineColliding(pos, diameter / 2, wall.pos1, wall.pos2);
     if (wall.collided) {
       resolveCollision(player.pos, player.diameter / 2, wall.pos1, wall.pos2);
-      //println("debil naboural");
     }
   }
 
   void scan() {
     if (screen2State == s2s.RADAR && !scanning) {
       scanning = true;
+      soundManager.sounds.get("sonar").play();
       for (Ray r : rays) {
         r.findWallAnimation();
       }
@@ -142,13 +142,13 @@ class Player {
 
     // terrain sounds
     //if (lastTerrain != onTerrain) {
-      if (abs(speed) > 0) {
-        float vol = map(abs(speed), 0, max_speed, 0, 1);
-        println(onTerrain, vol);
-        soundManager.tracks.get("terrain" + onTerrain).vol(vol);
-      }
-      //soundManager.allTerrainOff();
-      //soundManager.tracks.get("terrain" + onTerrain).on();
+    // if (abs(speed) > 0) {
+    float vol = map(abs(speed), 0, max_speed, 0, 1);
+    // println(onTerrain, speed, vol);
+    soundManager.allTerrainOff();
+    soundManager.tracks.get("terrain" + onTerrain).vol(vol);
+    // }
+    //soundManager.tracks.get("terrain" + onTerrain).on();
     //}
 
 
