@@ -13,6 +13,11 @@ class SoundManager {
     addTrack("terrain1");
     addTrack("terrain2");
     addTrack("terrain3");
+    addTrack("sampleIde");
+    addTrack("interference");
+    addTrack("power");
+    addTrack("battery0");
+    addTrack("battery1");
 
     addSound("switch");
     addSound("sonar");
@@ -20,6 +25,8 @@ class SoundManager {
     for (String key : tracks.keySet()) {
       init(key);
     }
+
+    // tracks.get("sampleIde").on();
   }
 
   void addTrack(String name, String filePath) {

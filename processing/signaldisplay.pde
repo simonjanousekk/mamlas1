@@ -42,9 +42,6 @@ class SignalDisplay {
     //float da = map(player.pos.y, 0, mapa.size.y, ampConstrain.x, ampConstrain.y);
 
 
-
-
-
     sinePlayer.update();
     sineGame.update();
 
@@ -62,6 +59,7 @@ class SignalDisplay {
       interference = 0;
 
       ledDriver.turnOff();
+      soundManager.tracks.get("interference").off();
     } else {
       sinePlayer.isRight = false;
 
@@ -73,6 +71,8 @@ class SignalDisplay {
       interference = min(ampDiff + bandDiff, 1);
 
       ledDriver.turnOn();
+      // println(interference, soundManager.tracks.get("interference"));
+      soundManager.tracks.get("interference").vol(interference);
     }
   }
 
