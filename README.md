@@ -12,6 +12,7 @@ Maneuverable Module for Land Assessement
 - mamlas dev (compiles game and runs)
 - mamlas build (exports game)
 - mamlas run (runs exported game (faster!))
+- mamlas help (for emergency purposes)
 
 ## reinstall tutorial
 
@@ -22,8 +23,7 @@ Maneuverable Module for Land Assessement
 - enable i2c (raspi config)
 - download and install processing raspberry version
 - clone github repo to ~/Documents "https://github.com/simonjanousekk/prototyp_demo.git"
-- change paths on config.sh if necessary
-- add ignoring of changing config.sh file `git update-index --assume-unchanged config.sh`
+- *optional* add config-local.sh file with paths to mamlas1 git clone dir and installed processing
 - add autostart
   - crontab works but needs for the display to be "ready", otherwise processing screams
     - `crontab -e`
@@ -36,7 +36,7 @@ Maneuverable Module for Land Assessement
         source /home/ddt/Documents/mamlas1/mamlas.sh
         mamlas run >> /home/ddt/startup.log 2>&1
         ```
-  - add sourcing of mamlas.sh to .bashrc to enable mamlas commands
+- add sourcing of mamlas.sh to .bashrc to enable mamlas commands
 
 ## known bugs and how to fix them
 
@@ -72,8 +72,9 @@ Maneuverable Module for Land Assessement
   - [ ] temperature warning
   - [ ] success sound
   - [ ] endscreen sound?
+- restructure atom.pde file
 ##### hardware
 - [x] resistors on bargraphs
 - [ ] new knob heads..?
 - [ ] top screws
-
+- [ ] sound >~<
