@@ -15,9 +15,10 @@ class SoundManager {
     addTrack("terrain3");
     addTrack("sampleIde");
     addTrack("interference");
-    addTrack("power");
+    addTrack("power", 5);
     addTrack("battery0");
     addTrack("battery1");
+    addTrack("ambience", 5);
 
     addSound("switch");
     addSound("sonar");
@@ -26,19 +27,15 @@ class SoundManager {
       init(key);
     }
 
-    // tracks.get("sampleIde").on();
+    tracks.get("ambience").on();
   }
 
-  void addTrack(String name, String filePath) {
-    tracks.put(name, new Track(filePath));
+  void addTrack(String name, int mv) {
+    tracks.put(name, new Track("sound/"+name+".wav", mv));
   }
 
   void addTrack(String name) {
     tracks.put(name, new Track("sound/"+name+".wav"));
-  }
-
-  void addSound(String name, String filePath) {
-    sounds.put(name, new Sound(filePath));
   }
 
   void addSound(String name) {
@@ -62,14 +59,21 @@ class SoundManager {
       track.soundFile.stop();
     }
     tracks.clear();
+    sounds.clear();
   }
 }
 
 class Track {
   SoundFile soundFile;
   boolean isOn = false;
+  float maxVolume;
   Track(String path) {
+    this(path, 1);
+  }
+
+  Track(String path, int mv) {
     soundFile = new SoundFile(globalProcessing, path);
+    maxVolume = mv;
   }
 
   void start() {
@@ -77,7 +81,7 @@ class Track {
     soundFile.amp(0);
   }
   void on() {
-    soundFile.amp(1);
+    soundFile.amp(maxVolume);
     isOn = true;
   }
 
@@ -86,12 +90,12 @@ class Track {
     isOn = false;
   }
 
-  void vol(float v) {
+  void vol(float v) { // recives 0..1 and remaps to 0..maxVolume. passing v>1 will set to maxVolume
     v = min(v, 1);
     if (v <= 0) off();
     else {
       // println(v);
-      soundFile.amp(v);
+      soundFile.amp(map(v, 0, 1, 0, maxVolume));
     }
   }
 }

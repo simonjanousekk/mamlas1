@@ -167,12 +167,13 @@ void restartGame() {
     gameInitialized = false;
     sampleIdentification = false;
     setup();
-    //loop();
+    loop();
   }
 }
 
 void endGame() {
   println("game ended");
+  soundManager.end();
   survived = (millis() - gameStartTime)/gameState.dayLength;
   gameEnded = true;
 }
