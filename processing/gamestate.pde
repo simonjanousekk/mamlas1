@@ -12,7 +12,7 @@ class GameState {
   float currentPhaseTemp, nextPhaseTemp;
 
   // TEMPERATURE STUFF
-  int[][] outTemperaturePhases = {{ - 30, -60}, {20, 70}, {100, 120}, {40, 80}, {0, -40}, { - 70, -100}, { - 140, -160}, { - 80, -110} };
+  int[][] outTemperaturePhases = {{ 30, -60}, {20, 70}, {100, 120}, {40, 80}, {0, -40}, {-70, -100}, {-140, -160}, {-80, -110} };
   float temperature = 0;
   float outTemperature = 0;
   int max_temperature = 80;
@@ -215,6 +215,14 @@ class GameState {
     powerUsage = pu;
     powerUsage = constrain(powerUsage, 0, 100);
 
+    int soundThreshold = 50;
+    if (powerUsage > soundThreshold) {
+      float vol = map(powerUsage, soundThreshold, 100, 0, 1);
+      soundManager.tracks.get("power").vol(vol);
+    } else {
+      soundManager.tracks.get("power").off();
+    }
+
     sendPowerUsage(powerUsage);
   }
 
@@ -225,6 +233,10 @@ class GameState {
       alertEnd = Alerts.END_BATTERY;
     }
     sendBattery(battery);
+
+    if (battery < 50) {
+      soundManager.tracks.get("battery1").on();
+    }
   }
 }
 

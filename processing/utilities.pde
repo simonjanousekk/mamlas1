@@ -159,7 +159,7 @@ boolean isCloseEnough(float x, float y, float t) {
 void restartGame() {
   if (gameInitialized) {
     println("restart game");
-    //noLoop();
+    noLoop();
     soundManager.end();
     background(0);
     gamePaused = false;
