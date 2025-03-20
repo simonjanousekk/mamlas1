@@ -15,6 +15,7 @@ class SoundManager {
     addTrack("terrain3");
 
     addSound("switch");
+    addSound("sonar");
 
     for (String key : tracks.keySet()) {
       init(key);
@@ -82,6 +83,7 @@ class Track {
     v = min(v, 1);
     if (v <= 0) off();
     else {
+      // println(v);
       soundFile.amp(v);
     }
   }
