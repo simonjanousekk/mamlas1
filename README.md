@@ -55,7 +55,6 @@ Maneuverable Module for Land Assessement
 ## todo
 ##### software
 - [ ] signal change on position
-- [ ] endscreen graphics
 - [ ] driving into wall causes power usage to flicker (not a bug a feature ?)
 - [ ] sample spawn distance
 - [ ] load screen text ?
@@ -64,12 +63,17 @@ Maneuverable Module for Land Assessement
 - [ ] sample fail / sample succes -> battery add / sub
 - [ ] global game time
 - [ ] restart -> fix setup
-- [ ] lcd bugging (why?, might be fixed by exporting)
+- [x] lcd bugging (why?, might be fixed by exporting)
 - [x] try export
 - [x] hide cursor
-- [ ] highscore screen ..?
+- [ ] endscreen graphics
+  - [ ] highscore screen ..?
+- [ ] sounds
+  - [ ] temperature warning
+  - [ ] success sound
+  - [ ] endscreen sound?
 ##### hardware
-- [ ] resistors on bargraphs
+- [x] resistors on bargraphs
 - [ ] new knob heads..?
 - [ ] top screws
 

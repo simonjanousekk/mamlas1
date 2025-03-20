@@ -148,7 +148,7 @@ class AtomAnalyzer {
   String successMessage = "Matching succeeded!";
   int transitionOut = 3000;
   int countDown = 0;
-  
+
   int atomAnlTime = 0;
 
   LedDriver ledDriver = new LedDriver(12);
@@ -164,7 +164,7 @@ class AtomAnalyzer {
       printArray(elements_mem);
       e = elements.get(int(random(elements.size())));
     }
-      println("element pick: ", e.name);
+    println("element pick: ", e.name);
 
     // Adding e to memory
     mem_index = ((mem_index < 3) ? mem_index : 0);
@@ -177,6 +177,8 @@ class AtomAnalyzer {
     // when the anl started and game was paused
     atomAnlTime = millis();
     gamePaused = true;
+    soundManager.allTracksOff();
+    soundManager.tracks.get("sampleIde").on();
   }
 
   void display() {
@@ -297,6 +299,7 @@ class AtomAnalyzer {
         if (gameState.alertHot || gameState.alertCold) {
           gameState.temperatureAlertStart+= millis() - atomAnlTime;
         }
+        soundManager.tracks.get("sampleIde").off();
       }
     }
   }
@@ -322,8 +325,10 @@ class AtomAnalyzer {
     String elementSelected = elements.get(cursorPlayer-2).name;
     if (elementSelected.equals(e.name)) {
       matchResult = successMessage;
+      soundManager.sounds.get("select").play();
     } else {
       matchResult = failMessage;
+      soundManager.sounds.get("select").play();
     }
   }
 }

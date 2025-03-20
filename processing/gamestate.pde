@@ -235,7 +235,7 @@ class GameState {
     sendBattery(battery);
 
     if (battery < 50) {
-      soundManager.tracks.get("battery1").on();
+      soundManager.tracks.get("battery0").on();
     }
   }
 }

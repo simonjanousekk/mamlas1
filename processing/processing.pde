@@ -105,8 +105,8 @@ void setup() {
   System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
   System.setProperty("com.pi4j.logging.level", "ERROR");
 
-  //fullScreen();
-  size(800, 480);
+  fullScreen();
+  // size(800, 480);
 
   noSmooth();
   noCursor();

@@ -19,8 +19,10 @@ class SoundManager {
     addTrack("battery0");
     addTrack("battery1");
     addTrack("ambience", 5);
+    addTrack("sampleIde");
 
     addSound("switch");
+    addSound("select");
     addSound("sonar");
 
     for (String key : tracks.keySet()) {
@@ -51,6 +53,12 @@ class SoundManager {
   void allTerrainOff() {
     for (int i = 0; i < 4; i++) {
       tracks.get("terrain"+i).off();
+    }
+  }
+
+  void allTracksOff() {
+    for (Track track : tracks.values()) {
+      track.off();
     }
   }
 
