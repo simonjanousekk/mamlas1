@@ -66,16 +66,17 @@ Maneuverable Module for Land Assessement
 - [x] lcd bugging (why?, might be fixed by exporting)
 - [x] try export
 - [x] hide cursor
+- [ ] map consistency
 - [ ] endscreen graphics
   - [ ] highscore screen ..?
 - [ ] sounds
-  - [ ] temperature warning
-  - [ ] success sound
+  - [x] temperature warning
+  - [x] success sound
   - [ ] endscreen sound?
 - restructure atom.pde file
 ##### hardware
 - [x] resistors on bargraphs
-- [ ] new knob heads..?
-- [ ] top screws
+- [x] new knob heads..?
+- [x] top screws
 - [ ] usb sound cable
 - [ ] sound >~<
