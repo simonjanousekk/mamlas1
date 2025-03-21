@@ -77,4 +77,5 @@ Maneuverable Module for Land Assessement
 - [x] resistors on bargraphs
 - [ ] new knob heads..?
 - [ ] top screws
+- [ ] usb sound cable
 - [ ] sound >~<
