@@ -20,9 +20,11 @@ class SoundManager {
     addTrack("battery1");
     addTrack("ambience", 5);
     addTrack("sampleIde");
+    addTrack("temperature");
 
     addSound("switch");
-    addSound("select");
+    addSound("selectTrue");
+    addSound("selectFalse");
     addSound("sonar");
 
     for (String key : tracks.keySet()) {
@@ -89,13 +91,17 @@ class Track {
     soundFile.amp(0);
   }
   void on() {
-    soundFile.amp(maxVolume);
-    isOn = true;
+    if (!isOn) {
+      soundFile.amp(maxVolume);
+      isOn = true;
+    }
   }
 
   void off() {
-    soundFile.amp(0);
-    isOn = false;
+    if (isOn) {
+      soundFile.amp(0);
+      isOn = false;
+    }
   }
 
   void vol(float v) { // recives 0..1 and remaps to 0..maxVolume. passing v>1 will set to maxVolume
@@ -103,6 +109,7 @@ class Track {
     if (v <= 0) off();
     else {
       // println(v);
+      isOn = true;
       soundFile.amp(map(v, 0, 1, 0, maxVolume));
     }
   }
@@ -115,6 +122,7 @@ class Sound {
   }
 
   void play() {
-    soundFile.play();
+    if (!soundFile.isPlaying()) {
+    soundFile.play();}
   }
 }
