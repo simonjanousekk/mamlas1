@@ -40,7 +40,6 @@ Maneuverable Module for Land Assessement
 ## known bugs
 
 ##### Arduino Micro naming issue
-
 - raspberry sometimes changes card number `"Micro [hw:n,0,0]"` and for whatever reason processing doesnt like that and crashes even if the name is changed in processing.pde.
 - old fix (not right, but keep it for further debugging):
   - `sudo nano /etc/modprobe.d/alsa-base.conf`
@@ -54,15 +53,15 @@ Maneuverable Module for Land Assessement
   - `/etc/asound.conf`
   - ```
     pcm.!default {
-    type asym
-    playback.pcm {
-        type hw
-        card 1  # USB Speakers
-    }
-    capture.pcm {
-        type hw
-        card 2  # MIDI Controller (if needed for input)
-    }
+      type asym
+      playback.pcm {
+          type hw
+          card 1  # USB Speakers
+      }
+      capture.pcm {
+          type hw
+          card 2  # MIDI Controller (if needed for input)
+      }
     }
     ```
 ## todo
@@ -93,3 +92,5 @@ Maneuverable Module for Land Assessement
 - [x] top screws
 - [ ] usb sound cable
 - [ ] sound >~<
+
+
