@@ -4,7 +4,6 @@ Maneuverable Module for Land Assessement
 
 ![mamlas1 render](website/images/mamlas_render_iso.png?raw=true)
 
-
 ## operation of mamlas-1
 
 - mamlas (opens dir of git repo)
@@ -38,12 +37,12 @@ Maneuverable Module for Land Assessement
         ```
 - add sourcing of mamlas.sh to .bashrc to enable mamlas commands
 
-## known bugs and how to fix them
+## known bugs
 
 ##### Arduino Micro naming issue
 
 - raspberry sometimes changes card number `"Micro [hw:n,0,0]"` and for whatever reason processing doesnt like that and crashes even if the name is changed in processing.pde.
-- fix:
+- old fix (not right, but keep it for further debugging):
   - `sudo nano /etc/modprobe.d/alsa-base.conf`
   - ```
     options snd-usb-audio index=1 vid=0x0d8c pid=0x0014
@@ -51,7 +50,21 @@ Maneuverable Module for Land Assessement
     ```
     - the id's can change and can be found with : `lsusb -v | grep -E "idVendor|idProduct"`
       - soundcard should be index 1 and arduino MIDI index 2
-
+- even more fuckery comes when the USB sound card is plugged. they bug each other out, usually only one of them is working. current (kinda working) is shifing the indexes of both sound and midi devices.
+  - `/etc/asound.conf`
+  - ```
+    pcm.!default {
+    type asym
+    playback.pcm {
+        type hw
+        card 1  # USB Speakers
+    }
+    capture.pcm {
+        type hw
+        card 2  # MIDI Controller (if needed for input)
+    }
+    }
+    ```
 ## todo
 ##### software
 - [ ] signal change on position
@@ -68,11 +81,11 @@ Maneuverable Module for Land Assessement
 - [x] hide cursor
 - [ ] map consistency
 - [ ] endscreen graphics
-  - [ ] highscore screen ..?
+- [ ] highscore screen ..?
 - [ ] sounds
-  - [x] temperature warning
-  - [x] success sound
-  - [ ] endscreen sound?
+- [x] temperature warning
+- [x] success sound
+- [ ] endscreen sound?
 - restructure atom.pde file
 ##### hardware
 - [x] resistors on bargraphs
