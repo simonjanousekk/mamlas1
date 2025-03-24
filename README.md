@@ -64,6 +64,8 @@ Maneuverable Module for Land Assessement
       }
     }
     ```
+- the results of the current solution are unstable, sometimes system asigns micro as card 1 after boot.
+
 ## todo
 ##### software
 - [ ] signal change on position
