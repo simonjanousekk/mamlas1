@@ -303,6 +303,8 @@ void draw() {
     atomAnl.display();
     pop();
   } else if (gameEnded) {
+    soundManager.allTracksOff();
+    soundManager.tracks.get("end").on();
     // draw game end screen
     background(0);
     //print("end screen render");
