@@ -72,7 +72,7 @@ Maneuverable Module for Land Assessement
 - [ ] driving into wall causes power usage to flicker (not a bug a feature ?)
 - [ ] sample spawn distance
 - [ ] load screen text ?
-- [ ] cool + head - led should not blink
+- [x] cool + head - led should not blink
 - [ ] radio glitch return copying to x / 2
 - [ ] sample fail / sample succes -> battery add / sub
 - [ ] global game time
@@ -81,7 +81,7 @@ Maneuverable Module for Land Assessement
 - [x] try export
 - [x] hide cursor
 - [ ] map consistency
-- [ ] endscreen graphics
+- [x] endscreen graphics
 - [ ] highscore screen ..?
 - [ ] sounds
 - [x] temperature warning
