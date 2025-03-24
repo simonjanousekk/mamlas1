@@ -1,6 +1,4 @@
-
 script_path=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
-
 
 . $script_path/config-default.sh
 
@@ -19,15 +17,19 @@ function mamlas ()
 
     case "$cmd" in
         "open")
+            echo "Opening mamlas in processing..."
             $processing $mamlaspath/processing/processing.pde
             ;;
         "dev")
+            echo "Running mamlas from .pde files..."
             $processingJava --sketch=$mamlaspath/processing --run
             ;;
         "run")
+            echo "Running mamlas from build files..."
             "$mamlaspath/build/processing"
             ;;
         "build")
+            echo "Building mamlas run files.."
             $processingJava --sketch=$mamlaspath/processing --output=$mamlaspath/build \
                 --variant=linux-aarch64 --force --export
             ;;
@@ -35,14 +37,24 @@ function mamlas ()
             cd $mamlaspath && git pull
             cd $currentpath
             ;;
+        "arduino build")
+            echo "Building Arduino sketch..."
+            arduino-cli compile --fqbn $arduino_board $mamlaspath/arduino
+            ;;
+        "arduino upload")
+            echo "Uploading to Arduino..."
+            arduino-cli upload -p $arduino_port --fqbn $arduino_board $mamlaspath/arduino
+            ;;
         "help")
             echo "Mamlas-1"
-            echo "  open    - Opens the Processing sketch located at $mamlaspath/processing/processing.pde"
-            echo "  dev     - Runs the Processing sketch in development mode using Java."
-            echo "  run     - Runs the Processing build located at $mamlaspath/build/processing"
-            echo "  build   - Builds the Processing sketch for the Linux AArch64 platform."
-            echo "  pull    - Pulls the latest changes from the Git repository in $mamlaspath."
-            echo "  (no command) - Changes the working directory to $mamlaspath."
+            echo "  open            - Opens the Processing sketch located at $mamlaspath/processing/processing.pde"
+            echo "  dev             - Runs the Processing sketch in development mode using Java."
+            echo "  run             - Runs the Processing build located at $mamlaspath/build/processing"
+            echo "  build           - Builds the Processing sketch for the Linux AArch64 platform."
+            echo "  pull            - Pulls the latest changes from the Git repository in $mamlaspath."
+            echo "  arduino build   - Compiles the Arduino sketch at $mamlaspath/arduino."
+            echo "  arduino upload  - Uploads the compiled sketch to the connected Arduino."
+            echo "  (no command)    - Changes the working directory to $mamlaspath."
             ;;
         "")
             echo "Changing directory to $mamlaspath."
