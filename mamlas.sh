@@ -8,42 +8,49 @@ if [ -f "$script_path/config-local.sh" ]; then
     . "$script_path/config-local.sh"
 fi
 
-function mamlas ()
-{
+
+function mamlas() {
     local cmd="$1"
+    shift  # Shift removes the first argument ($1) so the rest can be processed
+    local subcmd="$1"
+    
     local currentpath=$(pwd)
     
     export DISPLAY=:0
 
     case "$cmd" in
         "open")
-            echo "Opening mamlas in processing..."
-            $processing $mamlaspath/processing/processing.pde
+            $processing "$mamlaspath/processing/processing.pde"
             ;;
         "dev")
-            echo "Running mamlas from .pde files..."
-            $processingJava --sketch=$mamlaspath/processing --run
+            $processingJava --sketch="$mamlaspath/processing" --run
             ;;
         "run")
-            echo "Running mamlas from build files..."
             "$mamlaspath/build/processing"
             ;;
         "build")
-            echo "Building mamlas run files.."
-            $processingJava --sketch=$mamlaspath/processing --output=$mamlaspath/build \
+            $processingJava --sketch="$mamlaspath/processing" --output="$mamlaspath/build" \
                 --variant=linux-aarch64 --force --export
             ;;
         "pull")
-            cd $mamlaspath && git pull
-            cd $currentpath
+            cd "$mamlaspath" && git pull
+            cd "$currentpath"
             ;;
-        "arduino build")
-            echo "Building Arduino sketch..."
-            arduino-cli compile --fqbn $arduino_board $mamlaspath/arduino
-            ;;
-        "arduino upload")
-            echo "Uploading to Arduino..."
-            arduino-cli upload -p $arduino_port --fqbn $arduino_board $mamlaspath/arduino
+        "arduino")
+            case "$subcmd" in
+                "build")
+                    echo "Building Arduino sketch..."
+                    arduino-cli compile --fqbn "$arduino_board" "$mamlaspath/arduino"
+                    ;;
+                "upload")
+                    echo "Uploading to Arduino..."
+                    arduino-cli upload -p "$arduino_port" --fqbn "$arduino_board" "$mamlaspath/arduino"
+                    ;;
+                *)
+                    echo "Unknown Arduino command: $subcmd !!!"
+                    return 1
+                    ;;
+            esac
             ;;
         "help")
             echo "Mamlas-1"
@@ -57,7 +64,8 @@ function mamlas ()
             echo "  (no command)    - Changes the working directory to $mamlaspath."
             ;;
         "")
-            cd $mamlaspath
+            echo "Changing directory to $mamlaspath."
+            cd "$mamlaspath"
             ;;
         *)
             echo "Unknown command: $cmd"

@@ -295,10 +295,8 @@ class Storm {
   }
 
   void update() {
-    println("update");
     if (storm && screen2State == s2s.GPS) {
       ledDriver.turnOn();
-      println("on");
       if (storm && frameCount > animationStart && frameCount < animationEnd) {
         display();
       } else {
@@ -306,7 +304,6 @@ class Storm {
       }
     } else {
       ledDriver.turnOff();
-      println("off");
     }
   }
 

@@ -64,7 +64,7 @@ void controllerChange(ControlChange change) {
       } else if (control == 22) { // HEATING
         if (value == 0) {
           gameState.heating = true;
-          turnOnLed(5);
+          turnOnLedNoBlink(5);
         } else {
           gameState.heating = false;
           turnOffLed(5);
@@ -72,7 +72,7 @@ void controllerChange(ControlChange change) {
       } else if (control == 23) { // COOLING
         if (value == 0) {
           gameState.cooling = true;
-          turnOnLed(6);
+          turnOnLedNoBlink(6);
         } else {
           gameState.cooling = false;
           turnOffLed(6);
@@ -149,6 +149,10 @@ void requestPotValues() { // for requesting all static values
 
 void turnOnLed(int index) {
   mb.sendControllerChange(2, index, 1);
+}
+
+void turnOnLedNoBlink(int index) {
+  mb.sendControllerChange(2, index, 2);
 }
 
 void turnOffLed(int index) {

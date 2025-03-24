@@ -3,6 +3,7 @@ class Led {
 private:
   int index;
   bool state = false;
+  bool blink = false;
   unsigned long interval = 400;
   unsigned long lastToggleTime = 0;
 
@@ -10,14 +11,18 @@ public:
   Led() {}
 
   Led(int i)
-    : index(i) {}
+  : index(i) {}
 
   void update() {
     if (state) {
-      unsigned long currentTime = millis();
-      if (currentTime - lastToggleTime >= interval) {
+      if (blink) {
+        unsigned long currentTime = millis();
+        if (currentTime - lastToggleTime >= interval) {
+          toggleSingleBit(index);
+          lastToggleTime = currentTime;
+        }
+      } else {
         toggleSingleBit(index);
-        lastToggleTime = currentTime;
       }
     } else {
       setSingleBit(index, 0);
@@ -31,6 +36,11 @@ public:
     state = false;
   }
   void on() {
+    state = true;
+    blink = false;
+  }
+  void on_blink() {
+    blink = true;
     state = true;
   }
 };
