@@ -8,13 +8,13 @@ import com.pi4j.io.i2c.I2C;
 // What will be displayed on line1 when there is no alert
 enum DailyCycle {
   DAWN("Day phase:      DAWN"),
-    MORNING("Day phase:   MORNING"),
-    NOON("Day phase:      NOON"),
-    AFTERNOON("Day phase: AFTERNOON"),
-    EVENING("Day phase:   EVENING"),
-    DUSK("Day phase:      DUSK"),
-    NIGHT("Day phase:     NIGHT"),
-    MIDNIGHT("Day phase:  MIDNIGHT");
+  MORNING("Day phase:   MORNING"),
+  NOON("Day phase:      NOON"),
+  AFTERNOON("Day phase: AFTERNOON"),
+  EVENING("Day phase:   EVENING"),
+  DUSK("Day phase:      DUSK"),
+  NIGHT("Day phase:     NIGHT"),
+  MIDNIGHT("Day phase:  MIDNIGHT");
 
   String message;
 
@@ -31,11 +31,11 @@ enum DailyCycle {
 enum Forecast {
   // do not remove the spaces. its on purpose
   CLEAR("Forecast:      CLEAR"),
-    WIND("Forecast:STRONG WIND"),
-    SANDSTORM("Forecast:  SANDSTORM"),
-    MAGSTORM("Forecast:  MAG STORM"),
-    COLD("Forecast: COLD FRONT"),
-    HOT("Forecast:   HEATWAVE");
+  WIND("Forecast:STRONG WIND"),
+  SANDSTORM("Forecast:  SANDSTORM"),
+  MAGSTORM("Forecast:  MAG STORM"),
+  COLD("Forecast: COLD FRONT"),
+  HOT("Forecast:   HEATWAVE");
 
   String message;
 
@@ -54,17 +54,17 @@ enum Alerts {
   //POWER("WARNING:\n ENERGY RESERVE\n BELOW 20%\n Conserve Power"),
   //POWER_CRITICAL("CRITICAL FAILURE\n ENERGY RESERVE \n EXHAUSTED\n SHUTTING DOWN"),
   OVERHEATING("    EXTREME HEAT\n\n  Cooling systems\n      required"),
-    //OVERHEATING_CRITICAL("CRITICAL FAILURE:\n CORE OVERHEATING \n INTERNAL DAMAGE\n DETECTED"),
-    FREEZE("    EXTREME COLD\n\n  Heating systems\n      required"),
-    //FREEZE_CRITICAL("CRITICAL FAILURE:\n SYSTEM FREEZING \n INTERNAL DAMAGE\n DETECTED"),
-    //MAGSTORM_SOON("WARNING:\n MAGNETIC STORM\n IMMINENT\n Comm unstable"),
-    MAGSTORM("   MAGNETIC STORM\n     IN PROGRESS\n Communication link\n      unstable"),
-    //WIND("WARNING:\n STRONG WIND\n Rover trajectory\n altered"),
-    SANDSTORM("     SANDSTORM\n    IN PROGRESS\n    GPS off-line\n Engage radar mode"),
-    END_BATTERY("   ENERGY RESERVE\n     EXHAUSTED\n    All systems\n   shutting down"),
-    END_DMG("\n SYSTEM DAMAGE FATAL:\n Mission Terminated"),
-    END("\n    PRESS RESET\n TO REPEAT MISSION"),
-    NONE("");
+  //OVERHEATING_CRITICAL("CRITICAL FAILURE:\n CORE OVERHEATING \n INTERNAL DAMAGE\n DETECTED"),
+  FREEZE("    EXTREME COLD\n\n  Heating systems\n      required"),
+  //FREEZE_CRITICAL("CRITICAL FAILURE:\n SYSTEM FREEZING \n INTERNAL DAMAGE\n DETECTED"),
+  //MAGSTORM_SOON("WARNING:\n MAGNETIC STORM\n IMMINENT\n Comm unstable"),
+  MAGSTORM("   MAGNETIC STORM\n     IN PROGRESS\n Communication link\n      unstable"),
+  //WIND("WARNING:\n STRONG WIND\n Rover trajectory\n altered"),
+  SANDSTORM("     SANDSTORM\n    IN PROGRESS\n    GPS off-line\n Engage radar mode"),
+  END_BATTERY("   ENERGY RESERVE\n     EXHAUSTED\n    All systems\n   shutting down"),
+  END_DMG("\n SYSTEM DAMAGE FATAL:\n Mission Terminated"),
+  END("\n    PRESS RESET\n TO REPEAT MISSION"),
+  NONE("");
 
   String message;
 
@@ -275,7 +275,7 @@ class Storm {
   float timeSpeed = 0.0001;
 
   PVector wind = new PVector(0, 0);
-
+  LedDriver ledDriver = new LedDriver(new int[] {9, 10});
 
   int animationStart = -1;
   int animationEnd = -1;
@@ -294,59 +294,71 @@ class Storm {
     fall = f;
   }
 
-  void display() {
-    if (frameCount > animationStart && frameCount < animationEnd) {
-
-      float t = map(frameCount, animationStart, animationEnd, 0, 1);
-      float tcurve = riseStandFall(t, rise, fall);
-
-      // debug animation curve
-      //circle(screen2Center.x, screen2Center.y, tcurve*100);
-
-      for (int x = int(screen2Center.x - screenHalf); x < screen2Center.x + screenHalf; x += rectSize) {
-        for (int y = int(screen2Center.y - screenHalf); y < screen2Center.y + screenHalf; y += rectSize) {
-
-          // Convert screen coordinates to world coordinates
-          float worldX = player.pos.x + (x - screen2Center.x);
-          float worldY = player.pos.y + (y - screen2Center.y);
-
-          // Rotate world coordinates around the player
-          float dx = worldX - player.pos.x;
-          float dy = worldY - player.pos.y;
-
-          float rotatedX = cos(player.angle) * dx - sin(player.angle) * dy + player.pos.x;
-          float rotatedY = sin(player.angle) * dx + cos(player.angle) * dy + player.pos.y;
-
-          wind.add(gameState.windVelocity.copy().mult(.00000005));
-
-          // Scale for noise
-          float nx = rotatedX / rectSize * noiseScale + wind.x;
-          float ny = rotatedY / rectSize * noiseScale + wind.y;
-          float nz = frameCount * timeSpeed;
-
-          // Generate noise value
-          float noiseVal = map(noise(nx, ny, nz), .05, .95, 0, 1);
-          
-
-          // Draw rectangles based on noise value
-          if (noiseVal < tcurve) {
-            noStroke();
-            //fill(noiseVal * 255);
-            float c = map(noiseVal, 0, tcurve, 0, 1);
-
-            if (c < .4) {
-              fill(white);
-            } else  if (c < .6) {
-              fill(primary);
-            } else {
-              fill(primaryLight);
-            }
-            rect(x, y, rectSize, rectSize);
-          }
-        }
+  void update() {
+    println("update");
+    if (storm && screen2State == s2s.GPS) {
+      ledDriver.turnOn();
+      println("on");
+      if (storm && frameCount > animationStart && frameCount < animationEnd) {
+        display();
+      } else {
+        storm = false;
       }
     } else {
-      storm = false;
+      ledDriver.turnOff();
+      println("off");
+    }
+  }
+
+
+  void display() {
+    float t = map(frameCount, animationStart, animationEnd, 0, 1);
+    float tcurve = riseStandFall(t, rise, fall);
+
+    // debug animation curve
+    //circle(screen2Center.x, screen2Center.y, tcurve*100);
+
+    for (int x = int(screen2Center.x - screenHalf); x < screen2Center.x + screenHalf; x += rectSize) {
+      for (int y = int(screen2Center.y - screenHalf); y < screen2Center.y + screenHalf; y += rectSize) {
+
+        // Convert screen coordinates to world coordinates
+        float worldX = player.pos.x + (x - screen2Center.x);
+        float worldY = player.pos.y + (y - screen2Center.y);
+
+        // Rotate world coordinates around the player
+        float dx = worldX - player.pos.x;
+        float dy = worldY - player.pos.y;
+
+        float rotatedX = cos(player.angle) * dx - sin(player.angle) * dy + player.pos.x;
+        float rotatedY = sin(player.angle) * dx + cos(player.angle) * dy + player.pos.y;
+
+        wind.add(gameState.windVelocity.copy().mult(.00000005));
+
+        // Scale for noise
+        float nx = rotatedX / rectSize * noiseScale + wind.x;
+        float ny = rotatedY / rectSize * noiseScale + wind.y;
+        float nz = frameCount * timeSpeed;
+
+        // Generate noise value
+        float noiseVal = map(noise(nx, ny, nz), .05, .95, 0, 1);
+
+
+        // Draw rectangles based on noise value
+        if (noiseVal < tcurve) {
+          noStroke();
+          //fill(noiseVal * 255);
+          float c = map(noiseVal, 0, tcurve, 0, 1);
+
+          if (c < .4) {
+            fill(white);
+          } else  if (c < .6) {
+            fill(primary);
+          } else {
+            fill(primaryLight);
+          }
+          rect(x, y, rectSize, rectSize);
+        }
+      }
     }
   }
 }

@@ -79,7 +79,7 @@ class GameState {
       lastHazard = millis();
       if (hazardMonitor.forecast == Forecast.SANDSTORM) {
         alertSand = true;
-        storm.startStorm(int(gameState.phaseLength*2*60/1000), .2, .2); // convert time to frames cos why would i select one
+        storm.startStorm(int(gameState.phaseLength*2*60/1000), .2, .2); // convert time to frames cos why would i use only one
       } else {
         alertSand = false;
       }
@@ -185,6 +185,7 @@ class GameState {
       if (!alertHot && !alertCold) {
         temperatureAlertStart = millis();
         println("rmpAlertStart set");
+        soundManager.tracks.get("temperature").on();
       }
       if (temperatureAlertStart + temperatureSurvivabilityLength < millis()) {
         println(temperature, temperatureAlertStart);
@@ -192,6 +193,8 @@ class GameState {
         alertEnd = Alerts.END_DMG;
         endGame();
       }
+    } else {
+      soundManager.tracks.get("temperature").off();
     }
     alertHot = temperature > max_temperature;
     alertCold = temperature < min_temperature;
@@ -219,8 +222,10 @@ class GameState {
     if (powerUsage > soundThreshold) {
       float vol = map(powerUsage, soundThreshold, 100, 0, 1);
       soundManager.tracks.get("power").vol(vol);
+      // println(vol + "power sound on");
     } else {
       soundManager.tracks.get("power").off();
+      // println("power sound off");
     }
 
     sendPowerUsage(powerUsage);
@@ -236,6 +241,9 @@ class GameState {
 
     if (battery < 50) {
       soundManager.tracks.get("battery0").on();
+      if (battery < 25) {
+        soundManager.tracks.get("battery1").on();
+      }
     }
   }
 }

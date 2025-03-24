@@ -6,7 +6,7 @@ class Atom {
 
   int size = screenSize / 2 - screen2Border - s_thick;
   int coreSize = size / 3;
-
+ 
   int electronCount = 3;
   ArrayList<Electron> electrons = new ArrayList<Electron>();
 
@@ -300,6 +300,7 @@ class AtomAnalyzer {
           gameState.temperatureAlertStart+= millis() - atomAnlTime;
         }
         soundManager.tracks.get("sampleIde").off();
+        requestPotValues();
       }
     }
   }
@@ -325,10 +326,10 @@ class AtomAnalyzer {
     String elementSelected = elements.get(cursorPlayer-2).name;
     if (elementSelected.equals(e.name)) {
       matchResult = successMessage;
-      soundManager.sounds.get("select").play();
+      soundManager.sounds.get("selectTrue").play();
     } else {
       matchResult = failMessage;
-      soundManager.sounds.get("select").play();
+      soundManager.sounds.get("selectFalse").play();
     }
   }
 }

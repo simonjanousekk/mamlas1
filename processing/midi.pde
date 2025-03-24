@@ -94,31 +94,6 @@ void controllerChange(ControlChange change) {
 
 
 
-void requestPotValues() {
-  mb.sendControllerChange(1, 1, 1);
-}
-
-
-void turnOnLed(int index) {
-  mb.sendControllerChange(2, index, 1);
-}
-
-void turnOffLed(int index) {
-  mb.sendControllerChange(2, index, 0);
-}
-
-void turnAllLedOff() {
-  for (int i = 0; i < 14; i++) {
-    turnOffLed(i);
-  }
-}
-
-void turnAllLedOn() {
-  for (int i = 0; i < 14; i++) {
-    turnOnLed(i);
-    delay(int(random(1000)));
-  }
-}
 
 
 
@@ -168,26 +143,27 @@ class LedDriver {
   }
 }
 
-
-
-
-// not used rn, keep it in case
-void noteOn(Note note) {
-  // Receive a noteOn
-  println();
-  println("Note On:");
-  println("--------");
-  println("Channel:"+note.channel());
-  println("Pitch:"+note.pitch());
-  println("Velocity:"+note.velocity());
+void requestPotValues() { // for requesting all static values
+  mb.sendControllerChange(1, 1, 1);
 }
 
-void noteOff(Note note) {
-  // Receive a noteOff
-  println();
-  println("Note Off:");
-  println("--------");
-  println("Channel:"+note.channel());
-  println("Pitch:"+note.pitch());
-  println("Velocity:"+note.velocity());
+void turnOnLed(int index) {
+  mb.sendControllerChange(2, index, 1);
+}
+
+void turnOffLed(int index) {
+  mb.sendControllerChange(2, index, 0);
+}
+
+void turnAllLedOff() {
+  for (int i = 0; i < 14; i++) {
+    turnOffLed(i);
+  }
+}
+
+void turnAllLedOn() {
+  for (int i = 0; i < 14; i++) {
+    turnOnLed(i);
+    delay(int(random(1000)));
+  }
 }
