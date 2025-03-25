@@ -21,6 +21,7 @@ class SoundManager {
     addTrack("ambience", 5);
     addTrack("sampleIde");
     addTrack("temperature");
+    addTrack("end");
 
     addSound("switch");
     addSound("selectTrue");

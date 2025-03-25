@@ -173,7 +173,6 @@ void restartGame() {
 
 void endGame() {
   println("game ended");
-  soundManager.allTracksOff();
   survived = (millis() - gameStartTime)/gameState.dayLength;
   gameEnded = true;
 }
