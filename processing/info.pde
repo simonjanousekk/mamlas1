@@ -6,7 +6,7 @@ class Info {
   Info(PVector p, int space) {
     pos = p;
   }
-
+  
   void display() {
     push();
     fill(255);
@@ -23,11 +23,11 @@ class Info {
     text("phase: " + gameState.dayPhase + " time: " + gameState.dayTime, pos.x, pos.y + 90);
     text("temp: " + int(gameState.temperature) + " outTemp: " + int(gameState.outTemperature), pos.x, pos.y + 105);
     text("cool: " + gameState.cooling + " heat: " + gameState.heating, pos.x, pos.y + 120);
-    text("wind dir: " + nf(gameState.windDirectionAngle, 0, 3) + " spe: " + floor(gameState.windSpeed), pos.x, pos.y+135);
-    text("tempSur: " + gameState.temperatureAlertStart + " left: " + (gameState.temperatureAlertStart + gameState.temperatureSurvivabilityLength - millis()), pos.x, pos.y+150);
+    text("wind dir: " + nf(gameState.windDirectionAngle, 0, 3) + " spe: " + floor(gameState.windSpeed), pos.x, pos.y + 135);
+    text("tempSur: " + gameState.temperatureAlertStart + " left: " + (gameState.temperatureAlertStart + gameState.temperatureSurvivabilityLength - millis()), pos.x, pos.y + 150);
     text("alertBools: C: " + gameState.alertCold + " H: " + gameState.alertHot, pos.x, pos.y + 165);
     if (hazardMonitor != null) {
-      text("haz: " + gameState.hazardChanceMultiplier, pos.x, pos.y+180);
+      text("haz: " + gameState.hazardChanceMultiplier, pos.x, pos.y + 180);
     }
     pop();
   }
@@ -38,8 +38,8 @@ void displayFPS() {
   push();
   fill(255);
   textSize(16);
-  textAlign(RIGHT, BOTTOM);
-  text(fakeFrameRate, width - 5, height - 20);
-  text(int(frameRate), width - 5, height - 5);
+  textAlign(CENTER, CENTER);
+  text(fakeFrameRate, screen2Center.x, screen2Center.y);
+  text(int(frameRate), screen2Center.x, screen2Center.y + 15);
   pop();
 }
