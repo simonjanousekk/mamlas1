@@ -1,6 +1,13 @@
-import themidibus.*;
+import themidibus.*; // midi library
+
+// java nonsence for executing bash commands 
+// import java.io.BufferedReader;
+// import java.io.InputStreamReader;
+// import java.io.ProcessBuilder;
+
 
 MidiBus mb;
+boolean changingVolume = false;
 
 void mbInit() {
   MidiBus.list();
@@ -27,7 +34,16 @@ void controllerChange(ControlChange change) {
         } else if (value == 1) {
           player.turn++;
         }
-      } else if (control == 2) {
+        if (changingVolume) {
+          if (value == 0) {
+            println("volume down");
+            changeVolume(false);
+          } else {
+            println("volume up");
+            changeVolume(true);
+          }
+        }
+      } else if (control == 2) { // analyzer encoder
         // handle selection of sample
         // left is 1 and right is 0 for some reason :D
         if (atomAnl != null) {
@@ -81,9 +97,15 @@ void controllerChange(ControlChange change) {
         // --- BUTTONS ---
       } else if (control == 10 && value == 0) { // RADAR button
         player.scan();
-      } else if (control == 11 && value == 0) { // SAMPLE IDENTIFICATION button
-        atomAnl.validateResult();
-        // confirm sample selection
+      } else if (control == 11) { // SAMPLE IDENTIFICATION button
+        if (value == 0) {
+          if (atomAnl != null) {
+            atomAnl.validateResult();
+          }
+          changingVolume = true;
+        } else if (value == 1) {
+          changingVolume = false;
+        }
       } else if (control == 12 && value == 0) { // RESTART button
         hazardMonitor = null;
         restartGame();
@@ -171,3 +193,19 @@ void turnAllLedOn() {
     delay(int(random(1000)));
   }
 }
+
+void changeVolume(boolean up) {
+  String command = "amixer set Master 2%";
+  command += up ? "+" : "-";
+  // println(command);
+  try {
+    ProcessBuilder pb = new ProcessBuilder("bash", "-c", command);
+    pb.inheritIO();
+    Process process = pb.start();
+
+    process.waitFor();
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+}
+

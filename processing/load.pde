@@ -36,7 +36,20 @@ class Load {
     fill(0);
     rect(screen2Corner.x+screen2Border, screen2Corner.y+screen2Border, screenSize-screen2Border*2, screenSize-screen2Border*2);
     imageMode(CENTER);
-    image(frames[frameIndex], screen2Center.x, screen2Center.y);
+    
+    int testPos = 105;
+
+
+    image(frames[frameIndex], screen2Center.x, screen2Center.y-15);
+
+    
+    rectMode(CENTER);
+    textAlign(CENTER, CENTER);
+    fill(white);
+    rect(screen2Center.x, screen2Center.y+testPos, 100, 30);
+    fill(0);
+    text("LOADING", screen2Center.x, screen2Center.y+testPos);
+
     //String loadText;
     //if (screen2State == s2s.RADAR) {
     //  loadText = "Radar systems loading...";
@@ -44,7 +57,7 @@ class Load {
     //  loadText = "Satelite imagery loading...";
     //}
     if (frameCount % 2 == 0) {
-    frameIndex = (frameIndex + 1) % frames.length;
+      frameIndex = (frameIndex + 1) % frames.length;
     }
     //fill(white);
     //text(loadText, screen2Center.x, screen2Center.y+u*20);
