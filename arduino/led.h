@@ -40,7 +40,7 @@ public:
     blink = false;
   }
   void on_blink() {
-    blink = true;
     state = true;
+    blink = true;
   }
 };
