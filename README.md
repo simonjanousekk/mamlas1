@@ -87,7 +87,9 @@ Maneuverable Module for Land Assessement
 - [x] temperature warning
 - [x] success sound
 - [x] endscreen sound?
-- restructure atom.pde file
+- [ ] restructure atom.pde file
+- [ ] heating cooling lights flickering
+- [ ] volume control
 ##### hardware
 - [x] resistors on bargraphs
 - [x] new knob heads..?
