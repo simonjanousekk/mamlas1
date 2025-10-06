@@ -13,6 +13,12 @@ Maneuverable Module for Land Assessement
 - mamlas run (runs exported game (faster!))
 - mamlas help (for emergency purposes)
 
+## external links
+
+##### submission kit
+
+https://drive.google.com/drive/folders/1BHxb0JXGAgPObnLpFieMfIWJmpR4lA8V
+
 ## reinstall tutorial
 
 - disable touch
@@ -22,7 +28,7 @@ Maneuverable Module for Land Assessement
 - enable i2c (raspi config)
 - download and install processing raspberry version
 - clone github repo to ~/Documents "https://github.com/simonjanousekk/prototyp_demo.git"
-- *optional* add config-local.sh file with paths to mamlas1 git clone dir and installed processing
+- _optional_ add config-local.sh file with paths to mamlas1 git clone dir and installed processing
 - add autostart
   - crontab works but needs for the display to be "ready", otherwise processing screams
     - `crontab -e`
@@ -40,6 +46,7 @@ Maneuverable Module for Land Assessement
 ## known bugs
 
 ##### Arduino Micro naming issue
+
 - raspberry sometimes changes card number `"Micro [hw:n,0,0]"` and for whatever reason processing doesnt like that and crashes even if the name is changed in processing.pde.
 - old fix (not right, but keep it for further debugging):
   - `sudo nano /etc/modprobe.d/alsa-base.conf`
@@ -67,7 +74,9 @@ Maneuverable Module for Land Assessement
 - the results of the current solution are unstable, sometimes system asigns micro as card 1 after boot.
 
 ## todo
+
 ##### software
+
 - [ ] signal change on position
 - [ ] driving into wall causes power usage to flicker (not a bug a feature ?)
 - [ ] sample spawn distance
@@ -90,11 +99,11 @@ Maneuverable Module for Land Assessement
 - [ ] restructure atom.pde file
 - [ ] heating cooling lights flickering
 - [ ] volume control
+
 ##### hardware
+
 - [x] resistors on bargraphs
 - [x] new knob heads..?
 - [x] top screws
 - [ ] usb sound cable
 - [ ] sound >~<
-
-
