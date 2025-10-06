@@ -43,3 +43,12 @@ void displayFPS() {
   text(int(frameRate), screen2Center.x, screen2Center.y + 15);
   pop();
 }
+
+int lastTimeTaken = 0;
+void printTimeTaken(String name) {
+  if (infoDisplay) {
+    int timeTaken = millis() - lastTimeTaken;
+    println(name + ": " + timeTaken);
+    lastTimeTaken = millis();
+  }
+}

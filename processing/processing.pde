@@ -23,7 +23,6 @@ ArrayList<DCross> dcrosses = new ArrayList<DCross>();
 
 PImage mask;
 PFont mono;
-
 int rayCount = 36;
 int rayLength;
 
@@ -104,33 +103,33 @@ void setup() {
   System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
   System.setProperty("pi4j.library.gpiod.logging.level", "ERROR");
   System.setProperty("com.pi4j.logging.level", "ERROR");
-
+  
   fullScreen();
   // size(800, 480);
-
+  
   noSmooth();
   noCursor();
   randomSeed(millis());
   noiseSeed(millis());
-
+  
   walls.clear();
   //player.rays.clear();
   wmarkers.clear();
   dcrosses.clear();
   elements.clear();
-
+  
   screen1Center = new PVector(screenSize / 2 + (width - screenGap - screenSize * 2) / 2, screenSize / 2 + (height - screenSize) / 2);
   screen2Center = new PVector(screenSize / 2 + (width + screenGap - screenSize * 2) / 2 + screenSize, screenSize / 2 + (height - screenSize) / 2);
   screen1Center.y += screenYOffset;
   screen2Center.y += screenYOffset;
   screen2Corner.x = int(screen2Center.x - screenSize / 2);
   screen2Corner.y = int(screen2Center.y - screenSize / 2);
-
+  
   if (mb == null) {
     print("creating new midi bus object");
     mbInit();
   }
-
+  
   load = new Load();
   soundManager = new SoundManager();
   mask = loadImage("mask.png"); // mask_debug.png avalible for debug duh
@@ -139,18 +138,18 @@ void setup() {
   mono = createFont("OCR-A.ttf", 18);
   rayLength = int((screenSize / 2 - screen2Border) *.66);
   textFont(mono);
-
+  
   gameState = new GameState();
   mapa = new Mapa(mapaSize, mapaSize, cellSize, terrainMapScale, wallNoiseScale);
   player = new Player(randomPosOutsideWalls(), 4 * u);
   sample = new Sample(randomPosOutsideWalls());
   //minimapa = new Minimapa(minimapaSize);
   //minimapaWindow = new MinimapaWindow(this, minimapa);
-  info = new Info(screen1Center.copy().sub(new PVector(0, screenSize/2)).add(new PVector(0, screen1Border)), 15);
+  info = new Info(screen1Center.copy().sub(new PVector(0, screenSize / 2)).add(new PVector(0, screen1Border)), 15);
   compass = new Compass(screenSize / 2 - screen2Border);
   signalDisplay = new SignalDisplay();
-
-
+  
+  
   atom = new Atom();
   elements.add(new Element("Au", "Gold", "High", false));
   elements.add(new Element("T", "Tritium", "Low", true));
@@ -159,7 +158,7 @@ void setup() {
   elements.add(new Element("Fe", "Iron", "Mid", false));
   elements.add(new Element("Li", "Lithium", "Low", false));
   storm = new Storm();
-
+  
   try {
     if (hazardMonitor == null) {
       hazardMonitor = new HazardMonitor();
@@ -169,11 +168,11 @@ void setup() {
     println("LCD could not be created");
     hazardMonitor = null;
   }
-
+  
   for (int i = 0; i < rayCount; i++) {
     player.rays.add(new Ray(player.pos, i * (TWO_PI / rayCount)));
   }
-
+  
   for (int x = 0; x < mapa.cols; x += quadrantSize) {
     for (int y = 0; y < mapa.rows; y += quadrantSize) {
       if (!mapa.grid[x][y].state && mapa.grid[x][y].caseValue == 0) {
@@ -183,23 +182,28 @@ void setup() {
       }
     }
   }
-
+  
   surface.setVisible(false);
   surface.setVisible(true);
-
+  
   gameStartTime = millis();
   gameEndTime = 0;
-
+  
   gameInitialized = true;
 }
 
 void draw() {
-
+  
+  println("--------------------------------");
+  printTimeTaken("Start");
+  
   if (!gamePaused && !gameEnded && !sampleIdentification && gameInitialized) {
+    
     gameState.update();
+    printTimeTaken("GameState");
     hazardMonitorSync();
     //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
-
+    
     // get relevant walls
     float relevantDistance = rayLength * 1.3;
     ArrayList<Wall> relevantWalls = new ArrayList<Wall>(walls);
@@ -210,7 +214,8 @@ void draw() {
       }
     }
     relevantWallsC = relevantWalls.size();
-
+    printTimeTaken("RelevantWalls");
+    
     //get relewant wmarkers
     ArrayList<WMarker> relevantWMarkers = new ArrayList<WMarker>(wmarkers);
     for (int i = relevantWMarkers.size() - 1; i >= 0; i--) {
@@ -220,18 +225,19 @@ void draw() {
       }
     }
     relevantWMarkersC = relevantWMarkers.size();
-
-
+    printTimeTaken("RelevantWMarkers");
+    
     for (Wall wall : relevantWalls) {
       player.collide(wall);
     }
-
+    printTimeTaken("Player Wall Collision");
     sample.update();
-
+    printTimeTaken("Sample Update");
     for (Ray ray : player.rays) {
       ray.update(player.pos, player.angle);
       ray.findShortestIntersection(relevantWalls);
     }
+    printTimeTaken("Rays Update");
     for (int i = wmarkers.size() - 1; i >= 0; i--) {
       WMarker wm = wmarkers.get(i);
       if (wm.destroy) {
@@ -239,8 +245,8 @@ void draw() {
       }
       wm.update();
     }
-
-
+    printTimeTaken("WMarkers Update");
+    
     //fakeFrameRate = int(map(signalDisplay.interference, 0, .5, 60, 1));
     //if (frameCount % (60 / fakeFrameRate) == 0) {
     push();
@@ -264,31 +270,32 @@ void draw() {
     sample.display();
     player.display();
     pop();
-
-
-
+    printTimeTaken("Screen 2 Display");
+    
+    
+    
     storm.update();
-
+    printTimeTaken("Storm Update");
     //maybe to verify if its ok
     if (!sampleIdentification) {
       signalDisplay.update();
       signalDisplay.display();
     }
-
+    printTimeTaken("SignalDisplay Update");
     if (!sampleIdentification) { // draw only the things inside the mask
       compass.displayInside();
     }
-
+    
     if (!signalDisplay.sinePlayer.isRight && !sampleIdentification) {
       radio(signalDisplay.interference);
     }
-
+    
     if (load.loading) {
       load.display();
       load.update();
     }
     //}
-
+    
     player.update();
     player.handleInput();
   } else if (sampleIdentification) {
@@ -297,7 +304,7 @@ void draw() {
     translate(screen2Center.x, screen2Center.y);
     atom.display();
     pop();
-
+    
     push();
     translate(screen1Center.x, screen1Center.y);
     atomAnl.display();
@@ -313,7 +320,7 @@ void draw() {
     fill(white);
     textSize(20);
     text("PRESS RESET \nTO REPEAT MISSION", screen1Center.x, screen1Center.y);
-    String dayz = (survived == 1) ? "day":"days";
+    String dayz = (survived == 1) ? "day" : "days";
     //text("You survived " + nf(survived, 0, 1) + " " + dayz + "\n and collected " + player.samplesCollected + " samples", screen2Center.x, screen2Center.y);
     text("Days survived: " + nf(survived, 0, 1) + "\n Samples collected: " + player.samplesCollected + "\nDistance Traveled: " + nf(player.distanceTraveled, 0, 1), screen2Center.x, screen2Center.y);
     if (hazardMonitor != null) {
@@ -330,11 +337,12 @@ void draw() {
       }
     }
   }
-
+  printTimeTaken("End / Other Stuff");
   // draw circular masks
   image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
   image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
-
+  printTimeTaken("Screen Masks");
+  
   // hide empty parts of the screen, might be deleted for production
   push();
   fill(0);
@@ -347,24 +355,25 @@ void draw() {
   rect(width, height, -xgap, -height);
   rect(screenSize + xgap, 0, screenGap, height);
   pop();
-
+  printTimeTaken("Black Rectagles Display");
   if (!sampleIdentification && !gameEnded) { // draw the ouside compass
     compass.displayOutside();
   }
-
-
+  
+  
   if (infoDisplay) {
     info.display();
     displayFPS();
   }
-
+  printTimeTaken("Info Display");
+  
   // DEBUG YOFFSET
   //push();
   //fill(255);
   //text(screenYOffset, screen2Center.x, screen2Center.y);
   //pop();
-
-
+  
+  
   // DEBUG WIND DIRECTION
   //push();
   //translate(screen2Center.x, screen2Center.y);
