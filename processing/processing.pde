@@ -249,28 +249,34 @@ void draw() {
     
     //fakeFrameRate = int(map(signalDisplay.interference, 0, .5, 60, 1));
     //if (frameCount % (60 / fakeFrameRate) == 0) {
+    println("----");
     push();
     translate(screen2Center.x, screen2Center.y);
     rotate( -player.angle);
     translate( -player.pos.x, -player.pos.y);
     background(0);
+    printTimeTaken("Translations and Background");
     if (screen2State == s2s.RADAR) { // --- RADAR ---
       for (WMarker wm : relevantWMarkers) {
         wm.display();
       }
+      printTimeTaken("WMarkers Display");
     } else if (screen2State == s2s.GPS) { // --- GPS ---
       mapa.display();
+      printTimeTaken("Mapa Display");
       for (DCross dc : dcrosses) {
         dc.display();
       }
+      printTimeTaken("DCrosses Display");
       for (Wall wall : relevantWalls) {
         wall.display();
       }
+      printTimeTaken("Walls Display");
     }
     sample.display();
     player.display();
+    printTimeTaken("Sample and Player Display");
     pop();
-    printTimeTaken("Screen 2 Display");
     
     
     
