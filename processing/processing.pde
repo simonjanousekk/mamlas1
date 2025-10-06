@@ -195,6 +195,7 @@ void setup() {
 void draw() {
   
   println("--------------------------------");
+  println("frameRate: " + frameRate);
   printTimeTaken("Start");
   
   if (!gamePaused && !gameEnded && !sampleIdentification && gameInitialized) {
