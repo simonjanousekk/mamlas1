@@ -42,7 +42,7 @@ int cellSize = 5 * u;
 int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
 
-final float treshold =.45;
+final float treshold = .45;
 int fakeFrameRate = 59;
 
 String[] terrainTypes = {"SOFT", "DENSE", "FIRM", "HARD"};
@@ -89,7 +89,7 @@ boolean gamePaused = false;
 boolean gameEnded = false;
 
 boolean infoDisplay = false;
-float distUnitScale = .1;
+float distUnitScale =.1;
 Alerts alertEnd = Alerts.NONE;
 
 
@@ -136,7 +136,7 @@ void setup() {
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 18);
-  rayLength = int((screenSize / 2 - screen2Border) *.66);
+  rayLength = int((screenSize / 2 - screen2Border) * .66);
   textFont(mono);
   
   gameState = new GameState();
@@ -277,6 +277,7 @@ void draw() {
     player.display();
     printTimeTaken("Sample and Player Display");
     pop();
+    println("----");
     
     
     
