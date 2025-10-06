@@ -46,9 +46,9 @@ void displayFPS() {
 
 int lastTimeTaken = 0;
 void printTimeTaken(String name) {
-  if (infoDisplay) {
-    int timeTaken = millis() - lastTimeTaken;
-    println(name + ": " + timeTaken);
-    lastTimeTaken = millis();
-  }
+  // if (infoDisplay) {
+  int timeTaken = millis() - lastTimeTaken;
+  println(name + ": " + timeTaken);
+  lastTimeTaken = millis();
+  // }
 }
