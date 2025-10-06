@@ -250,17 +250,11 @@ void draw() {
     //fakeFrameRate = int(map(signalDisplay.interference, 0, .5, 60, 1));
     //if (frameCount % (60 / fakeFrameRate) == 0) {
     println("----");
-    // Clear only the screen2 area instead of entire canvas
-    push();
-    fill(0);
-    noStroke();
-    rect(screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2, screenSize, screenSize);
-    pop();
-    
     push();
     translate(screen2Center.x, screen2Center.y);
     rotate( -player.angle);
     translate( -player.pos.x, -player.pos.y);
+    background(0);
     printTimeTaken("Translations and Background");
     if (screen2State == s2s.RADAR) { // --- RADAR ---
       for (WMarker wm : relevantWMarkers) {
