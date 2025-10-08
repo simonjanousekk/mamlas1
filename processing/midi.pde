@@ -17,7 +17,7 @@ void mbInit() {
     println("No MIDI input devices detected!");
     return;
   }
-  midiDevice = null;
+  String midiDevice = null;
   for (String name : inputs) {
     if (name.startsWith("Micro")) {  // change to contains("Micro") if needed
       midiDevice = name;

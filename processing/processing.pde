@@ -93,9 +93,6 @@ float distUnitScale =.1;
 Alerts alertEnd = Alerts.NONE;
 
 
-// needs a change on rPI, for macos its "Arduino Micro", for linux its "Micro [hw:2,0,0]"
-//String midiDevice = "Micro [hw:1,0,0]";
-
 void setup() {
   println("setup");
   globalProcessing = this;
