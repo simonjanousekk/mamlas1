@@ -10,8 +10,27 @@ MidiBus mb;
 boolean changingVolume = false;
 
 void mbInit() {
-  MidiBus.list();
+  //MidiBus.list();
+  String[] inputs = MidiBus.availableInputs();
+  
+  if (inputs == null || inputs.length == 0) {
+    println("No MIDI input devices detected!");
+    return;
+  }
+  midiDevice = null;
+  for (String name : inputs) {
+    if (name.startsWith("Micro")) {  // change to contains("Micro") if needed
+      midiDevice = name;
+      break;
+    }
+  }
+  
+    if (midiDevice != null) {
+  
   mb = new MidiBus(this, midiDevice, midiDevice);
+    } else {
+      println("No Micro MIDI devices is available");
+    }
 }
 
 void controllerChange(ControlChange change) {
@@ -208,4 +227,3 @@ void changeVolume(boolean up) {
     e.printStackTrace();
   }
 }
-
