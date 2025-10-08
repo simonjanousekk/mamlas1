@@ -42,7 +42,7 @@ int cellSize = 5 * u;
 int terrainTypeCount = 4;
 int quadrantSize = 3 * u;
 
-final float treshold =.45;
+final float treshold = .45;
 int fakeFrameRate = 59;
 
 String[] terrainTypes = {"SOFT", "DENSE", "FIRM", "HARD"};
@@ -89,7 +89,7 @@ boolean gamePaused = false;
 boolean gameEnded = false;
 
 boolean infoDisplay = false;
-float distUnitScale = .1;
+float distUnitScale =.1;
 Alerts alertEnd = Alerts.NONE;
 
 
@@ -136,7 +136,7 @@ void setup() {
   screen1Mask = getMask(screenSize, 0, mask);
   screen2Mask = getMask(screenSize, screen2Border, mask);
   mono = createFont("OCR-A.ttf", 18);
-  rayLength = int((screenSize / 2 - screen2Border) *.66);
+  rayLength = int((screenSize / 2 - screen2Border) * .66);
   textFont(mono);
   
   gameState = new GameState();
@@ -193,14 +193,10 @@ void setup() {
 }
 
 void draw() {
-  println("--------------------------------");
-  println("frameRate: " + frameRate);
-  printTimeTaken("Start");
   
   if (!gamePaused && !gameEnded && !sampleIdentification && gameInitialized) {
     
     gameState.update();
-    printTimeTaken("GameState");
     hazardMonitorSync();
     //fakeFrameRate = int(map(mouseX, 0, width, 1, 60));
     
@@ -214,7 +210,6 @@ void draw() {
       }
     }
     relevantWallsC = relevantWalls.size();
-    printTimeTaken("RelevantWalls");
     
     //get relewant wmarkers
     ArrayList<WMarker> relevantWMarkers = new ArrayList<WMarker>(wmarkers);
@@ -225,19 +220,15 @@ void draw() {
       }
     }
     relevantWMarkersC = relevantWMarkers.size();
-    printTimeTaken("RelevantWMarkers");
     
     for (Wall wall : relevantWalls) {
       player.collide(wall);
     }
-    printTimeTaken("Player Wall Collision");
     sample.update();
-    printTimeTaken("Sample Update");
     for (Ray ray : player.rays) {
       ray.update(player.pos, player.angle);
       ray.findShortestIntersection(relevantWalls);
     }
-    printTimeTaken("Rays Update");
     for (int i = wmarkers.size() - 1; i >= 0; i--) {
       WMarker wm = wmarkers.get(i);
       if (wm.destroy) {
@@ -245,50 +236,39 @@ void draw() {
       }
       wm.update();
     }
-    printTimeTaken("WMarkers Update");
     
     //fakeFrameRate = int(map(signalDisplay.interference, 0, .5, 60, 1));
     //if (frameCount % (60 / fakeFrameRate) == 0) {
-    println("----");
     push();
     translate(screen2Center.x, screen2Center.y);
     rotate( -player.angle);
     translate( -player.pos.x, -player.pos.y);
     background(0);
-    printTimeTaken("Translations and Background");
     if (screen2State == s2s.RADAR) { // --- RADAR ---
       for (WMarker wm : relevantWMarkers) {
         wm.display();
       }
-      printTimeTaken("WMarkers Display");
     } else if (screen2State == s2s.GPS) { // --- GPS ---
       mapa.display();
-      printTimeTaken("Mapa Display");
       for (DCross dc : dcrosses) {
         dc.display();
       }
-      printTimeTaken("DCrosses Display");
       for (Wall wall : relevantWalls) {
         wall.display();
       }
-      printTimeTaken("Walls Display");
     }
     sample.display();
     player.display();
-    printTimeTaken("Sample and Player Display");
     pop();
-    println("----");
     
     
     
     storm.update();
-    printTimeTaken("Storm Update");
     //maybe to verify if its ok
     if (!sampleIdentification) {
       signalDisplay.update();
       signalDisplay.display();
     }
-    printTimeTaken("SignalDisplay Update");
     if (!sampleIdentification) { // draw only the things inside the mask
       compass.displayInside();
     }
@@ -344,11 +324,9 @@ void draw() {
       }
     }
   }
-  printTimeTaken("End / Other Stuff");
   // draw circular masks
   image(screen1Mask, screen1Center.x - screenSize / 2, screen1Center.y - screenSize / 2);
   image(screen2Mask, screen2Center.x - screenSize / 2, screen2Center.y - screenSize / 2);
-  printTimeTaken("Screen Masks");
   
   // hide empty parts of the screen, might be deleted for production
   push();
@@ -362,7 +340,6 @@ void draw() {
   rect(width, height, -xgap, -height);
   rect(screenSize + xgap, 0, screenGap, height);
   pop();
-  printTimeTaken("Black Rectagles Display");
   if (!sampleIdentification && !gameEnded) { // draw the ouside compass
     compass.displayOutside();
   }
@@ -372,7 +349,6 @@ void draw() {
     info.display();
     displayFPS();
   }
-  printTimeTaken("Info Display");
   
   // DEBUG YOFFSET
   //push();
