@@ -9,23 +9,30 @@ class SignalDisplay {
 
   float interference = 0;
   boolean sineGameSet = false;
-  boolean valuesRequested;
+  int staticMidiRequestIntervalMs = 1200;
+  int lastStaticMidiRequestAt = -1200;
+  int staticMidiRequestCount = 0;
+  int maxStaticMidiRequests = 12;
 
   LedDriver ledDriver = new LedDriver(new int[]{2, 4});
 
   SignalDisplay() {
     //randomizeSineGame();
-
-    valuesRequested = false;
+    midiStaticValuesReceived = false;
     sinePlayer = new SineWave(primary, primaryLight, .5);
     sineGame = new SineWave(white, gray, .01);
   }
 
   void update() {
-    if (!sineGameSet && gameInitialized && !valuesRequested) {
-      requestPotValues();
-      valuesRequested = true;
-      println("request static midi values");
+    if (!sineGameSet && gameInitialized && !midiStaticValuesReceived) {
+      boolean canRetry = staticMidiRequestCount < maxStaticMidiRequests;
+      boolean isTimeForRetry = millis() - lastStaticMidiRequestAt >= staticMidiRequestIntervalMs;
+      if (canRetry && isTimeForRetry) {
+        requestPotValues();
+        staticMidiRequestCount++;
+        lastStaticMidiRequestAt = millis();
+        println("request static midi values (attempt " + staticMidiRequestCount + ")");
+      }
     }
     // this is fucking piss but i cannot solve for delay that arduino midi brings.
     if (!sineGameSet && gameInitialized && sinePlayer.desAmp != 0 && sinePlayer.desBand != 0) {
@@ -35,6 +42,9 @@ class SignalDisplay {
       sineGame.desBand = sinePlayer.desBand;
       sineGameSet = true;
       println("received static midi values");
+    } else if (!sineGameSet && gameInitialized && midiStaticValuesReceived && sinePlayer.desAmp == 0 && sinePlayer.desBand == 0) {
+      // We got MIDI traffic but not the expected pot values yet: keep retrying.
+      midiStaticValuesReceived = false;
     }
 
 

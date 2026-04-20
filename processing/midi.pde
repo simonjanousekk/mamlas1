@@ -8,6 +8,7 @@ import themidibus.*; // midi library
 
 MidiBus mb;
 boolean changingVolume = false;
+boolean midiStaticValuesReceived = false;
 
 void mbInit() {
   //MidiBus.list();
@@ -99,13 +100,17 @@ void controllerChange(ControlChange change) {
       } else if (control == 3) { // ROT POT for AMP
         float alpha = map(value, 0, 127, signalDisplay.ampConstrain.x, signalDisplay.ampConstrain.y);
         signalDisplay.sinePlayer.desAmp = alpha;
+        midiStaticValuesReceived = true;
       } else if (control == 4) { // ROT POT for BAND
         float beta = map(value, 0, 127, signalDisplay.bandConstrain.x, signalDisplay.bandConstrain.y);
         signalDisplay.sinePlayer.desBand = beta;
+        midiStaticValuesReceived = true;
       } else if (control == 5) { // SLIDER POT for SPEED
         player.setDesiredVelocity(value);
+        midiStaticValuesReceived = true;
       } else if (control == 6) { // SLIDER POT for SUSPENSION
         player.setSuspension(value);
+        midiStaticValuesReceived = true;
 
 
         // --- SWITCHES ---
