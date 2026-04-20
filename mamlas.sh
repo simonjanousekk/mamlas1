@@ -12,7 +12,7 @@ fi
 function mamlas() {
     local cmd="$1"
     shift  # Shift removes the first argument ($1) so the rest can be processed
-    local subcmd="$1"
+    local subcmd="${1:-}"
     
     local currentpath=$(pwd)
     
