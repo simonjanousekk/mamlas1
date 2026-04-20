@@ -9,10 +9,9 @@ class SignalDisplay {
 
   float interference = 0;
   boolean sineGameSet = false;
-  int staticMidiRequestIntervalMs = 1200;
+  int staticMidiRequestIntervalMs = 900;
   int lastStaticMidiRequestAt = -1200;
   int staticMidiRequestCount = 0;
-  int maxStaticMidiRequests = 12;
 
   LedDriver ledDriver = new LedDriver(new int[]{2, 4});
 
@@ -25,9 +24,8 @@ class SignalDisplay {
 
   void update() {
     if (!sineGameSet && gameInitialized && !midiStaticValuesReceived) {
-      boolean canRetry = staticMidiRequestCount < maxStaticMidiRequests;
       boolean isTimeForRetry = millis() - lastStaticMidiRequestAt >= staticMidiRequestIntervalMs;
-      if (canRetry && isTimeForRetry) {
+      if (isTimeForRetry) {
         requestPotValues();
         staticMidiRequestCount++;
         lastStaticMidiRequestAt = millis();

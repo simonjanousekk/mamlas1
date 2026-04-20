@@ -55,6 +55,18 @@ int tempTens = 6;
 int tempOnes = 66;
 bool isNegative = true;
 
+void sendStaticControllerSnapshot() {
+  pot1.sendData();
+  pot2.sendData();
+  slider1.sendData();
+  slider2.sendData();
+
+  switch1.sendData();
+  switch2.sendData();
+  switch3.sendData();
+  switch4.sendData();
+}
+
 
 
 void setup() {
@@ -99,10 +111,11 @@ void loop() {
   }
 
 
-  // Process incoming MIDI messages
+  // Process all pending incoming MIDI messages.
   midiEventPacket_t rx = MidiUSB.read();
-  if (rx.header != 0) {  // If a MIDI message is received
+  while (rx.header != 0) {
     handleIncomingMidi(rx);
+    rx = MidiUSB.read();
   }
 
   MidiUSB.flush();
@@ -130,17 +143,9 @@ void handleIncomingMidi(midiEventPacket_t rx) {
   int control = rx.byte2;
   int value = rx.byte3;
 
-  if (channel == 1) {
-    if (control == 1 && value == 1) {  // REQUEST FROM PROCESSING TO SEND ANALOG VALUES
-      pot1.sendData();
-      pot2.sendData();
-      slider1.sendData();
-      slider2.sendData();
-
-      switch1.sendData();
-      switch2.sendData();
-      switch3.sendData();
-      switch4.sendData();
+  if (channel == 1 || channel == 0) {
+    if (control == 1 && value > 0) {  // REQUEST FROM PROCESSING TO SEND STATIC CONTROL VALUES
+      sendStaticControllerSnapshot();
     } else if (control == 10) {  // SEVEN SEGMENT DISPLAY DATA
       tempTens = value;
       updateDisplayValues(tempTens, tempOnes, isNegative);

@@ -8,7 +8,7 @@ private:
 
 public:
   Potenciometer(int p, int n)
-    : pin(p), midiNumber(n), lastMidiValue(-1) {
+    : pin(p), lastMidiValue(-1), midiNumber(n), midiValue(0) {
     memset(values, 0, sizeof(values)); // Initialize the array to 0
     pinMode(pin, INPUT);
     update();
@@ -46,6 +46,12 @@ public:
   }
 
   void sendData() {
+    // If startup smoothing buffer is not full yet, send a direct current read
+    // so startup requests always return a meaningful value.
+    if (!isFilled) {
+      int value = analogRead(pin);
+      midiValue = map(value, 0, 1023, 0, 127);
+    }
     midiEventPacket_t event = { 0x0B, 0xB0 | 0, midiNumber, midiValue };
     MidiUSB.sendMIDI(event);
   }
