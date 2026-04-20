@@ -32,15 +32,8 @@ https://drive.google.com/drive/folders/1BHxb0JXGAgPObnLpFieMfIWJmpR4lA8V
 - add autostart
   - crontab works but needs for the display to be "ready", otherwise processing screams
     - `crontab -e`
-    - `@reboot sleep 10 && DISPLAY=:0 /bin/bash /home/ddt/startup.sh >> /home/ddt/cronlog.txt 2>&1`
-    - startup.sh:
-      - ```
-        #!/bin/bash
-        export DISPLAY=:0  # Set display for GUI applications
-        echo "[$(date)] Setting up display for Processing..." >> /home/ddt/startup.log 2>&1
-        source /home/ddt/Documents/mamlas1/mamlas.sh
-        mamlas run >> /home/ddt/startup.log 2>&1
-        ```
+    - `@reboot /bin/bash /home/ddt/Documents/mamlas1/startup-rpi.sh >> /home/ddt/cronlog.txt 2>&1`
+    - copy autostart script `startup-rpi.sh` to /home/ddt/starup.sh
 - add sourcing of mamlas.sh to .bashrc to enable mamlas commands
 
 ## known bugs
@@ -54,6 +47,7 @@ https://drive.google.com/drive/folders/1BHxb0JXGAgPObnLpFieMfIWJmpR4lA8V
     options snd-usb-audio index=1 vid=0x0d8c pid=0x0014
     options snd-usb-audio index=2 vid=0x2341 pid=0x8037
     ```
+
     - the id's can change and can be found with : `lsusb -v | grep -E "idVendor|idProduct"`
       - soundcard should be index 1 and arduino MIDI index 2
 - even more fuckery comes when the USB sound card is plugged. they bug each other out, usually only one of them is working. current (kinda working) is shifing the indexes of both sound and midi devices.
@@ -72,6 +66,7 @@ https://drive.google.com/drive/folders/1BHxb0JXGAgPObnLpFieMfIWJmpR4lA8V
     }
     ```
 - the results of the current solution are unstable, sometimes system asigns micro as card 1 after boot.
+- this issue seems to be solved, processing scans and detects the adress of arduino. the fuckery of 0,0,0 might be unsolved, didnt encounter it now (might be solved by the new waiting `startup-rpi.sh` script.)
 
 ## todo
 
