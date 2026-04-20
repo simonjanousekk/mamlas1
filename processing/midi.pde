@@ -9,6 +9,8 @@ import themidibus.*; // midi library
 MidiBus mb;
 boolean changingVolume = false;
 boolean midiStaticValuesReceived = false;
+int lastRestartTriggerAt = -2000;
+int restartDebounceMs = 1200;
 
 void mbInit() {
   //MidiBus.list();
@@ -157,8 +159,16 @@ void controllerChange(ControlChange change) {
           changingVolume = false;
         }
       } else if (control == 12 && value == 0) { // RESTART button
-        hazardMonitor = null;
-        restartGame();
+        boolean runningGameplay = !gameEnded && !gamePaused && !sampleIdentification && load != null && !load.loading;
+        boolean endScreen = gameEnded;
+        boolean debounced = millis() - lastRestartTriggerAt >= restartDebounceMs;
+        if ((runningGameplay || endScreen) && debounced) {
+          lastRestartTriggerAt = millis();
+          hazardMonitor = null;
+          restartGame();
+        } else {
+          println("reset ignored (startup/loading/paused/debounce)");
+        }
       }
     }
   }
