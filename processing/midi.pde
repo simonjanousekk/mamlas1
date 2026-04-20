@@ -12,25 +12,51 @@ boolean changingVolume = false;
 void mbInit() {
   //MidiBus.list();
   String[] inputs = MidiBus.availableInputs();
+  String[] outputs = MidiBus.availableOutputs();
   
   if (inputs == null || inputs.length == 0) {
     println("No MIDI input devices detected!");
     return;
   }
-  String midiDevice = null;
-  for (String name : inputs) {
-    if (name.startsWith("Micro")) {  // change to contains("Micro") if needed
-      midiDevice = name;
+  if (outputs == null || outputs.length == 0) {
+    println("No MIDI output devices detected!");
+    return;
+  }
+
+  String midiInput = pickMicroDevice(inputs);
+  String midiOutput = pickMicroDevice(outputs);
+
+  if (midiInput != null && midiOutput != null) {
+    println("Using MIDI input: " + midiInput);
+    println("Using MIDI output: " + midiOutput);
+    mb = new MidiBus(this, midiInput, midiOutput);
+  } else {
+    println("No usable Micro MIDI input/output pair found");
+  }
+}
+
+String pickMicroDevice(String[] devices) {
+  String preferredDefault = null;
+  String preferredHw = null;
+  String preferredAny = null;
+
+  for (String name : devices) {
+    if (!name.startsWith("Micro")) continue;
+
+    String lower = name.toLowerCase();
+    if (lower.contains("[default]")) {
+      preferredDefault = name;
       break;
+    } else if (lower.contains("[hw:")) {
+      preferredHw = name;
+    } else if (preferredAny == null) {
+      preferredAny = name;
     }
   }
-  
-    if (midiDevice != null) {
-  
-  mb = new MidiBus(this, midiDevice, midiDevice);
-    } else {
-      println("No Micro MIDI devices is available");
-    }
+
+  if (preferredDefault != null) return preferredDefault;
+  if (preferredHw != null) return preferredHw;
+  return preferredAny;
 }
 
 void controllerChange(ControlChange change) {
@@ -185,18 +211,22 @@ class LedDriver {
 }
 
 void requestPotValues() { // for requesting all static values
+  if (mb == null) return;
   mb.sendControllerChange(1, 1, 1);
 }
 
 void turnOnLed(int index) {
+  if (mb == null) return;
   mb.sendControllerChange(2, index, 1);
 }
 
 void turnOnLedNoBlink(int index) {
+  if (mb == null) return;
   mb.sendControllerChange(2, index, 2);
 }
 
 void turnOffLed(int index) {
+  if (mb == null) return;
   mb.sendControllerChange(2, index, 0);
 }
 
